@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2010 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  Original slides: Marcin Wichary (mwichary@google.com)
+  Modifications: Ernest Delgado (ernestd@google.com)
+                 Alex Russell (slightlyoff@chromium.org)
+
+  html5-slides-markdown Modifications: Adam Zapletal (adamzap@gmail.com)
+-->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>HTML5 presentation</title>
+    <link rel="stylesheet" href="style.css" type="text/css" media="screen"/ >
+</head>
+<body>
+    <div class="presentation">
+      <div class="slides">
+        
+          <div class="slide">
+              <header><h1>html5-slides-markdown</h1></header>
+              <section><p>Generates a slideshow using the slides that power
+<a href="http://apirocks.com/html5/html5.html">the html5-slides presentation</a>.</p>
+<p>A <code>python</code> with the <code>jinja2</code> and <code>markdown</code> modules are required.</p>
+<h2>Markdown Formatting Instructions</h2>
+<ul>
+<li>Separate your slides with a horizontal rule (--- in markdown)</li>
+<li>Your slides should have a title that renders to an h1 element</li>
+<li>See the included slides.md for an example</li>
+</ul>
+<h2>Rendering Instructions</h2>
+<ul>
+<li>Put your markdown content in a file called <code>slides.md</code></li>
+<li>Run <code>python render.py</code></li>
+<li>Enjoy your newly generated <code>presentation.html</code></li>
+</ul>
+</section>
+          </div>
+        
+          <div class="slide">
+              <header><h1>Slide #2</h1></header>
+              <section><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna tellus,
+fermentum nec venenatis nec, dapibus id metus. Phasellus nulla massa, consequat
+nec tempor et, elementum viverra est. Duis sed nisl in eros adipiscing tempor.</p>
+<h2>Section #1</h2>
+<p>Integer in dignissim ipsum. Integer pretium nulla at elit facilisis eu feugiat
+velit consectetur.</p>
+<h2>Section #2</h2>
+<p>Donec risus tortor, dictum sollicitudin ornare eu, egestas at purus. Cras
+consequat lacus vitae lectus faucibus et molestie nisl gravida. Donec tempor,
+tortor in varius vestibulum, mi odio laoreet magna, in hendrerit nibh neque eu
+eros.</p>
+</section>
+          </div>
+        
+          <div class="slide">
+              <header><h1>Slide #3</h1></header>
+              <section><p><strong>Hello Gentlemen</strong></p>
+<ul>
+<li>Mega Man 2</li>
+<li>Mega Man 3</li>
+<li>Spelunky</li>
+<li>Dungeon Crawl Stone Soup</li>
+<li>Etrian Odyssey</li>
+</ul>
+<p><em>Are you prepared to see beyond the veil of reason?</em> - DeceasedCrab</p>
+<ul>
+<li>Black Cascade</li>
+<li>Two Hunters</li>
+<li>Diadem of 12 Stars</li>
+</ul>
+</section>
+          </div>
+        
+          <div class="slide">
+              <header><h1>Slide #4</h1></header>
+              <section><h2>render.py</h2>
+<pre><code>import jinja2
+import markdown
+
+with open('presentation.html', 'w') as outfile:
+    slides_src = markdown.markdown(open('slides.md').read()).split('&lt;hr /&gt;\n')
+
+    slides = []
+
+    for slide_src in slides_src:
+        header, content = slide_src.split('\n', 1)
+        slides.append({'header': header, 'content': content})
+
+    template = jinja2.Template(open('base.html').read())
+
+    outfile.write(template.render({'slides': slides}))
+</code></pre></section>
+          </div>
+        
+      </div>
+    </div>
+    <script type="text/javascript" src="animation.js"></script></script>
+    <script>
+        main()
+    </script>
+</body>
+</html>
