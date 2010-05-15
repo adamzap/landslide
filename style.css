@@ -20,15 +20,6 @@
   html5-slides-markdown Modifications: Adam Zapletal (adamzap@gmail.com)
 */
 
-.notes { display: none; }
-
-.stroke {
-  -webkit-text-stroke-color: red;
-  -webkit-text-stroke-width: 1px;
-  -moz-text-stroke-color: red;
-  -moz-text-stroke-width: 1px;
-}
-
 body {
   font: 14px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
   background: #778;
@@ -92,22 +83,6 @@ div.slide p {
   font-size: 20px;
 }
 
-section.intro p {
-  font-size: 35px;
-}
-
-button {
-  font-size: 20px;
-}
-
-.summary {
- font-size: 30px;
-}
-
-.bullets {
- font-size: 40px;
-}
-
 .slide.far-past {
   display: block;
   margin-left: -2400px;
@@ -131,10 +106,6 @@ button {
 .slide.far-future {
   display: block;
   margin-left: 1500px;
-}
-
-body.three-d div.presentation {
-  /*background: -webkit-gradient(radial, 50% 50%, 10, 50% 50%, 1000, from(#333), to(#000));        */        
 }
 
 body.three-d div.slides {
@@ -216,114 +187,7 @@ pre {
   border: 1px solid rgba(255, 0, 0, 0.2);
 }
 
-pre select {
-  font-size: 16px;
-  font-family: Monaco, Courier;
-  border: 1px solid #c61800;
-}
-
-input {
-  font-size: 16px;
-  font-family: Helvetica;
-  padding: 3px;
-}
-
-input[type="range"] {
-  width: 100%;
-}
-
-button {
-  font-family: Verdana;
-}
-
-pre b {
-  font-weight: normal;
-  color: #c61800;
-  text-shadow: #c61800 0 0 1px; 
-}
-pre em {
-  font-weight: normal;
-  font-style: normal;
-  color: #18a600;
-  text-shadow: #18a600 0 0 1px; 
-}
-pre input[type="range"] {
-  height: 6px;
-  cursor: pointer;
-  width: auto;
-}      
-example {
-  font-size: 16px;
-  display: block;
-  padding: 10px 20px;
-  color: black;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 8px;
-  margin-bottom: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-video {
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.css,
-.js,
-.html,
-.key {
-  font-family: 'Lucida Grande';
-  color: black;
-  display: inline-block;
-  padding: 6px 10px 3px 10px;
-  font-size: 25px;
-  line-height: 30px;
-  text-shadow: none;
-  letter-spacing: 0;
-  bottom: 10px;
-  position: relative;
-  border-radius: 10px;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  background: white;
-  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 5px; 
-  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0 2px 5px; 
-  -moz-box-shadow: rgba(0, 0, 0, 0.1) 0 2px 5px; 
-}
-
-.key { font-family: Arial; }
-
-:not(header) > .css,
-:not(header) > .js,
-:not(header) > .html,
-:not(header) > .key {
-  margin: 0 5px;
-  bottom: 4px;
-}
-
-.css {
-  background: -webkit-gradient(linear, left top, left bottom, from(#ff4), to(#ffa));
-  background-color: #ff4;
-  background: -moz-linear-gradient(left top, #ff4, #ffa);
-}
-.js {
-  background: -webkit-gradient(linear, left top, left bottom, from(#4f4), to(#afa));
-  background-color: #4f4;
-  background: -moz-linear-gradient(left top, #4f4, #afa);
-}
-.html {
-  background: -webkit-gradient(linear, left top, left bottom, from(#e88), to(#fee));
-  background-color: #e88;
-  background: -moz-linear-gradient(left top, #e88, #fee);
-}
-
 li {
   padding: 10px 0;
   font-size: 20px;
-}
-
-info {
-  display: block;
-  font-size: 50%;
-  text-align: center;
 }
