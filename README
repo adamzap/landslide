@@ -19,3 +19,10 @@ Rendering Instructions
 - Put your markdown content in a file called `slides.md`
 - Run `python render.py`
 - Enjoy your newly generated `presentation.html`
+
+TODO
+----
+
+- Remove unnecessary CSS classes
+- Test CSS for all Markdown features
+- Add syntax highlighting for code blocks
