@@ -4,6 +4,8 @@ import markdown
 with open('presentation.html', 'w') as outfile:
     slides_src = markdown.markdown(open('slides.md').read()).split('<hr />\n')
 
+    title = slides_src.pop(0)
+
     slides = []
 
     for slide_src in slides_src:
@@ -12,4 +14,4 @@ with open('presentation.html', 'w') as outfile:
 
     template = jinja2.Template(open('base.html').read())
 
-    outfile.write(template.render({'slides': slides}))
+    outfile.write(template.render({'title': title, 'slides': slides}))

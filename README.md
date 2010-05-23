@@ -10,7 +10,8 @@ Markdown Formatting Instructions
 --------------------------------
 
 - Separate your slides with a horizontal rule (--- in markdown)
-- Your slides should have a title that renders to an h1 element
+- Your first slide (title slide) should not have a heading, only `<p>`s
+- Your other slides should have a heading that renders to an h1 element
 - See the included slides.md for an example
 
 Rendering Instructions

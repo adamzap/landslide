@@ -191,3 +191,19 @@ li {
   padding: 10px 0;
   font-size: 20px;
 }
+
+section.title {
+  line-height: 180%;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  height: 700px;
+  width: 900px;
+}
+
+section.title p {
+  font-size: 50px;
+  margin-top:100px;
+  margin-bottom:100px;
+}
+
