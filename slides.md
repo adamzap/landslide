@@ -77,6 +77,7 @@ Slide #4
 render.py
 ---------
 
+    !python
     import jinja2
     import markdown
 
