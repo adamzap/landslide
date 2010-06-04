@@ -177,14 +177,8 @@ h2 {
 }
 
 pre {
-  text-align: left;
   font-size: 16px;
-  font-family: Monaco, Courier;
-  padding-bottom: 10px;
-  padding: 10px 20px;
-  background: rgba(255, 0, 0, 0.05);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 0, 0, 0.2);
+  font-family: Monaco, Courier, monospace;
 }
 
 li {
@@ -206,4 +200,3 @@ section.title p {
   margin-top:100px;
   margin-bottom:100px;
 }
-
