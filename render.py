@@ -22,7 +22,7 @@ with open('presentation.html', 'w') as outfile:
 
         if lang_match:
             lang = lang_match.group(1)
-            code = content.split(lang, 1)[1].split('</code')[0]
+            code = content.split(lang, 1)[1].split('</code', 1)[0]
 
             lexer = get_lexer_by_name(lang)
 
@@ -32,8 +32,8 @@ with open('presentation.html', 'w') as outfile:
             pretty_code = pygments.highlight(code, lexer, formatter)
             pretty_code = pretty_code.replace('&amp;', '&')
 
-            before_code = content.split('<code>')[0]
-            after_code = content.split('</code>')[1]
+            before_code = content.split('<code>', 1)[0]
+            after_code = content.split('</code>', 1)[1]
 
             content = before_code + pretty_code + after_code
 
