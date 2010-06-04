@@ -18,24 +18,25 @@ with open('presentation.html', 'w') as outfile:
     for slide_src in slides_src:
         header, content = slide_src.split('\n', 1)
 
-        lang_match = re.search('<code>!(.+)\n', content)
+        while '<code>!' in content:
+            lang_match = re.search('<code>!(.+)\n', content)
 
-        if lang_match:
-            lang = lang_match.group(1)
-            code = content.split(lang, 1)[1].split('</code', 1)[0]
+            if lang_match:
+                lang = lang_match.group(1)
+                code = content.split(lang, 1)[1].split('</code', 1)[0]
 
-            lexer = get_lexer_by_name(lang)
+                lexer = get_lexer_by_name(lang)
 
-            formatter = HtmlFormatter(linenos='inline', noclasses=True,
-                                      nobackground=True)
+                formatter = HtmlFormatter(linenos='inline', noclasses=True,
+                                          nobackground=True)
 
-            pretty_code = pygments.highlight(code, lexer, formatter)
-            pretty_code = pretty_code.replace('&amp;', '&')
+                pretty_code = pygments.highlight(code, lexer, formatter)
+                pretty_code = pretty_code.replace('&amp;', '&')
 
-            before_code = content.split('<code>', 1)[0]
-            after_code = content.split('</code>', 1)[1]
+                before_code = content.split('<code>', 1)[0]
+                after_code = content.split('</code>', 1)[1]
 
-            content = before_code + pretty_code + after_code
+                content = before_code + pretty_code + after_code
 
         slides.append({'header': header, 'content': content})
 
