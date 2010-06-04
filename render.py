@@ -6,6 +6,8 @@ with open('presentation.html', 'w') as outfile:
 
     title = slides_src.pop(0)
 
+    head_title = title.split('>')[1].split('<')[0]
+
     slides = []
 
     for slide_src in slides_src:
@@ -14,4 +16,4 @@ with open('presentation.html', 'w') as outfile:
 
     template = jinja2.Template(open('base.html').read())
 
-    outfile.write(template.render({'title': title, 'slides': slides}))
+    outfile.write(template.render(locals()))
