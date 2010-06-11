@@ -14,7 +14,7 @@ from pygments.formatters import HtmlFormatter
 parser = OptionParser()
 parser.add_option("-s", "--source", 
                   dest="source", 
-                  help="The path to the markdown source file", 
+                  help="The path to the markdown source file, or a directory containing several files to combine", 
                   metavar="FILE", 
                   default="slides.md")
 parser.add_option("-d", "--destination", 

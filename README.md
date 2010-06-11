@@ -35,13 +35,15 @@ Several options are available using the command line:
     Options:
       -h, --help            show this help message and exit
       -s FILE, --source=FILE
-                            The path to the markdown source file
+                            The path to the markdown source file, or a directory
+                            containing several files to combine
       -d FILE, --destination=FILE
                             The path to the to the destination
       -t FILE, --template=FILE
                             The path to the to the Jinja2 template file
       -e ENCODING, --encoding=ENCODING
                             The encoding of your files (defaults to utf8)
+      -o, --direct-ouput    Prints the generated HTML code to stdin
 
 TODO
 ----
