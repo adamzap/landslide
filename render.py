@@ -8,7 +8,8 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 with codecs.open('presentation.html', 'w', encoding='utf8') as outfile:
-    slides_src = markdown.markdown(codecs.open('slides.md', mode='r', encoding='utf8').read()).split('<hr />\n')
+    md_src = codecs.open('slides.md', encoding='utf8').read()
+    slides_src = markdown.markdown(md_src).split('<hr />\n')
 
     title = slides_src.pop(0)
 
