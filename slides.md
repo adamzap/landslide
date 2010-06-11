@@ -51,6 +51,16 @@ consequat lacus vitae lectus faucibus et molestie nisl gravida. Donec tempor,
 tortor in varius vestibulum, mi odio laoreet magna, in hendrerit nibh neque eu
 eros.
 
+Unicode Characters Work
+-----------------------
+
+© é
+
+---
+
+Middle slide
+============
+
 ---
 
 Middle slide
