@@ -1,14 +1,23 @@
+#!/usr/bin/env python
 import codecs
 import re
 import jinja2
 import markdown
 import pygments
 
+from optparse import OptionParser
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-with codecs.open('presentation.html', 'w', encoding='utf8') as outfile:
-    slides_src = markdown.markdown(codecs.open('slides.md', mode='r', encoding='utf8').read()).split('<hr />\n')
+parser = OptionParser()
+parser.add_option("-s", "--source", dest="source_file", help="The path to the markdown source file", metavar="FILE", default="slides.md")
+parser.add_option("-d", "--destination", dest="target_file", help="The path to the to the destination", metavar="FILE", default="presentation.html")
+parser.add_option("-t", "--template", dest="template_file", help="The path to the to the Jinja2 template file", metavar="FILE", default="base.html")
+
+(options, args) = parser.parse_args()
+
+with codecs.open(options.target_file, 'w', encoding='utf8') as outfile:
+    slides_src = markdown.markdown(codecs.open(options.source_file, mode='r', encoding='utf8').read()).split('<hr />\n')
 
     title = slides_src.pop(0)
 
@@ -41,6 +50,8 @@ with codecs.open('presentation.html', 'w', encoding='utf8') as outfile:
 
         slides.append({'header': header, 'content': content})
 
-    template = jinja2.Template(open('base.html').read())
+    template = jinja2.Template(open(options.template_file).read())
 
     outfile.write(template.render(locals()))
+
+print "Generated %s" % options.target_file
