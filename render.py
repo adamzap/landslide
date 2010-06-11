@@ -67,7 +67,7 @@ class Generator:
         md_contents = ""
         if os.path.isdir(source):
             for md_file in glob.glob('%s/*.md' % source):
-                md_contents = self.fetch_md_contents(md_file)
+                md_contents = md_contents + self.fetch_md_contents(md_file)
         else:
             md_contents = codecs.open(source, encoding=self.encoding).read()
         
@@ -125,6 +125,7 @@ class Generator:
         Returns generated html code
         """
         md_src = self.fetch_md_contents(self.source)
+        
         slides_src = markdown.markdown(md_src).split('<hr />\n')
         
         template_src = codecs.open(self.template_file, encoding=self.encoding)
