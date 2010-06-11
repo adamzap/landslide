@@ -53,6 +53,11 @@ eros.
 
 ---
 
+Middle slide
+============
+
+---
+
 Slide #3
 ========
 
@@ -94,4 +99,3 @@ render.py
         template = jinja2.Template(open('base.html').read())
 
         outfile.write(template.render({'slides': slides}))
-
