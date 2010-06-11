@@ -1,3 +1,4 @@
+import codecs
 import re
 import jinja2
 import markdown
@@ -6,8 +7,8 @@ import pygments
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-with open('presentation.html', 'w') as outfile:
-    slides_src = markdown.markdown(open('slides.md').read()).split('<hr />\n')
+with codecs.open('presentation.html', 'w', encoding='utf8') as outfile:
+    slides_src = markdown.markdown(codecs.open('slides.md', mode='r', encoding='utf8').read()).split('<hr />\n')
 
     title = slides_src.pop(0)
 
