@@ -27,10 +27,10 @@ Markdown Formatting Instructions
 --------------------------------
 
 - To create a title slide, render a single h1 element
-- Separate your slides with a horizontal rule (--- in markdown)
+- Separate your slides with a horizontal rule (`---` in markdown)
 - Your other slides should have a heading that renders to an h1 element
-- To highlight blocks of code, put !{{lang}} as the first indented line
-- See the included slides.md for an example
+- To highlight blocks of code, put `!{{lang}}` where `{{lang}}` is the pygment supported language identifier as the first indented line
+- See the included `slides.md` for an example
 
 Rendering Instructions
 ----------------------
@@ -62,6 +62,25 @@ Several options are available using the command line:
                             containing several files to combine
       -v, --verbose         Write informational messages to stdin (enabled by
                             default)
+
+Advanced Usage
+--------------
+
+### Setting Cutom Destination File
+
+    $ ./render.py -d ~/MyPresentations/KeynoteKiller.html
+
+### Working with Directories
+
+    $ ./render.py -s slides/
+
+### Working with Direct Output
+
+    $ ./render.py -o |tidy
+
+### Using and Alternate Jinja2 Template
+
+    $ ./render.py -t ~/templates/mytemplate.html
 
 TODO
 ----

@@ -19,7 +19,7 @@ class Generator:
         """
         self.direct = options.direct
         self.encoding = options.encoding
-        self.verbose = options.verbose
+        self.verbose = False if options.direct else options.verbose
         
         if (os.path.exists and not os.path.isfile(options.destination_file)):
             raise IOError("Destination %s exists and is not a file" % options.destination_file)
