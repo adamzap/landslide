@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import sys
 
@@ -8,7 +9,7 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("-d", "--destination",
                   dest="destination_file",
-                  help="The path to the to the destination",
+                  help="The path to the to the destination file: .html or .pdf",
                   metavar="FILE",
                   default="presentation.html")
 parser.add_option("-e", "--encoding",

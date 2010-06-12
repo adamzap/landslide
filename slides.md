@@ -84,29 +84,13 @@ Slide #3
 Slide #4
 ========
 
-render.py
----------
-
 First code block:
 
     !python
-    import jinja2
-    import markdown
-
-    with open('presentation.html', 'w') as outfile:
-        slides_src = markdown.markdown(open('slides.md').read()).split('<hr />\n')
-
-        slides = []
-
-        for slide_src in slides_src:
-            header, content = slide_src.split('\n', 1)
-            slides.append({'header': header, 'content': content})
-
-        template = jinja2.Template(open('base.html').read())
-
-        outfile.write(template.render({'slides': slides}))
+    while True:
+        print "Everything's gonna be allright"
 
 Second code block:
 
     !php
-    exec('python render.py --help');
+    <?php exec('python render.py --help'); ?>
