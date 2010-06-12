@@ -124,6 +124,7 @@ TODO
 ----
 
 - Test CSS for all Markdown features
+- Get rid of the annoying princexml warnings on PDF generation (princexml can't handle html5 tags like `<header>` but generated PDFs are okay)
 
 ---
 
