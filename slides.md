@@ -58,13 +58,8 @@ Unicode Characters Work
 
 ---
 
-Middle slide
-============
-
----
-
-Middle slide
-============
+Middle Title Slide
+==================
 
 ---
 
