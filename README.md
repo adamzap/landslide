@@ -4,6 +4,8 @@ html5-slides-markdown
 Generates a slideshow using the slides that power
 [the html5-slides presentation](http://apirocks.com/html5/html5.html).
 
+![demo](http://files.droplr.com.s3.amazonaws.com/files/6619162/1bcGcm.html5_presentation.png)
+
 A sample slideshow is [here](http://adamzap.com/random/html5-slides-markdown.html).
 
 ---
