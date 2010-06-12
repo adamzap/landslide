@@ -6,6 +6,14 @@ Generates a slideshow using the slides that power
 
 A sample slideshow is [here](http://adamzap.com/random/html5-slides-markdown.html).
 
+News
+----
+
+**06/11/10** - Current slideshows will need to be updated. As of tonight's changes
+(48024cfe), title slides are rendered like any other. This means that you must
+render them to an h1 element (# or = below). This is cleaner and more
+consistent.
+
 Requirements
 ------------
 
