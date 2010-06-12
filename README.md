@@ -49,25 +49,29 @@ Several options are available using the command line:
 
     Options:
       -h, --help            show this help message and exit
+      -d FILE, --destination=FILE
+                            The path to the to the destination
+      -e ENCODING, --encoding=ENCODING
+                            The encoding of your files (defaults to utf8)
+      -t FILE, --template=FILE
+                            The path to the to the Jinja2 template file
+      -o, --direct-ouput    Prints the generated HTML code to stdin
+      -q, --quiet           Won't write anything to stdin
       -s FILE, --source=FILE
                             The path to the markdown source file, or a directory
                             containing several files to combine
-      -d FILE, --destination=FILE
-                            The path to the to the destination
-      -t FILE, --template=FILE
-                            The path to the to the Jinja2 template file
-      -e ENCODING, --encoding=ENCODING
-                            The encoding of your files (defaults to utf8)
-      -o, --direct-ouput    Prints the generated HTML code to stdin
+      -v, --verbose         Write informational messages to stdin (enabled by
+                            default)
 
 TODO
 ----
 
 - Test CSS for all Markdown features
 
-Thanks
-------
+Authors
+-------
 
-- Nicolas Perriault (n1k0)
-- Vincent Agnano (Particules)
-- Brad Cupit (bradcupit)
+- Adam Zapletal ([adamzap](http://github.com/adamzap))
+- Brad Cupit ([bradcupit](github.com/bradcupit))
+- Nicolas Perriault ([n1k0](github.com/n1k0))
+- Vincent Agnano ([vinyll](github.com/vinyll))

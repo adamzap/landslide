@@ -7,66 +7,102 @@ import codecs
 import jinja2
 import markdown
 import pygments
+import sys
 
 from optparse import OptionParser
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 parser = OptionParser()
+parser.add_option("-d", "--destination",
+                  dest="destination_file",
+                  help="The path to the to the destination",
+                  metavar="FILE",
+                  default="presentation.html")
+parser.add_option("-e", "--encoding",
+                  dest="encoding",
+                  help="The encoding of your files (defaults to utf8)",
+                  metavar="ENCODING",
+                  default="utf8")
+parser.add_option("-t", "--template",
+                  dest="template_file",
+                  help="The path to the to the Jinja2 template file",
+                  metavar="FILE",
+                  default="base.html")
+parser.add_option("-o", "--direct-ouput",
+                  action="store_true",
+                  dest="direct",
+                  help="Prints the generated HTML code to stdin",
+                  default=False)
+parser.add_option("-q", "--quiet",
+                  action="store_false",
+                  dest="verbose",
+                  help="Won't write anything to stdin",
+                  default=False)
 parser.add_option("-s", "--source",
                   dest="source",
                   help="The path to the markdown source file, or a directory \
                         containing several files to combine",
                   metavar="FILE",
                   default="slides.md")
-parser.add_option("-d", "--destination",
-                  dest="destination_file",
-                  help="The path to the to the destination",
-                  metavar="FILE",
-                  default="presentation.html")
-parser.add_option("-t", "--template",
-                  dest="template_file",
-                  help="The path to the to the Jinja2 template file",
-                  metavar="FILE",
-                  default="base.html")
-parser.add_option("-e", "--encoding",
-                  dest="encoding",
-                  help="The encoding of your files (defaults to utf8)",
-                  metavar="ENCODING",
-                  default="utf8")
-parser.add_option("-o", "--direct-ouput",
+parser.add_option("-v", "--verbose",
                   action="store_true",
-                  dest="direct",
-                  help="Prints the generated HTML code to stdin",
-                  default=False)
+                  dest="verbose",
+                  help="Write informational messages to stdin (enabled by  \
+                        default)",
+                  default=True)
 
 (options, args) = parser.parse_args()
 
 class Generator:
     def __init__(self, options, args):
+        self.configure(options, args)
+    
+    def configure(self, options, args):
+        """
+        Configures this generator from its properties. "args" are not used (yet?)
+        """
         self.direct = options.direct
-        self.destination_file = options.destination_file
         self.encoding = options.encoding
-        self.source = options.source
-        self.template_file = options.template_file
+        self.verbose = options.verbose
+        
+        if (os.path.exists and not os.path.isfile(options.destination_file)):
+            raise IOError("Destination %s exists and is not a file" % options.destination_file)
+        else:
+            self.destination_file = options.destination_file
+        
+        if (not os.access(self.destination_file, os.W_OK)):
+            raise IOError("Destination file %s is not writeable" % self.destination_file)
+        
+        if (os.path.exists(options.source)):
+            self.source = options.source
+        else:
+            raise IOError("Source file/directory %s does not exist" % options.source)
+
+        if (os.path.exists(options.template_file)):
+            self.template_file = options.template_file
+        else:
+            raise IOError("Template file %s does not exist" % options.template_file)
 
     def execute(self):
         """
-        Execute this generator configured process
+        Execute this generator regarding its current configuration
         """
         if (self.direct):
             print self.render()
         else:
             self.write()
-            print "Generated file: %s" % self.destination_file
+            self.log("Generated file: %s" % self.destination_file)
 
     def fetch_md_contents(self, source):
         """
-        Fetches Mardown contents from a single file, or a directory containing
-        Markdown files
+        Recursively fetches Markdown contents from a single file or directories 
+        containing Markdown files
         """
-        print "Adding %s" % source
+        self.log("Adding %s" % source)
+        
         md_contents = ""
+        
         if os.path.isdir(source):
             for md_file in glob.glob('%s/*.md' % source):
                 md_contents = md_contents + self.fetch_md_contents(md_file)
@@ -79,20 +115,17 @@ class Generator:
         """
         Computes template vars from slide source
         """
-        template_vars = {}
-
-        template_vars['head_title'] = slides_src[0].split('>')[1].split('<')[0]
-
-        template_vars['slides'] = []
+        head_title = slides_src[0].split('>')[1].split('<')[0]
+        
+        slides = []
 
         for slide_src in slides_src:
             header, content = slide_src.split('\n', 1)
 
-            content = self.highlight_code(content)
+            slides.append({'header': header, 
+                           'content': self.highlight_code(content)})
 
-            template_vars['slides'].append({'header': header, 'content': content})
-
-        return template_vars
+        return {'head_title': head_title, 'slides': slides}
 
     def highlight_code(self, content):
         """
@@ -120,6 +153,10 @@ class Generator:
 
         return content
 
+    def log(self, message):
+        if (self.verbose):
+            print message
+    
     def render(self):
         """
         Returns generated html code
@@ -130,7 +167,7 @@ class Generator:
 
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
-
+        
         return template.render(self.get_template_vars(slides_src))
 
     def write(self):
@@ -140,4 +177,7 @@ class Generator:
         outfile = codecs.open(self.destination_file, 'w', encoding=self.encoding)
         outfile.write(self.render())
 
-Generator(options, args).execute()
+try:
+    Generator(options, args).execute()
+except Exception as e:
+    sys.exit("Error: %s" % e)
