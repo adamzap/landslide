@@ -6,6 +6,8 @@ Generates a slideshow using the slides that power
 
 A sample slideshow is [here](http://adamzap.com/random/html5-slides-markdown.html).
 
+---
+
 News
 ----
 
@@ -13,6 +15,8 @@ News
 (48024cfe), title slides are rendered like any other. This means that you must
 render them to an h1 element (# or = below). This is cleaner and more
 consistent.
+
+---
 
 Requirements
 ------------
@@ -23,14 +27,18 @@ Requirements
 - `markdown`
 - `pygments`
 
+---
+
 Markdown Formatting Instructions
 --------------------------------
 
 - To create a title slide, render a single h1 element
 - Separate your slides with a horizontal rule (`---` in markdown)
 - Your other slides should have a heading that renders to an h1 element
-- To highlight blocks of code, put `!{{lang}}` where `{{lang}}` is the pygment supported language identifier as the first indented line
+- To highlight blocks of code, put !`{lang}` where `{lang}` is the pygment supported language identifier as the first indented line
 - See the included `slides.md` for an example
+
+---
 
 Rendering Instructions
 ----------------------
@@ -38,6 +46,12 @@ Rendering Instructions
 - Put your markdown content in a file called `slides.md`
 - Run `python render.py` (or `./render.py`)
 - Enjoy your newly generated `presentation.html`
+
+As a proof of concept, you can even transform this annoying README into a fancy presentation:
+
+    $ ./render.py -s README.md && open presentation.html
+
+---
 
 Options
 -------
@@ -63,6 +77,8 @@ Several options are available using the command line:
       -v, --verbose         Write informational messages to stdin (enabled by
                             default)
 
+---
+
 Advanced Usage
 --------------
 
@@ -82,10 +98,14 @@ Advanced Usage
 
     $ ./render.py -t ~/templates/mytemplate.html
 
+---
+
 TODO
 ----
 
 - Test CSS for all Markdown features
+
+---
 
 Authors
 -------
