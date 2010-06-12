@@ -25,7 +25,69 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>{{ head_title }}</title>
-    <style type = "text/css">
+    <style type="text/css" media="print">
+      * {
+          margin: 0;
+          padding: 0;
+      }
+      @page { 
+          size: landscape; 
+      }
+      body {
+          font: 150% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+          padding: 0;
+          margin: 0;
+      }
+      p, li, header, h1, h2, h3, h4, h5, h6 {
+          text-align: center;
+      }
+      div.slide {
+          min-width: 800px;
+          min-height: 600px;
+          padding: 1em;
+          overflow: hidden;
+          page-break-after: always;
+      }
+      div.slide div.inner {
+          width: 800px;
+          height: 600px;
+          margin: auto;
+          display: table-cell; 
+          vertical-align: middle;
+      }
+      div.slide header {
+          text-align: center;
+      }
+      h1 {
+          font-size: 2em;
+      }
+      ul {
+          margin: 0;
+          padding: 0;
+          text-align: center;
+          list-style-type: none;
+      }
+      p, li {
+          margin: 1em 0;
+          text-align: center;
+          line-height: 1.4em;
+      }
+      pre, code {
+          max-width: 800px;
+          background: #eee;
+          font-family: Monaco, monospace;
+          font-size: 90%;
+      }
+      pre {
+          padding: .5em;
+          overflow: hidden;
+          border-radius: .8em;
+      }
+      code {
+          padding: 0 .2em;
+      }
+    </style>
+    <style type="text/css" media="screen">
         body {
           font: 14px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
           background: #778;
@@ -405,10 +467,12 @@
       <div class="slides">
         {% for slide in slides %}
           <div class="slide">
-              <header>{{ slide.header }}</header>
-              {% if slide.content %}
-                  <section>{{ slide.content }}</section>
-              {% endif %}
+              <div class="inner">
+                  <header>{{ slide.header }}</header>
+                  {% if slide.content %}
+                      <section>{{ slide.content }}</section>
+                  {% endif %}
+              </div>
           </div>
         {% endfor %}
       </div>
