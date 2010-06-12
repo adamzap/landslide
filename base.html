@@ -192,16 +192,13 @@
           font-size: 20px;
         }
 
-        section.title, .slide header:only-child h1 {
+        .slide header:only-child h1 {
           line-height: 180%;
           text-align: center;
           display: table-cell;
           vertical-align: middle;
           height: 700px;
           width: 900px;
-        }
-
-        section.title p, .slide header:only-child h1 {
           font-size: 50px;
           margin-top:100px;
           margin-bottom:100px;
@@ -406,9 +403,6 @@
 <body>
     <div class="presentation">
       <div class="slides">
-        <div class="slide">
-            <section class="title">{{ title }}</section>
-        </div>
         {% for slide in slides %}
           <div class="slide">
               <header>{{ slide.header }}</header>

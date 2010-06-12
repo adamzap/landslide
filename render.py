@@ -81,9 +81,7 @@ class Generator:
         """
         template_vars = {}
 
-        title = template_vars['title'] = slides_src.pop(0)
-
-        template_vars['head_title'] = title.split('>')[1].split('<')[0]
+        template_vars['head_title'] = slides_src[0].split('>')[1].split('<')[0]
 
         template_vars['slides'] = []
 

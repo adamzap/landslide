@@ -1,6 +1,5 @@
 html5-slides-markdown
-
-(this is a title slide)
+=====================
 
 ---
 
