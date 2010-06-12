@@ -59,7 +59,7 @@ class Generator:
         md_contents = ""
         
         if os.path.isdir(source):
-            for md_file in glob.glob('%s/*.md' % source):
+            for md_file in glob.glob(os.path.join(source, '*.md')):
                 md_contents = md_contents + self.fetch_md_contents(md_file)
         else:
             md_contents = codecs.open(source, encoding=self.encoding).read()
