@@ -51,7 +51,7 @@ class Generator:
 
     def fetch_md_contents(self, source):
         """
-        Recursively fetches Markdown contents from a single file or directories 
+        Recursively fetches Markdown contents from a single file or directory 
         containing Markdown files
         """
         self.log("Adding %s" % source)
@@ -59,8 +59,12 @@ class Generator:
         md_contents = ""
         
         if os.path.isdir(source):
-            for md_file in glob.glob(os.path.join(source, '*.md')):
-                md_contents = md_contents + self.fetch_md_contents(md_file)
+            for entry in os.listdir(source):
+                current = os.path.join(source, entry)
+                if os.path.isdir(current):
+                    md_contents = md_contents + self.fetch_md_contents(current)
+                elif current.endswith('.md') or current.endswith('.markdown'):
+                    md_contents = md_contents + self.fetch_md_contents(current)
         else:
             md_contents = codecs.open(source, encoding=self.encoding).read()
 
