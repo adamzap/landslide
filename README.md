@@ -6,13 +6,20 @@ Generates a slideshow using the slides that power
 
 A sample slideshow is [here](http://adamzap.com/random/html5-slides-markdown.html).
 
-A `python` with the `jinja2`, `markdown`, and `pygments` modules is required.
+Requirements
+------------
+
+`python` and the following modules:
+
+- `jinja2`
+- `markdown`
+- `pygments`
 
 Markdown Formatting Instructions
 --------------------------------
 
+- To create a title slide, render a single h1 element
 - Separate your slides with a horizontal rule (--- in markdown)
-- Your first slide (title slide) should not have a heading, only `<p>`s
 - Your other slides should have a heading that renders to an h1 element
 - To highlight blocks of code, put !{{lang}} as the first indented line
 - See the included slides.md for an example
@@ -53,4 +60,6 @@ TODO
 Thanks
 ------
 
-- bradcupit (for suggestions and encouragement)
+- Nicolas Perriault (n1k0)
+- Vincent Agnano (Particules)
+- Brad Cupit (bradcupit)
