@@ -9,7 +9,8 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("-d", "--destination",
                   dest="destination_file",
-                  help="The path to the to the destination file: .html or .pdf",
+                  help="The path to the to the destination file: .html or "
+                       ".pdf extensions allowed",
                   metavar="FILE",
                   default="presentation.html")
 parser.add_option("-e", "--encoding",
@@ -34,15 +35,15 @@ parser.add_option("-q", "--quiet",
                   default=False)
 parser.add_option("-s", "--source",
                   dest="source",
-                  help="The path to the markdown source file, or a directory \
-                        containing several files to combine",
+                  help="The path to the markdown source file, or a directory "
+                       "containing several files to combine",
                   metavar="FILE",
                   default="slides.md")
 parser.add_option("-v", "--verbose",
                   action="store_true",
                   dest="verbose",
-                  help="Write informational messages to stdin (enabled by  \
-                        default)",
+                  help="Write informational messages to stdin (enabled by "
+                       "default)",
                   default=True)
 
 (options, args) = parser.parse_args()

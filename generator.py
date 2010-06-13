@@ -14,20 +14,24 @@ from pygments.formatters import HtmlFormatter
 
 from subprocess import *
 
+
 class Generator:
     def __init__(self, options, args):
         self.configure(options, args)
 
     def configure(self, options, args):
         """
-        Configures this generator from its properties. "args" are not used (yet?)
+        Configures this generator from its properties. "args" are not used
+        (yet?)
         """
         self.direct = options.direct
         self.encoding = options.encoding
         self.verbose = False if options.direct else options.verbose
 
-        if (os.path.exists(options.destination_file) and not os.path.isfile(options.destination_file)):
-            raise IOError(u"Destination %s exists and is not a file" % options.destination_file)
+        if (os.path.exists(options.destination_file)
+            and not os.path.isfile(options.destination_file)):
+            raise IOError(u"Destination %s exists and is not a file"
+                          % options.destination_file)
         else:
             self.destination_file = options.destination_file
 
@@ -43,12 +47,14 @@ class Generator:
         if (os.path.exists(options.source)):
             self.source = options.source
         else:
-            raise IOError(u"Source file/directory %s does not exist" % options.source)
+            raise IOError(u"Source file/directory %s does not exist"
+                          % options.source)
 
         if (os.path.exists(options.template_file)):
             self.template_file = options.template_file
         else:
-            raise IOError(u"Template file %s does not exist" % options.template_file)
+            raise IOError(u"Template file %s does not exist"
+                          % options.template_file)
 
     def execute(self):
         """
@@ -56,7 +62,8 @@ class Generator:
         """
         if (self.direct):
             if (self.file_type == 'pdf'):
-                raise IOError(u"Direct output mode is not available for PDF export")
+                raise IOError(u"Direct output mode is not available for PDF "
+                               "export")
             else:
                 print self.render()
         else:
@@ -66,7 +73,7 @@ class Generator:
     def fetch_md_contents(self, source):
         """
         Recursively fetches Markdown contents from a single file or directory
-        containing Markdown files
+        containing itself Markdown files
         """
         self.log(u"Adding %s" % source)
 
@@ -106,7 +113,8 @@ class Generator:
         """
 
         while u'<code>!' in content:
-            code_match = re.search('<code>!(.+?)\n(.+?)</code>', content, re.DOTALL)
+            code_match = re.search('<code>!(.+?)\n(.+?)</code>', content,
+                                   re.DOTALL)
 
             if code_match:
                 lang, code = code_match.groups()
@@ -154,7 +162,8 @@ class Generator:
         if (self.file_type == 'pdf'):
             self.write_pdf(html)
         else:
-            outfile = codecs.open(self.destination_file, 'w', encoding=self.encoding)
+            outfile = codecs.open(self.destination_file, 'w',
+                                  encoding=self.encoding)
             outfile.write(html)
 
     def write_pdf(self, html):
@@ -168,7 +177,7 @@ class Generator:
             f.close()
         except Exception:
             raise IOError(u"Unable to create temporary file")
-        
+
         try:
             command = Popen(["prince", f.name, self.destination_file])
         except Exception:
