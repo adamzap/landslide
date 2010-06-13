@@ -100,7 +100,7 @@ Several options are available using the command line:
 Advanced Usage
 --------------
 
-### Setting Cutom Destination File
+### Setting Custom Destination File
 
     $ ./render.py -d ~/MyPresentations/KeynoteKiller.html
 
