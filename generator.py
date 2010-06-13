@@ -26,6 +26,7 @@ class Generator:
         """Configures this generator from its properties. "args" are not used
         (yet?)
         """
+        self.debug = options.debug
         self.direct = options.direct
         self.encoding = options.encoding
         self.verbose = False if options.direct else options.verbose
@@ -211,6 +212,8 @@ class Generator:
         return content
 
     def log(self, message):
+        """Log a message (eventually, override to do something more clever)
+        """
         if self.verbose:
             print message
 
