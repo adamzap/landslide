@@ -7,6 +7,11 @@ from generator import Generator
 from optparse import OptionParser
 
 parser = OptionParser()
+parser.add_option("-b", "--debug",
+                  action="store_true",
+                  dest="debug",
+                  help="Will display any exception trace to stdin",
+                  default=False)
 parser.add_option("-d", "--destination",
                   dest="destination_file",
                   help="The path to the to the destination file: .html or "
@@ -48,7 +53,10 @@ parser.add_option("-v", "--verbose",
 
 (options, args) = parser.parse_args()
 
-try:
+if (options.debug):
     Generator(options, args).execute()
-except Exception, e:
-    sys.exit("Error: %s" % e)
+else:
+    try:
+        Generator(options, args).execute()
+    except Exception, e:
+        sys.exit("Error: %s" % e)
