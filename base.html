@@ -474,7 +474,9 @@
         {% for slide in slides %}
           <div class="slide">
               <div class="inner">
+                  {% if slide.header %}
                   <header>{{ slide.header }}</header>
+                  {% endif %}
                   {% if slide.content %}
                       <section>{{ slide.content }}</section>
                   {% endif %}

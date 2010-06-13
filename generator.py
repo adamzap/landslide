@@ -89,20 +89,33 @@ class Generator:
         else:
             md_contents = codecs.open(source, encoding=self.encoding).read()
 
+        if not md_contents.strip():
+            raise ValueError("No Markdown contents found")
+
         return md_contents
 
     def get_template_vars(self, slides_src):
         """
         Computes template vars from slide source
         """
-        head_title = slides_src[0].split('>')[1].split('<')[0]
+        try:
+            head_title = slides_src[0].split('>')[1].split('<')[0]
+        except IndexError:
+            head_title = "Untitled Presentation"
 
         slides = []
 
         for slide_src in slides_src:
-            header, content = slide_src.split('\n', 1)
+            if not slide_src.strip():
+                continue
+            
+            try:
+                header, content = slide_src.split('\n', 1)
+            except ValueError:
+                header = None
+                content = slide_src
 
-            slides.append({'header': header,
+            slides.append({'header': header, 
                            'content': self.highlight_code(content)})
 
         return {'head_title': head_title, 'slides': slides}

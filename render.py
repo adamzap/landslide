@@ -50,5 +50,5 @@ parser.add_option("-v", "--verbose",
 
 try:
     Generator(options, args).execute()
-except Exception as e:
+except Exception, e:
     sys.exit("Error: %s" % e)
