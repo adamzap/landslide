@@ -81,7 +81,7 @@ class Generator:
             if (image_url.startswith('http://')
                 or image_url.startswith('https://')):
                 continue
-            elif image_url.startswith('/'): # TODO: add Windows compliance?
+            elif image_url.startswith('/'):  # TODO: add Windows compliance?
                 image_real_path = image_url
             else:
                 source_base_dir = os.path.dirname(from_source)
