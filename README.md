@@ -24,7 +24,7 @@ Features
 --------
 
 - Write your slide contents easily using the [Markdown syntax](http://daringfireball.net/projects/markdown/syntax)
-- HTML5, Web based, stand-alone document (even with images), fancy transitions
+- HTML5, Web based, stand-alone document (embedded local images), fancy transitions
 - PDF export (using [PrinceXML](http://www.princexml.com/) if available)
 
 ---
