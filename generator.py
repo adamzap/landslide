@@ -104,12 +104,14 @@ class Generator:
         """
         Performs syntax coloration in slide code blocks
         """
-        while u'<code>!' in content:
-            lang_match = re.search('<code>!(.+)\n', content)
 
-            if lang_match:
-                lang = lang_match.group(1)
-                code = content.split(lang, 1)[1].split(u'</code', 1)[0]
+        while u'<code>!' in content:
+            code_match = re.search('<code>!(.+?)\n(.+?)</code>', content, re.DOTALL)
+
+            if code_match:
+                lang, code = code_match.groups()
+
+                code = code.replace('&lt;', '<').replace('&gt;', '>')
 
                 lexer = get_lexer_by_name(lang)
 
