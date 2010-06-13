@@ -15,7 +15,7 @@ News
 
 **06/11/10** - Current slideshows will need to be updated. As of tonight's changes
 (48024cfe), title slides are rendered like any other. This means that you must
-render them to an h1 element (# or = below). This is cleaner and more
+render them to an h1 element (`#` or `=` below). This is cleaner and more
 consistent.
 
 ---
@@ -112,7 +112,7 @@ Advanced Usage
 
     $ ./render.py -o |tidy
 
-### Using and Alternate Jinja2 Template
+### Using an Alternate Jinja2 Template
 
     $ ./render.py -t ~/templates/mytemplate.html
 
@@ -125,7 +125,17 @@ Advanced Usage
 TODO
 ----
 
+- Create a `pip` and `setuptools` compatible package, and therefore find a cool name for it
+- Manage presentation *projects*, each one having its own configuration file; the configuration file could configure:
+  - theme (template, assets, etc), 
+  - sources to order and aggregate, 
+  - destination,
+  - options
+- Make sure images are correctly embedded, both in html and pdf presentations
+- Write tests
+- Handle the case of markdown files aggregation, atm its necessary to write a `---` separator at the end of each one but the last
 - Test CSS for all Markdown features
+- Make a better default print stylesheet for PDF export
 - Get rid of the annoying princexml warnings on PDF generation (princexml can't handle html5 tags like `<header>` but generated PDFs are okay)
 
 ---
@@ -133,7 +143,7 @@ TODO
 Authors
 -------
 
-- Adam Zapletal ([adamzap](http://github.com/adamzap))
-- Brad Cupit ([bradcupit](github.com/bradcupit))
-- Nicolas Perriault ([n1k0](github.com/n1k0))
-- Vincent Agnano ([vinyll](github.com/vinyll))
+- [Adam Zapletal](http://github.com/adamzap)
+- [Brad Cupit](github.com/bradcupit) ([fork](http://github.com/bradcupit/html5-slides-markdown))
+- [Nicolas Perriault](github.com/n1k0) ([fork](http://github.com/n1k0/html5-slides-markdown))
+- [Vincent Agnano](github.com/vinyll) ([fork](http://github.com/vinyll/html5-slides-markdown))
