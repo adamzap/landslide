@@ -104,6 +104,10 @@ class Generator:
                 image_contents = open(image_real_path).read()
                 encoded_image = base64.b64encode(image_contents)
             except IOError:
+                self.log(u"Warning: unable to read image contents %s: skipping"
+                         % image_real_path)
+                continue
+            except Exception:
                 self.log(u"Warning: unable to base64-encode image %s: skipping"
                          % image_real_path)
                 continue
@@ -124,7 +128,7 @@ class Generator:
                 raise IOError(u"Direct output mode is not available for PDF "
                                "export")
             else:
-                print self.render()
+                print self.render().encode(self.encoding)
         else:
             self.write()
             self.log(u"Generated file: %s" % self.destination_file)
