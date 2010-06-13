@@ -24,7 +24,7 @@ Features
 --------
 
 - Write your slide contents easily using the [Markdown syntax](http://daringfireball.net/projects/markdown/syntax)
-- HTML5, Web based, stand-alone document, fancy transitions
+- HTML5, Web based, stand-alone document (even with images), fancy transitions
 - PDF export (using [PrinceXML](http://www.princexml.com/) if available)
 
 ---
@@ -73,18 +73,18 @@ Options
 
 Several options are available using the command line:
 
-    $ ./render.py 
-    Adding slides.md
-    Generated file: presentation.html
-    ~/Sites/html5-slides-markdown $ ./render.py --help
+    $ ./render.py --help
     Usage: render.py [options]
 
     Options:
       -h, --help            show this help message and exit
+      -b, --debug           Will display any exception trace to stdin
       -d FILE, --destination=FILE
                             The path to the to the destination file: .html or .pdf
+                            extensions allowed
       -e ENCODING, --encoding=ENCODING
                             The encoding of your files (defaults to utf8)
+      -i, --embed           Embed base64-encoded images in presentation
       -t FILE, --template=FILE
                             The path to the to the Jinja2 template file
       -o, --direct-ouput    Prints the generated HTML code to stdin
@@ -115,6 +115,10 @@ Advanced Usage
 ### Using an Alternate Jinja2 Template
 
     $ ./render.py -t ~/templates/mytemplate.html
+
+### Embedding Base-64-Encoded Images
+
+    $ ./render.py -i
 
 ### Exporting to PDF
 

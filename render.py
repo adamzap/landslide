@@ -23,6 +23,11 @@ parser.add_option("-e", "--encoding",
                   help="The encoding of your files (defaults to utf8)",
                   metavar="ENCODING",
                   default="utf8")
+parser.add_option("-i", "--embed",
+                  action="store_true",
+                  dest="embed",
+                  help="Embed base64-encoded images in presentation",
+                  default=False)
 parser.add_option("-t", "--template",
                   dest="template_file",
                   help="The path to the to the Jinja2 template file",
