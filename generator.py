@@ -62,7 +62,7 @@ class Generator:
                           % options.template_file)
 
     def embed_images(self, html_contents, from_source):
-        """Extracts images url and embed them using the base64 algorythm
+        """Extracts images url and embed them using the base64 algorithm
         """
         images = re.findall(r'<img\s.*?src="(.+?)"\s?.*?/?>', html_contents,
                             re.DOTALL | re.UNICODE)
