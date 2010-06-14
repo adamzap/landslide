@@ -251,8 +251,14 @@ class Generator:
         except Exception:
             raise IOError(u"Unable to create temporary file")
 
+        dummy_fh = open(os.path.devnull, 'w')
+
         try:
-            command = Popen(["prince", f.name, self.destination_file])
+            command = ["prince", f.name, self.destination_file]
+
+            process = Popen(command, stderr=dummy_fh).communicate()
         except Exception:
             raise EnvironmentError(u"Unable to generate PDF file using prince."
                                     "Is it installed and available?")
+
+        dummy_fh.close()
