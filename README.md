@@ -15,7 +15,7 @@ News
 
 **06/11/10** - Current slideshows will need to be updated. As of tonight's changes
 (48024cfe), title slides are rendered like any other. This means that you must
-render them to an h1 element (# or = below). This is cleaner and more
+render them to an h1 element (`#` or `=` below). This is cleaner and more
 consistent.
 
 ---
@@ -24,7 +24,7 @@ Features
 --------
 
 - Write your slide contents easily using the [Markdown syntax](http://daringfireball.net/projects/markdown/syntax)
-- HTML5, Web based, stand-alone document, fancy transitions
+- HTML5, Web based, stand-alone document (embedded local images), fancy transitions
 - PDF export (using [PrinceXML](http://www.princexml.com/) if available)
 
 ---
@@ -73,18 +73,18 @@ Options
 
 Several options are available using the command line:
 
-    $ ./render.py 
-    Adding slides.md
-    Generated file: presentation.html
-    ~/Sites/html5-slides-markdown $ ./render.py --help
+    $ ./render.py --help
     Usage: render.py [options]
 
     Options:
       -h, --help            show this help message and exit
+      -b, --debug           Will display any exception trace to stdin
       -d FILE, --destination=FILE
                             The path to the to the destination file: .html or .pdf
+                            extensions allowed
       -e ENCODING, --encoding=ENCODING
                             The encoding of your files (defaults to utf8)
+      -i, --embed           Embed base64-encoded images in presentation
       -t FILE, --template=FILE
                             The path to the to the Jinja2 template file
       -o, --direct-ouput    Prints the generated HTML code to stdin
@@ -100,7 +100,7 @@ Several options are available using the command line:
 Advanced Usage
 --------------
 
-### Setting Cutom Destination File
+### Setting Custom Destination File
 
     $ ./render.py -d ~/MyPresentations/KeynoteKiller.html
 
@@ -112,9 +112,13 @@ Advanced Usage
 
     $ ./render.py -o |tidy
 
-### Using and Alternate Jinja2 Template
+### Using an Alternate Jinja2 Template
 
     $ ./render.py -t ~/templates/mytemplate.html
+
+### Embedding Base-64-Encoded Images
+
+    $ ./render.py -i
 
 ### Exporting to PDF
 
@@ -125,7 +129,17 @@ Advanced Usage
 TODO
 ----
 
+- Create a `pip` and `setuptools` compatible package, and therefore find a cool name for it
+- Manage presentation *projects*, each one having its own configuration file; the configuration file could configure:
+  - theme (template, assets, etc), 
+  - sources to order and aggregate, 
+  - destination,
+  - options
+- Make sure images are correctly embedded, both in html and pdf presentations
+- Write tests
+- Handle the case of markdown files aggregation, atm its necessary to write a `---` separator at the end of each one but the last
 - Test CSS for all Markdown features
+- Make a better default print stylesheet for PDF export
 - Get rid of the annoying princexml warnings on PDF generation (princexml can't handle html5 tags like `<header>` but generated PDFs are okay)
 
 ---
@@ -133,7 +147,7 @@ TODO
 Authors
 -------
 
-- Adam Zapletal ([adamzap](http://github.com/adamzap))
-- Brad Cupit ([bradcupit](github.com/bradcupit))
-- Nicolas Perriault ([n1k0](github.com/n1k0))
-- Vincent Agnano ([vinyll](github.com/vinyll))
+- [Adam Zapletal](http://github.com/adamzap)
+- [Brad Cupit](github.com/bradcupit) ([fork](http://github.com/bradcupit/html5-slides-markdown))
+- [Nicolas Perriault](github.com/n1k0) ([fork](http://github.com/n1k0/html5-slides-markdown))
+- [Vincent Agnano](github.com/vinyll) ([fork](http://github.com/vinyll/html5-slides-markdown))
