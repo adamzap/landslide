@@ -138,9 +138,7 @@ TODO
 - Make sure images are correctly embedded, both in html and pdf presentations
 - Write tests
 - Handle the case of markdown files aggregation, atm its necessary to write a `---` separator at the end of each one but the last
-- Test CSS for all Markdown features
 - Make a better default print stylesheet for PDF export
-- Get rid of the annoying princexml warnings on PDF generation (princexml can't handle html5 tags like `<header>` but generated PDFs are okay)
 
 ---
 
