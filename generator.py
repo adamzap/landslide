@@ -260,5 +260,5 @@ class Generator:
         except Exception:
             raise EnvironmentError(u"Unable to generate PDF file using prince."
                                     "Is it installed and available?")
-
-        dummy_fh.close()
+        finally:
+            dummy_fh.close()
