@@ -196,7 +196,12 @@ class Generator:
 
                 code = code.replace('&lt;', '<').replace('&gt;', '>')
 
-                lexer = get_lexer_by_name(lang)
+                try:
+                    lexer = get_lexer_by_name(lang)
+                except Exception:
+                    self.log(u"Unknown pygment lexer \"%s\", code higlighting "
+                              "skipped" % lang)
+                    continue
 
                 formatter = HtmlFormatter(linenos='inline', noclasses=True,
                                           nobackground=True)
@@ -260,5 +265,5 @@ class Generator:
         except Exception:
             raise EnvironmentError(u"Unable to generate PDF file using prince."
                                     "Is it installed and available?")
-
-        dummy_fh.close()
+        finally:
+            dummy_fh.close()
