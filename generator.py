@@ -195,6 +195,7 @@ class Generator:
                 lang, code = code_match.groups()
 
                 code = code.replace('&lt;', '<').replace('&gt;', '>')
+                code = code.replace('&amp;', '&')
 
                 try:
                     lexer = get_lexer_by_name(lang)
@@ -207,7 +208,6 @@ class Generator:
                                           nobackground=True)
 
                 pretty_code = pygments.highlight(code, lexer, formatter)
-                pretty_code = pretty_code.replace('&amp;', '&')
 
                 before_code = content.split(u'<code>', 1)[0]
                 after_code = content.split(u'</code>', 1)[1]

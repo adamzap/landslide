@@ -105,3 +105,14 @@ Third code block:
         <date>1511</date>–<date>1512</date>.
       </caption>
     </painting>
+
+---
+
+Slide #5
+========
+Another code block:
+
+    !java
+    if (markdown && isEasy()) {
+        return true; 
+    }
