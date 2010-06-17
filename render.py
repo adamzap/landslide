@@ -6,7 +6,11 @@ import sys
 from generator import Generator
 from optparse import OptionParser
 
-parser = OptionParser()
+parser = OptionParser(usage="%prog [options] input ...",
+                      description="Generates fancy HTML5 or PDF slideshows "
+                                  "from Mardown sources ",
+                      epilog="Note: PDF export requires the `prince` program: "
+                             "http://princexml.com/")
 parser.add_option("-b", "--debug",
                   action="store_true",
                   dest="debug",
@@ -30,25 +34,20 @@ parser.add_option("-i", "--embed",
                   default=False)
 parser.add_option("-t", "--template",
                   dest="template_file",
-                  help="The path to the to the Jinja2 template file",
+                  help="The path to a Jinja2 compatible template file",
                   metavar="FILE",
-                  default="base.html")
+                  default=None)
 parser.add_option("-o", "--direct-ouput",
                   action="store_true",
                   dest="direct",
-                  help="Prints the generated HTML code to stdin",
+                  help="Prints the generated HTML code to stdin; won't work "
+                       "with PDF export",
                   default=False)
 parser.add_option("-q", "--quiet",
                   action="store_false",
                   dest="verbose",
-                  help="Won't write anything to stdin",
+                  help="Won't write anything to stdin (silent mode)",
                   default=False)
-parser.add_option("-s", "--source",
-                  dest="source",
-                  help="The path to the markdown source file, or a directory "
-                       "containing several files to combine",
-                  metavar="FILE",
-                  default="slides.md")
 parser.add_option("-v", "--verbose",
                   action="store_true",
                   dest="verbose",
@@ -58,11 +57,23 @@ parser.add_option("-v", "--verbose",
 
 (options, args) = parser.parse_args()
 
-if (options.debug):
-    Generator(options, args).execute()
-else:
-    try:
-        Generator(options, args).execute()
-    except Exception, e:
-        sys.stderr.write("Error: %s" % e)
-        sys.exit(1)
+if not args:
+    sys.stderr.write("Error: Missing argument\n")
+    sys.exit(1)
+
+def run():
+    generator = Generator(args[0], options.destination_file, 
+                          options.template_file, direct=options.direct, 
+                          debug=options.debug, verbose=options.verbose,
+                          embed=options.embed, encoding=options.encoding)
+    generator.execute()
+
+if __name__ == '__main__':
+    if (options.debug):
+        run()
+    else:
+        try:
+            run()
+        except Exception, e:
+            sys.stderr.write("Error: %s\n" % e)
+            sys.exit(1)

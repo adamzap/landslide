@@ -18,25 +18,27 @@ from pygments.formatters import HtmlFormatter
 from subprocess import *
 
 
-class Generator:
-    def __init__(self, options, args):
-        self.configure(options, args)
+BASE_DIR = os.path.dirname(__file__)
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
-    def configure(self, options, args):
+class Generator:
+    def __init__(self, source, destination_file='presentation.html', 
+                 template_file=None, direct=False, debug=False, verbose=True, 
+                 embed=False, encoding='utf8'):
         """Configures this generator from its properties. "args" are not used
         (yet?)
         """
-        self.debug = options.debug
-        self.direct = options.direct
-        self.encoding = options.encoding
-        self.verbose = False if options.direct else options.verbose
+        self.debug = debug
+        self.direct = direct
+        self.encoding = encoding
+        self.verbose = False if direct else verbose
 
-        if (os.path.exists(options.destination_file)
-            and not os.path.isfile(options.destination_file)):
+        if (os.path.exists(destination_file)
+            and not os.path.isfile(destination_file)):
             raise IOError(u"Destination %s exists and is not a file"
-                          % options.destination_file)
+                          % destination_file)
         else:
-            self.destination_file = options.destination_file
+            self.destination_file = destination_file
 
         if self.destination_file.endswith('.html'):
             self.file_type = 'html'
@@ -47,19 +49,22 @@ class Generator:
                            "please use one of these file extensions in the "
                            "destination")
 
-        self.embed = True if self.file_type == 'pdf' else options.embed
+        self.embed = True if self.file_type == 'pdf' else embed
 
-        if os.path.exists(options.source):
-            self.source = options.source
+        if os.path.exists(source):
+            self.source = source
         else:
             raise IOError(u"Source file/directory %s does not exist"
-                          % options.source)
+                          % source)
 
-        if os.path.exists(options.template_file):
-            self.template_file = options.template_file
+        if not template_file:
+            template_file = os.path.join(TEMPLATE_DIR, 'base.html')
+        
+        if os.path.exists(template_file):
+            self.template_file = template_file
         else:
             raise IOError(u"Template file %s does not exist"
-                          % options.template_file)
+                          % template_file)
 
     def embed_images(self, html_contents, from_source):
         """Extracts images url and embed them using the base64 algorithm
