@@ -6,7 +6,7 @@ import sys
 from generator import Generator
 from optparse import OptionParser
 
-parser = OptionParser(usage="%prog [options] input ...",
+parser = OptionParser(usage="%prog [options] input.md ...",
                       description="Generates fancy HTML5 or PDF slideshows "
                                   "from Mardown sources ",
                       epilog="Note: PDF export requires the `prince` program: "
@@ -19,7 +19,7 @@ parser.add_option("-b", "--debug",
 parser.add_option("-d", "--destination",
                   dest="destination_file",
                   help="The path to the to the destination file: .html or "
-                       ".pdf extensions allowed",
+                       ".pdf extensions allowed (default: presentation.html)",
                   metavar="FILE",
                   default="presentation.html")
 parser.add_option("-e", "--encoding",
@@ -58,12 +58,12 @@ parser.add_option("-v", "--verbose",
 (options, args) = parser.parse_args()
 
 if not args:
-    sys.stderr.write("Error: Missing argument\n")
+    parser.print_help()
     sys.exit(1)
 
 def run():
-    generator = Generator(args[0], options.destination_file, 
-                          options.template_file, direct=options.direct, 
+    generator = Generator(args[0], options.destination_file,
+                          options.template_file, direct=options.direct,
                           debug=options.debug, verbose=options.verbose,
                           embed=options.embed, encoding=options.encoding)
     generator.execute()

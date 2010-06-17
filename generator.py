@@ -22,8 +22,8 @@ BASE_DIR = os.path.dirname(__file__)
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
 class Generator:
-    def __init__(self, source, destination_file='presentation.html', 
-                 template_file=None, direct=False, debug=False, verbose=True, 
+    def __init__(self, source, destination_file='presentation.html',
+                 template_file=None, direct=False, debug=False, verbose=True,
                  embed=False, encoding='utf8'):
         """Configures this generator from its properties. "args" are not used
         (yet?)
@@ -59,7 +59,7 @@ class Generator:
 
         if not template_file:
             template_file = os.path.join(TEMPLATE_DIR, 'base.html')
-        
+
         if os.path.exists(template_file):
             self.template_file = template_file
         else:
