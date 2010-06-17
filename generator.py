@@ -143,17 +143,19 @@ class Generator:
         """Recursively fetches Markdown contents from a single file or
         directory containing itself Markdown files
         """
-        self.log(u"Adding %s" % source)
-
         contents = ""
 
         if os.path.isdir(source):
+            self.log(u"Entering %s/" % source)
+
             for entry in os.listdir(source):
                 current = os.path.join(source, entry)
                 if (os.path.isdir(current) or current.endswith('.md')
                     or current.endswith('.markdown')):
                     contents = contents + self.fetch_contents(current)
         else:
+            self.log(u"Adding   %s" % source)
+
             md_contents = codecs.open(source, encoding=self.encoding).read()
             contents = markdown.markdown(md_contents)
             if self.embed:
