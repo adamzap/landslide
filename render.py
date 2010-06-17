@@ -64,4 +64,5 @@ else:
     try:
         Generator(options, args).execute()
     except Exception, e:
-        sys.exit("Error: %s" % e)
+        sys.stderr.write("Error: %s" % e)
+        sys.exit(1)
