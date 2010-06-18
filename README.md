@@ -13,6 +13,9 @@ A sample slideshow is [here](http://adamzap.com/random/html5-slides-markdown.htm
 News
 ----
 
+**06/18/10** - You must now explicitly provide a source file to render.py. slides.md is
+no longer assumed. See help for more information.
+
 **06/11/10** - Current slideshows will need to be updated. As of tonight's changes
 (48024cfe), title slides are rendered like any other. This means that you must
 render them to an h1 element (`#` or `=` below). This is cleaner and more
