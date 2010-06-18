@@ -18,25 +18,27 @@ from pygments.formatters import HtmlFormatter
 from subprocess import *
 
 
-class Generator:
-    def __init__(self, options, args):
-        self.configure(options, args)
+BASE_DIR = os.path.dirname(__file__)
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
-    def configure(self, options, args):
+class Generator:
+    def __init__(self, source, destination_file='presentation.html',
+                 template_file=None, direct=False, debug=False, verbose=True,
+                 embed=False, encoding='utf8'):
         """Configures this generator from its properties. "args" are not used
         (yet?)
         """
-        self.debug = options.debug
-        self.direct = options.direct
-        self.encoding = options.encoding
-        self.verbose = False if options.direct else options.verbose
+        self.debug = debug
+        self.direct = direct
+        self.encoding = encoding
+        self.verbose = False if direct else verbose
 
-        if (os.path.exists(options.destination_file)
-            and not os.path.isfile(options.destination_file)):
+        if (os.path.exists(destination_file)
+            and not os.path.isfile(destination_file)):
             raise IOError(u"Destination %s exists and is not a file"
-                          % options.destination_file)
+                          % destination_file)
         else:
-            self.destination_file = options.destination_file
+            self.destination_file = destination_file
 
         if self.destination_file.endswith('.html'):
             self.file_type = 'html'
@@ -47,19 +49,22 @@ class Generator:
                            "please use one of these file extensions in the "
                            "destination")
 
-        self.embed = True if self.file_type == 'pdf' else options.embed
+        self.embed = True if self.file_type == 'pdf' else embed
 
-        if os.path.exists(options.source):
-            self.source = options.source
+        if os.path.exists(source):
+            self.source = source
         else:
             raise IOError(u"Source file/directory %s does not exist"
-                          % options.source)
+                          % source)
 
-        if os.path.exists(options.template_file):
-            self.template_file = options.template_file
+        if not template_file:
+            template_file = os.path.join(TEMPLATE_DIR, 'base.html')
+
+        if os.path.exists(template_file):
+            self.template_file = template_file
         else:
             raise IOError(u"Template file %s does not exist"
-                          % options.template_file)
+                          % template_file)
 
     def embed_images(self, html_contents, from_source):
         """Extracts images url and embed them using the base64 algorithm
@@ -82,7 +87,7 @@ class Generator:
             if (image_url.startswith('http://')
                 or image_url.startswith('https://')):
                 continue
-            elif image_url.startswith('/'):  # TODO: add Windows compliance?
+            elif os.path.isabs(image_url):
                 image_real_path = image_url
             else:
                 source_base_dir = os.path.dirname(from_source)
@@ -138,17 +143,19 @@ class Generator:
         """Recursively fetches Markdown contents from a single file or
         directory containing itself Markdown files
         """
-        self.log(u"Adding %s" % source)
-
         contents = ""
 
         if os.path.isdir(source):
+            self.log(u"Entering %s/" % source)
+
             for entry in os.listdir(source):
                 current = os.path.join(source, entry)
                 if (os.path.isdir(current) or current.endswith('.md')
                     or current.endswith('.markdown')):
                     contents = contents + self.fetch_contents(current)
         else:
+            self.log(u"Adding   %s" % source)
+
             md_contents = codecs.open(source, encoding=self.encoding).read()
             contents = markdown.markdown(md_contents)
             if self.embed:

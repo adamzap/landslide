@@ -54,17 +54,18 @@ Markdown Formatting Instructions
 Rendering Instructions
 ----------------------
 
-- Put your markdown content in a file called `slides.md`
-- Run `python render.py` (or `./render.py`)
+- Put your markdown content in a Markdown file, eg `slides.md`
+- Run `python render.py slides.md` (or `./render.py slides.md`)
 - Enjoy your newly generated `presentation.html`
 
-As a proof of concept, you can even transform this annoying README into a fancy presentation:
+As a proof of concept, you can even transform this annoying `README` into a fancy presentation:
 
-    $ ./render.py -s README.md && open presentation.html
+    $ ./render.py README.md && open presentation.html
 
 Or get it as a PDF document, at least if PrinceXML is installed and available on your system:
 
-    $ ./render.py -s README.md -d readme.pdf && open readme.pdf
+    $ ./render.py README.md -d readme.pdf
+    $ open readme.pdf
 
 ---
 
@@ -74,26 +75,28 @@ Options
 Several options are available using the command line:
 
     $ ./render.py --help
-    Usage: render.py [options]
+    Usage: render.py [options] input ...
+
+    Generates fancy HTML5 or PDF slideshows from Mardown sources
 
     Options:
       -h, --help            show this help message and exit
       -b, --debug           Will display any exception trace to stdin
       -d FILE, --destination=FILE
                             The path to the to the destination file: .html or .pdf
-                            extensions allowed
+                            extensions allowed (default: presentation.html)
       -e ENCODING, --encoding=ENCODING
                             The encoding of your files (defaults to utf8)
       -i, --embed           Embed base64-encoded images in presentation
       -t FILE, --template=FILE
-                            The path to the to the Jinja2 template file
-      -o, --direct-ouput    Prints the generated HTML code to stdin
-      -q, --quiet           Won't write anything to stdin
-      -s FILE, --source=FILE
-                            The path to the markdown source file, or a directory
-                            containing several files to combine
+                            The path to a Jinja2 compatible template file
+      -o, --direct-ouput    Prints the generated HTML code to stdin; won't work
+                            with PDF export
+      -q, --quiet           Won't write anything to stdin (silent mode)
       -v, --verbose         Write informational messages to stdin (enabled by
                             default)
+
+    Note: PDF export requires the `prince` program: http://princexml.com/
 
 ---
 
@@ -102,27 +105,27 @@ Advanced Usage
 
 ### Setting Custom Destination File
 
-    $ ./render.py -d ~/MyPresentations/KeynoteKiller.html
+    $ ./render.py slides.md -d ~/MyPresentations/KeynoteKiller.html
 
 ### Working with Directories
 
-    $ ./render.py -s slides/
+    $ ./render.py slides/
 
 ### Working with Direct Output
 
-    $ ./render.py -o |tidy
+    $ ./render.py slides.md -o |tidy
 
 ### Using an Alternate Jinja2 Template
 
-    $ ./render.py -t ~/templates/mytemplate.html
+    $ ./render.py slides.md -t ~/templates/mytemplate.html
 
 ### Embedding Base-64-Encoded Images
 
-    $ ./render.py -i
+    $ ./render.py slides.md -i
 
 ### Exporting to PDF
 
-    $ ./render.py -s MySlides.md -d PowerpointIsDead.pdf
+    $ ./render.py slides.md -d PowerpointIsDead.pdf
 
 ---
 
@@ -131,8 +134,8 @@ TODO
 
 - Create a `pip` and `setuptools` compatible package, and therefore find a cool name for it
 - Manage presentation *projects*, each one having its own configuration file; the configuration file could configure:
-  - theme (template, assets, etc), 
-  - sources to order and aggregate, 
+  - theme (template, assets, etc),
+  - sources to order and aggregate,
   - destination,
   - options
 - Make sure images are correctly embedded, both in html and pdf presentations
