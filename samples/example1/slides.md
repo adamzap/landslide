@@ -117,3 +117,12 @@ Another code block:
     if (markdown && isEasy()) {
         return true; 
     }
+
+---
+
+Slide #6
+========
+
+An image:
+
+![monkey](monkey.jpg)

@@ -62,11 +62,19 @@ if not args:
     sys.exit(1)
 
 
+def log(message, type):
+    if type == 'notice':
+        return sys.stdout.write(message + "\n")
+    else:
+        return sys.stderr.write(message + "\n")
+
+
 def run():
     generator = Generator(args[0], options.destination_file,
                           options.template_file, direct=options.direct,
                           debug=options.debug, verbose=options.verbose,
-                          embed=options.embed, encoding=options.encoding)
+                          embed=options.embed, encoding=options.encoding,
+                          logger=log)
     generator.execute()
 
 if __name__ == '__main__':
