@@ -1,6 +1,11 @@
 html5-slides-markdown
 =====================
 
+---
+
+Overview
+========
+
 Generates a slideshow using the slides that power
 [the html5-slides presentation](http://apirocks.com/html5/html5.html).
 
@@ -11,14 +16,17 @@ A sample slideshow is [here](http://adamzap.com/random/html5-slides-markdown.htm
 ---
 
 News
-----
+====
+
+**06/18/10** - You must now explicitly provide a source file to render.py. slides.md is
+no longer assumed. See help for more information.
 
 **06/19/10** - Project layout is currently being reorganized, to prepare future packaging -- btw we're still looking after a cool name, if you got ideas feel free to suggest on the [dedicated issue thread](http://github.com/adamzap/html5-slides-markdown/issues#issue/7). Also, some tests have been added, more to come though.
 
 ---
 
 Features
---------
+========
 
 - Write your slide contents easily using the [Markdown syntax](http://daringfireball.net/projects/markdown/syntax)
 - HTML5, Web based, stand-alone document (embedded local images), fancy transitions
@@ -27,7 +35,7 @@ Features
 ---
 
 Requirements
-------------
+============
 
 `python` and the following modules:
 
@@ -38,7 +46,7 @@ Requirements
 ---
 
 Markdown Formatting Instructions
---------------------------------
+================================
 
 - To create a title slide, render a single `h1` element (eg. `# My Title`)
 - Separate your slides with a horizontal rule (`---` in markdown)
@@ -49,7 +57,7 @@ Markdown Formatting Instructions
 ---
 
 Rendering Instructions
-----------------------
+======================
 
 - Put your markdown content in a Markdown file, eg `slides.md`
 - Run `python render.py slides.md` (or `./render.py slides.md`)
@@ -67,14 +75,14 @@ Or get it as a PDF document, at least if PrinceXML is installed and available on
 ---
 
 Options
--------
+=======
 
 Several options are available using the command line:
 
     $ ./render.py --help
     Usage: render.py [options] input ...
 
-    Generates fancy HTML5 or PDF slideshows from Mardown sources
+    Generates fancy HTML5 or PDF slideshows from Markdown sources
 
     Options:
       -h, --help            show this help message and exit
@@ -98,7 +106,7 @@ Several options are available using the command line:
 ---
 
 Advanced Usage
---------------
+==============
 
 ### Setting Custom Destination File
 
@@ -127,14 +135,14 @@ Advanced Usage
 ---
 
 TODO
-----
+====
 
 - Create a `pip` and `setuptools` compatible package, and therefore find a cool name for it
 - Manage presentation *projects*, each one having its own configuration file; the configuration file could configure:
-  - theme (template, assets, etc),
-  - sources to order and aggregate,
-  - destination,
-  - options
+    - theme (template, assets, etc)
+    - sources to order and aggregate
+    - destination
+    - options
 - Make sure images are correctly embedded, both in html and pdf presentations
 - Write tests
 - Handle the case of markdown files aggregation, atm its necessary to write a `---` separator at the end of each one but the last
@@ -143,7 +151,7 @@ TODO
 ---
 
 Authors
--------
+=======
 
 - [Adam Zapletal](http://github.com/adamzap)
 - [Brad Cupit](github.com/bradcupit) ([fork](http://github.com/bradcupit/html5-slides-markdown))

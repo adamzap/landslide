@@ -8,7 +8,7 @@ from optparse import OptionParser
 
 parser = OptionParser(usage="%prog [options] input.md ...",
                       description="Generates fancy HTML5 or PDF slideshows "
-                                  "from Mardown sources ",
+                                  "from Markdown sources ",
                       epilog="Note: PDF export requires the `prince` program: "
                              "http://princexml.com/")
 parser.add_option("-b", "--debug",
