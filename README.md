@@ -80,7 +80,7 @@ Several options are available using the command line:
     $ ./render.py --help
     Usage: render.py [options] input ...
 
-    Generates fancy HTML5 or PDF slideshows from Mardown sources
+    Generates fancy HTML5 or PDF slideshows from Markdown sources
 
     Options:
       -h, --help            show this help message and exit
