@@ -61,6 +61,7 @@ if not args:
     parser.print_help()
     sys.exit(1)
 
+
 def run():
     generator = Generator(args[0], options.destination_file,
                           options.template_file, direct=options.direct,

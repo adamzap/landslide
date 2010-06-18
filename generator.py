@@ -21,6 +21,7 @@ from subprocess import *
 BASE_DIR = os.path.dirname(__file__)
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
+
 class Generator:
     def __init__(self, source, destination_file='presentation.html',
                  template_file=None, direct=False, debug=False, verbose=True,
@@ -32,6 +33,12 @@ class Generator:
         self.direct = direct
         self.encoding = encoding
         self.verbose = False if direct else verbose
+
+        if source and os.path.exists(source):
+            self.source = source
+        else:
+            raise IOError(u"Source file/directory %s does not exist"
+                          % source)
 
         if (os.path.exists(destination_file)
             and not os.path.isfile(destination_file)):
@@ -50,12 +57,6 @@ class Generator:
                            "destination")
 
         self.embed = True if self.file_type == 'pdf' else embed
-
-        if os.path.exists(source):
-            self.source = source
-        else:
-            raise IOError(u"Source file/directory %s does not exist"
-                          % source)
 
         if not template_file:
             template_file = os.path.join(TEMPLATE_DIR, 'base.html')
