@@ -194,7 +194,7 @@ class Generator:
                 content = slide_src
 
             slides.append({'header': header,
-                           'content': self.highlight_code(content)})
+                           'content': self.highlight_code(content.strip())})
 
         return {'head_title': head_title, 'slides': slides}
 
@@ -239,7 +239,7 @@ class Generator:
     def render(self):
         """Returns generated html code
         """
-        slides_src = self.fetch_contents(self.source).split(u'<hr />\n')
+        slides_src = self.fetch_contents(self.source).split(u'<hr />')
 
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
