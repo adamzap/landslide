@@ -477,24 +477,22 @@
     </script>
 </head>
 <body>
-    <div class="presentation">
-      <div class="slides">
-        {% for slide in slides %}
-          <div class="slide">
-              <div class="inner">
-                  {% if slide.header %}
-                  <header>{{ slide.header }}</header>
-                  {% endif %}
-                  {% if slide.content %}
-                      <section>{{ slide.content }}</section>
-                  {% endif %}
-              </div>
+  <div class="presentation">
+    <div class="slides">
+      {% for slide in slides %}
+        <div class="slide">
+          <div class="inner">
+            {% if slide.header %}
+            <header><a name="slide{{ slide.number }}"></a>{{ slide.header }}</header>
+            {% endif %}
+            {% if slide.content %}
+            <section><a name="slide{{ slide.number }}"></a>{{ slide.content }}</section>
+            {% endif %}
           </div>
-        {% endfor %}
-      </div>
+        </div>
+      {% endfor %}
     </div>
-    <script>
-        main()
-    </script>
+  </div>
+  <script>main()</script>
 </body>
 </html>

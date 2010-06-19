@@ -42,9 +42,10 @@ class GeneratorTest(unittest.TestCase):
 
     def test_get_slide_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
-        vars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n<p>bar</p>\n")
+        vars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n<p>bar</p>\n", 1)
         self.assertEqual(vars['header'], '<h1>heading</h1>')
         self.assertEqual(vars['content'], '<p>foo</p>\n<p>bar</p>')
+        self.assertEqual(vars['number'], 1)
 
     def test_get_template_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
