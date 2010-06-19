@@ -172,6 +172,26 @@ class Generator:
 
         return contents
 
+    def get_slide_vars(self, slide_src):
+        """Computes a single slide template vars from its html source code
+        """
+        vars = {'header': None, 'content': None}
+        
+        find = re.search(r'^\s?(<h\d?>.+?</h\d>)\s?(.+)?', slide_src, 
+                         re.DOTALL | re.UNICODE)
+        
+        if not find:
+            header = None
+            content = slide_src
+        else:
+            header = find.group(1)
+            content = find.group(2)
+            
+        if content:
+            content = self.highlight_code(content)
+        
+        return {'header': header, 'content': content}
+
     def get_template_vars(self, slides_src):
         """Computes template vars from slides html source code
         """
@@ -183,18 +203,11 @@ class Generator:
         slides = []
 
         for slide_src in slides_src:
-            if not slide_src.strip():
+            slide_vars = self.get_slide_vars(slide_src.strip())
+            if not slide_vars['header'] and not not slide_vars['content']:
                 self.log(u"empty slide contents, skipping")
                 continue
-
-            try:
-                header, content = slide_src.split('\n', 1)
-            except ValueError:
-                header = None
-                content = slide_src
-
-            slides.append({'header': header,
-                           'content': self.highlight_code(content.strip())})
+            slides.append(slide_vars)
 
         return {'head_title': head_title, 'slides': slides}
 
