@@ -194,7 +194,7 @@ class Generator:
                 content = slide_src
 
             slides.append({'header': header,
-                           'content': self.highlight_code(content.strip())})
+                           'content': self.highlight_code(content)})
 
         return {'head_title': head_title, 'slides': slides}
 
