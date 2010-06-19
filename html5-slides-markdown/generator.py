@@ -38,8 +38,7 @@ class Generator:
             if callable(logger):
                 self.logger = logger
             else:
-                raise ValueError(u"Invalid logger set, must be a callable",
-                                 'error')
+                raise ValueError(u"Invalid logger set, must be a callable")
         self.verbose = False if direct else verbose and self.logger
 
         if source and os.path.exists(source):
@@ -47,12 +46,12 @@ class Generator:
             self.source_base_dir = os.path.split(os.path.abspath(source))[0]
         else:
             raise IOError(u"Source file/directory %s does not exist"
-                          % source, 'error')
+                          % source)
 
         if (os.path.exists(destination_file)
             and not os.path.isfile(destination_file)):
             raise IOError(u"Destination %s exists and is not a file"
-                          % destination_file, 'error')
+                          % destination_file)
         else:
             self.destination_file = destination_file
 
@@ -63,7 +62,7 @@ class Generator:
         else:
             raise IOError(u"This program can only write html or pdf files, "
                            "please use one of these file extensions in the "
-                           "destination", 'error')
+                           "destination")
 
         self.embed = True if self.file_type == 'pdf' else embed
 
@@ -73,8 +72,7 @@ class Generator:
         if os.path.exists(template_file):
             self.template_file = template_file
         else:
-            raise IOError(u"Template file %s does not exist"
-                          % template_file, 'error')
+            raise IOError(u"Template file %s does not exist" % template_file)
 
     def embed_images(self, html_contents, from_source):
         """Extracts images url and embed them using the base64 algorithm
@@ -100,9 +98,7 @@ class Generator:
             elif os.path.isabs(image_url):
                 image_real_path = image_url
             else:
-                image_root_dir = os.path.join(self.source_base_dir,
-                                              os.path.dirname(from_source))
-                image_real_path = os.path.join(image_root_dir, image_url)
+                image_real_path = os.path.join(os.path.dirname(from_source), image_url)
 
             if not os.path.exists(image_real_path):
                 self.log(u"Warning: image file %s not found: skipped"
@@ -142,7 +138,7 @@ class Generator:
         if self.direct:
             if self.file_type == 'pdf':
                 raise IOError(u"Direct output mode is not available for PDF "
-                               "export", 'error')
+                               "export")
             else:
                 print self.render().encode(self.encoding)
         else:
@@ -172,7 +168,7 @@ class Generator:
                 contents = self.embed_images(contents, source)
 
         if not contents.strip():
-            raise ValueError(u"No content found in %s" % source, 'warning')
+            self.log(u"No contents found in %s" % source, 'warning')
 
         return contents
 
@@ -272,8 +268,7 @@ class Generator:
             f.write(html.encode(self.encoding))
             f.close()
         except Exception:
-            raise IOError(u"Unable to create temporary file, aborting",
-                          'error')
+            raise IOError(u"Unable to create temporary file, aborting")
 
         dummy_fh = open(os.path.devnull, 'w')
 
@@ -283,6 +278,6 @@ class Generator:
             process = Popen(command, stderr=dummy_fh).communicate()
         except Exception:
             raise EnvironmentError(u"Unable to generate PDF file using prince."
-                                    "Is it installed and available?", 'error')
+                                    "Is it installed and available?")
         finally:
             dummy_fh.close()
