@@ -30,16 +30,13 @@
           margin: 0;
           padding: 0;
       }
-      @page { 
-          size: landscape; 
+      @page {
+          size: landscape;
       }
       body {
-          font: 150% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+          font: 100% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
           padding: 0;
           margin: 0;
-      }
-      p, li, header, h1, h2, h3, h4, h5, h6 {
-          text-align: center;
       }
       div.slide {
           min-width: 800px;
@@ -47,22 +44,20 @@
           padding: 1em;
           overflow: hidden;
           page-break-after: always;
+          border: 1px solid black;
+          border-radius: 20px;
       }
       div.slide div.inner {
           width: 800px;
           height: 600px;
           margin: auto;
-          display: table-cell; 
-          vertical-align: middle;
-      }
-      div.slide header {
-          text-align: center;
+          display: table-cell;
       }
       h1 {
-          font-size: 2em;
+          font-size: 2.4em;
       }
       h2 {
-          font-size: 1.6em;
+          font-size: 1.4em;
       }
       h3 {
           margin: 1em 0;
@@ -70,13 +65,15 @@
       ul {
           margin: 0;
           padding: 0;
-          text-align: center;
-          list-style-type: none;
       }
-      p, li {
+      p, li, pre {
           margin: 1em 0;
-          text-align: center;
-          line-height: 1.4em;
+      }
+      li {
+          margin-left: 2em;
+      }
+      a {
+          color: #000000;
       }
       pre, code {
           max-width: 800px;
@@ -91,6 +88,17 @@
       }
       code {
           padding: 0 .2em;
+      }
+      .slide header:only-child h1 {
+        line-height: 180%;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+        height: 600px;
+        width: 800px;
+        font-size: 48px;
+        margin-top:100px;
+        margin-bottom:100px;
       }
     </style>
     <style type="text/css" media="screen, projection">

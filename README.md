@@ -149,7 +149,6 @@ TODO
 - Make sure images are correctly embedded, both in html and pdf presentations
 - Write tests
 - Handle the case of markdown files aggregation, atm its necessary to write a `---` separator at the end of each one but the last
-- Make a better default print stylesheet for PDF export
 
 ---
 
