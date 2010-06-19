@@ -32,13 +32,19 @@ class GeneratorTest(unittest.TestCase):
         self.assertRaises(IOError, Generator, 'foo.md')
 
     def test_embed_images(self):
-        g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'),
-                      logger=self.logtest)
+        base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
+        g = Generator(base_dir, logger=self.logtest)
         self.assertRaises(WarningMessage, g.embed_images,
-                                          '<img src="toto.jpg"/>', '.')
-        content = g.embed_images('<img src="monkey.jpg"/>', '.')
+                          '<img src="toto.jpg"/>', '.')
+        content = g.embed_images('<img src="monkey.jpg"/>', base_dir)
         self.assertTrue(re.match('<img src="data:image/jpeg;base64,(.+?)"/>',
                         content))
+
+    def test_get_slide_vars(self):
+        g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
+        vars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n<p>bar</p>\n")
+        self.assertEqual(vars['header'], '<h1>heading</h1>')
+        self.assertEqual(vars['content'], '<p>foo</p>\n<p>bar</p>')
 
     def test_get_template_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))

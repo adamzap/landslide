@@ -188,7 +188,7 @@ class Generator:
             content = find.group(2)
             
         if content:
-            content = self.highlight_code(content)
+            content = self.highlight_code(content.strip())
         
         return {'header': header, 'content': content}
 
@@ -204,7 +204,7 @@ class Generator:
 
         for slide_src in slides_src:
             slide_vars = self.get_slide_vars(slide_src.strip())
-            if not slide_vars['header'] and not not slide_vars['content']:
+            if not slide_vars['header'] and not slide_vars['content']:
                 self.log(u"empty slide contents, skipping")
                 continue
             slides.append(slide_vars)
