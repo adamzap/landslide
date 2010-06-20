@@ -21,10 +21,7 @@ News
 **06/18/10** - You must now explicitly provide a source file to render.py. slides.md is
 no longer assumed. See help for more information.
 
-**06/11/10** - Current slideshows will need to be updated. As of tonight's changes
-(48024cfe), title slides are rendered like any other. This means that you must
-render them to an h1 element (`#` or `=` below). This is cleaner and more
-consistent.
+**06/19/10** - Project layout is currently being reorganized, to prepare future packaging -- btw we're still looking after a cool name, if you got ideas feel free to suggest on the [dedicated issue thread](http://github.com/adamzap/html5-slides-markdown/issues#issue/7). Also, some tests have been added, more to come though.
 
 ---
 
@@ -51,9 +48,9 @@ Requirements
 Markdown Formatting Instructions
 ================================
 
-- To create a title slide, render a single h1 element
+- To create a title slide, render a single `h1` element (eg. `# My Title`)
 - Separate your slides with a horizontal rule (`---` in markdown)
-- Your other slides should have a heading that renders to an h1 element
+- Your other slides should have a heading that renders to an `h1` element
 - To highlight blocks of code, put !`{lang}` where `{lang}` is the pygment supported language identifier as the first indented line
 - See the included `slides.md` for an example
 

@@ -21,17 +21,32 @@ from subprocess import *
 BASE_DIR = os.path.dirname(__file__)
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
+
 class Generator:
     def __init__(self, source, destination_file='presentation.html',
                  template_file=None, direct=False, debug=False, verbose=True,
-                 embed=False, encoding='utf8'):
+                 embed=False, encoding='utf8', logger=None):
         """Configures this generator from its properties. "args" are not used
         (yet?)
         """
         self.debug = debug
         self.direct = direct
         self.encoding = encoding
-        self.verbose = False if direct else verbose
+        self.logger = None
+
+        if logger:
+            if callable(logger):
+                self.logger = logger
+            else:
+                raise ValueError(u"Invalid logger set, must be a callable")
+        self.verbose = False if direct else verbose and self.logger
+
+        if source and os.path.exists(source):
+            self.source = source
+            self.source_base_dir = os.path.split(os.path.abspath(source))[0]
+        else:
+            raise IOError(u"Source file/directory %s does not exist"
+                          % source)
 
         if (os.path.exists(destination_file)
             and not os.path.isfile(destination_file)):
@@ -51,20 +66,13 @@ class Generator:
 
         self.embed = True if self.file_type == 'pdf' else embed
 
-        if os.path.exists(source):
-            self.source = source
-        else:
-            raise IOError(u"Source file/directory %s does not exist"
-                          % source)
-
         if not template_file:
             template_file = os.path.join(TEMPLATE_DIR, 'base.html')
 
         if os.path.exists(template_file):
             self.template_file = template_file
         else:
-            raise IOError(u"Template file %s does not exist"
-                          % template_file)
+            raise IOError(u"Template file %s does not exist" % template_file)
 
     def embed_images(self, html_contents, from_source):
         """Extracts images url and embed them using the base64 algorithm
@@ -81,7 +89,7 @@ class Generator:
 
             if image_url.startswith('file:///'):
                 self.log(u"Warning: file:/// image urls are not supported: "
-                          "skipped")
+                          "skipped", 'warning')
                 continue
 
             if (image_url.startswith('http://')
@@ -90,20 +98,18 @@ class Generator:
             elif os.path.isabs(image_url):
                 image_real_path = image_url
             else:
-                source_base_dir = os.path.dirname(from_source)
-                image_root_dir = os.path.join(os.getcwd(), source_base_dir)
-                image_real_path = os.path.join(image_root_dir, image_url)
+                image_real_path = os.path.join(os.path.dirname(from_source), image_url)
 
             if not os.path.exists(image_real_path):
                 self.log(u"Warning: image file %s not found: skipped"
-                         % image_real_path)
+                         % image_real_path, 'warning')
                 continue
 
             mime_type, encoding = mimetypes.guess_type(image_real_path)
 
             if not mime_type:
                 self.log(u"Warning: unknown image mime-type (%s): skipped"
-                         % image_real_path)
+                         % image_real_path, 'warning')
                 continue
 
             try:
@@ -111,11 +117,11 @@ class Generator:
                 encoded_image = base64.b64encode(image_contents)
             except IOError:
                 self.log(u"Warning: unable to read image contents %s: skipping"
-                         % image_real_path)
+                         % image_real_path, 'warning')
                 continue
             except Exception:
                 self.log(u"Warning: unable to base64-encode image %s: skipping"
-                         % image_real_path)
+                         % image_real_path, 'warning')
                 continue
 
             encoded_url = u"data:%s;base64,%s" % (mime_type, encoded_image)
@@ -162,9 +168,29 @@ class Generator:
                 contents = self.embed_images(contents, source)
 
         if not contents.strip():
-            raise ValueError(u"No content found in %s" % source)
+            self.log(u"No contents found in %s" % source, 'warning')
 
         return contents
+
+    def get_slide_vars(self, slide_src):
+        """Computes a single slide template vars from its html source code
+        """
+        vars = {'header': None, 'content': None}
+        
+        find = re.search(r'^\s?(<h\d?>.+?</h\d>)\s?(.+)?', slide_src, 
+                         re.DOTALL | re.UNICODE)
+        
+        if not find:
+            header = None
+            content = slide_src
+        else:
+            header = find.group(1)
+            content = find.group(2)
+            
+        if content:
+            content = self.highlight_code(content.strip())
+        
+        return {'header': header, 'content': content}
 
     def get_template_vars(self, slides_src):
         """Computes template vars from slides html source code
@@ -177,17 +203,11 @@ class Generator:
         slides = []
 
         for slide_src in slides_src:
-            if not slide_src.strip():
+            slide_vars = self.get_slide_vars(slide_src.strip())
+            if not slide_vars['header'] and not slide_vars['content']:
+                self.log(u"empty slide contents, skipping")
                 continue
-
-            try:
-                header, content = slide_src.split('\n', 1)
-            except ValueError:
-                header = None
-                content = slide_src
-
-            slides.append({'header': header,
-                           'content': self.highlight_code(content)})
+            slides.append(slide_vars)
 
         return {'head_title': head_title, 'slides': slides}
 
@@ -223,16 +243,16 @@ class Generator:
 
         return content
 
-    def log(self, message):
+    def log(self, message, type='notice'):
         """Log a message (eventually, override to do something more clever)
         """
-        if self.verbose:
-            print message
+        if self.verbose and self.logger:
+            self.logger(message, type)
 
     def render(self):
         """Returns generated html code
         """
-        slides_src = self.fetch_contents(self.source).split(u'<hr />\n')
+        slides_src = self.fetch_contents(self.source).split(u'<hr />')
 
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
@@ -261,7 +281,7 @@ class Generator:
             f.write(html.encode(self.encoding))
             f.close()
         except Exception:
-            raise IOError(u"Unable to create temporary file")
+            raise IOError(u"Unable to create temporary file, aborting")
 
         dummy_fh = open(os.path.devnull, 'w')
 

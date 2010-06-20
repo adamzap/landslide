@@ -117,3 +117,16 @@ Another code block:
     if (markdown && isEasy()) {
         return true; 
     }
+
+---
+
+Slide #6
+========
+
+An image:
+
+![monkey](monkey.jpg)
+
+---
+
+This is a slide with no heading. It works too.
