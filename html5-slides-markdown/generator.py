@@ -87,9 +87,9 @@ class Generator:
             if not image_url or image_url.startswith('data:'):
                 continue
 
-            if image_url.startswith('file:///'):
-                self.log(u"Warning: file:/// image urls are not supported: "
-                          "skipped", 'warning')
+            if image_url.startswith('file://'):
+                self.log(u"%s: file:// image urls are not supported: skipped"
+                         % from_source, 'warning')
                 continue
 
             if (image_url.startswith('http://')
@@ -98,30 +98,31 @@ class Generator:
             elif os.path.isabs(image_url):
                 image_real_path = image_url
             else:
-                image_real_path = os.path.join(os.path.dirname(from_source), image_url)
+                image_real_path = os.path.join(os.path.dirname(from_source), 
+                                               image_url)
 
             if not os.path.exists(image_real_path):
-                self.log(u"Warning: image file %s not found: skipped"
-                         % image_real_path, 'warning')
+                self.log(u"%s: image file %s not found: skipped"
+                         % (from_source, image_real_path), 'warning')
                 continue
 
             mime_type, encoding = mimetypes.guess_type(image_real_path)
 
             if not mime_type:
-                self.log(u"Warning: unknown image mime-type (%s): skipped"
-                         % image_real_path, 'warning')
+                self.log(u"%s: unknown image mime-type in %s: skipped"
+                         % (from_source, image_real_path), 'warning')
                 continue
 
             try:
                 image_contents = open(image_real_path).read()
                 encoded_image = base64.b64encode(image_contents)
             except IOError:
-                self.log(u"Warning: unable to read image contents %s: skipping"
-                         % image_real_path, 'warning')
+                self.log(u"%s: unable to read image %s: skipping"
+                         % (from_source, image_real_path), 'warning')
                 continue
             except Exception:
-                self.log(u"Warning: unable to base64-encode image %s: skipping"
-                         % image_real_path, 'warning')
+                self.log(u"%s: unable to base64-encode image %s: skipping"
+                         % (from_source, image_real_path), 'warning')
                 continue
 
             encoded_url = u"data:%s;base64,%s" % (mime_type, encoded_image)
