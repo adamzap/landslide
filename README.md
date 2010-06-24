@@ -18,10 +18,11 @@ A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 News
 ====
 
-**06/18/10** - You must now explicitly provide a source file to render.py. slides.md is
-no longer assumed. See help for more information.
+06/24/10
+--------
 
-**06/19/10** - Project layout is currently being reorganized, to prepare future packaging -- btw we're still looking after a cool name, if you got ideas feel free to suggest on the [dedicated issue thread](http://github.com/adamzap/landslide/issues#issue/7). Also, some tests have been added, more to come though.
+- Version 0.4.0 is tagged, and Landslide is on [pypi](http://pypi.python.org/pypi/landslide/0.4.0).
+- Landslide installs as a command line script if you install it via easy_install or pip.
 
 ---
 
