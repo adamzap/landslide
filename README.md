@@ -60,16 +60,16 @@ Rendering Instructions
 ======================
 
 - Put your markdown content in a Markdown file, eg `slides.md`
-- Run `python render.py slides.md` (or `./render.py slides.md`)
+- Run `./landslide slides.md`
 - Enjoy your newly generated `presentation.html`
 
 As a proof of concept, you can even transform this annoying `README` into a fancy presentation:
 
-    $ ./render.py README.md && open presentation.html
+    $ ./landslide README.md && open presentation.html
 
 Or get it as a PDF document, at least if PrinceXML is installed and available on your system:
 
-    $ ./render.py README.md -d readme.pdf
+    $ ./landslide README.md -d readme.pdf
     $ open readme.pdf
 
 ---
@@ -79,8 +79,8 @@ Options
 
 Several options are available using the command line:
 
-    $ ./render.py --help
-    Usage: render.py [options] input ...
+    $ ./landslide --help
+    Usage: landslide [options] input ...
 
     Generates fancy HTML5 or PDF slideshows from Markdown sources
 
@@ -110,27 +110,27 @@ Advanced Usage
 
 ### Setting Custom Destination File
 
-    $ ./render.py slides.md -d ~/MyPresentations/KeynoteKiller.html
+    $ ./landslide slides.md -d ~/MyPresentations/KeynoteKiller.html
 
 ### Working with Directories
 
-    $ ./render.py slides/
+    $ ./landslide slides/
 
 ### Working with Direct Output
 
-    $ ./render.py slides.md -o |tidy
+    $ ./landslide slides.md -o | tidy
 
 ### Using an Alternate Jinja2 Template
 
-    $ ./render.py slides.md -t ~/templates/mytemplate.html
+    $ ./landslide slides.md -t ~/templates/mytemplate.html
 
 ### Embedding Base-64-Encoded Images
 
-    $ ./render.py slides.md -i
+    $ ./landslide slides.md -i
 
 ### Exporting to PDF
 
-    $ ./render.py slides.md -d PowerpointIsDead.pdf
+    $ ./landslide slides.md -d PowerpointIsDead.pdf
 
 ---
 
