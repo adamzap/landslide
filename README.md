@@ -153,6 +153,6 @@ Authors
 =======
 
 - [Adam Zapletal](http://github.com/adamzap)
-- [Brad Cupit](github.com/bradcupit) ([fork](http://github.com/bradcupit/html5-slides-markdown))
-- [Nicolas Perriault](github.com/n1k0) ([fork](http://github.com/n1k0/html5-slides-markdown))
-- [Vincent Agnano](github.com/vinyll) ([fork](http://github.com/vinyll/html5-slides-markdown))
+- [Brad Cupit](http://github.com/bradcupit) ([fork](http://github.com/bradcupit/html5-slides-markdown))
+- [Nicolas Perriault](http://github.com/n1k0) ([fork](http://github.com/n1k0/html5-slides-markdown))
+- [Vincent Agnano](http://github.com/vinyll) ([fork](http://github.com/vinyll/html5-slides-markdown))
