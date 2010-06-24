@@ -1,0 +1,5 @@
+include AUTHORS.md
+include LICENSE
+include README.md
+recursive-include samples *
+recursive-include landslide *
