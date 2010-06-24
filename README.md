@@ -1,5 +1,5 @@
-html5-slides-markdown
-=====================
+Landslide
+=========
 
 ---
 
@@ -11,7 +11,7 @@ Generates a slideshow using the slides that power
 
 ![demo](http://files.droplr.com.s3.amazonaws.com/files/6619162/1bcGcm.html5_presentation.png)
 
-A sample slideshow is [here](http://adamzap.com/random/html5-slides-markdown.html).
+A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 
 ---
 
@@ -21,7 +21,7 @@ News
 **06/18/10** - You must now explicitly provide a source file to render.py. slides.md is
 no longer assumed. See help for more information.
 
-**06/19/10** - Project layout is currently being reorganized, to prepare future packaging -- btw we're still looking after a cool name, if you got ideas feel free to suggest on the [dedicated issue thread](http://github.com/adamzap/html5-slides-markdown/issues#issue/7). Also, some tests have been added, more to come though.
+**06/19/10** - Project layout is currently being reorganized, to prepare future packaging -- btw we're still looking after a cool name, if you got ideas feel free to suggest on the [dedicated issue thread](http://github.com/adamzap/landslide/issues#issue/7). Also, some tests have been added, more to come though.
 
 ---
 
@@ -152,7 +152,4 @@ TODO
 Authors
 =======
 
-- [Adam Zapletal](http://github.com/adamzap)
-- [Brad Cupit](http://github.com/bradcupit) ([fork](http://github.com/bradcupit/html5-slides-markdown))
-- [Nicolas Perriault](http://github.com/n1k0) ([fork](http://github.com/n1k0/html5-slides-markdown))
-- [Vincent Agnano](http://github.com/vinyll) ([fork](http://github.com/vinyll/html5-slides-markdown))
+See AUTHORS.md

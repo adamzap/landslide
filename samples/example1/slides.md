@@ -1,10 +1,10 @@
-html5-slides-markdown
-=====================
+Landslide
+=========
 
 ---
 
-html5-slides-markdown
-=====================
+Landslide
+=========
 
 Generates a slideshow using the slides that power
 [the html5-slides presentation](http://apirocks.com/html5/html5.html).
