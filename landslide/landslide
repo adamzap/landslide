@@ -17,7 +17,11 @@
 
 import sys
 
-from generator import Generator
+try:
+    from landslide.generator import Generator
+except ImportError:
+    from generator import Generator
+
 from optparse import OptionParser
 
 parser = OptionParser(usage="%prog [options] input.md ...",
