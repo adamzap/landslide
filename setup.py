@@ -3,6 +3,7 @@ from distutils.core import setup
 setup(
     name = 'landslide',
     packages = ['landslide'],
+    package_data = {'landslide': ['templates/*']},
     version = '0.4.0',
     description = 'Markdown-based html5 slideshow generator',
     author = 'Adam Zapletal',
