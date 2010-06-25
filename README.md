@@ -1,5 +1,5 @@
-html5-slides-markdown
-=====================
+Landslide
+=========
 
 ---
 
@@ -11,17 +11,18 @@ Generates a slideshow using the slides that power
 
 ![demo](http://files.droplr.com.s3.amazonaws.com/files/6619162/1bcGcm.html5_presentation.png)
 
-A sample slideshow is [here](http://adamzap.com/random/html5-slides-markdown.html).
+A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 
 ---
 
 News
 ====
 
-**06/18/10** - You must now explicitly provide a source file to render.py. slides.md is
-no longer assumed. See help for more information.
+06/24/10
+--------
 
-**06/19/10** - Project layout is currently being reorganized, to prepare future packaging -- btw we're still looking after a cool name, if you got ideas feel free to suggest on the [dedicated issue thread](http://github.com/adamzap/html5-slides-markdown/issues#issue/7). Also, some tests have been added, more to come though.
+- Version 0.4.0 is tagged, and Landslide is on [pypi](http://pypi.python.org/pypi/landslide/0.4.0).
+- Landslide installs as a command line script if you install it via easy_install or pip.
 
 ---
 
@@ -60,16 +61,16 @@ Rendering Instructions
 ======================
 
 - Put your markdown content in a Markdown file, eg `slides.md`
-- Run `python render.py slides.md` (or `./render.py slides.md`)
+- Run `./landslide slides.md`
 - Enjoy your newly generated `presentation.html`
 
 As a proof of concept, you can even transform this annoying `README` into a fancy presentation:
 
-    $ ./render.py README.md && open presentation.html
+    $ ./landslide README.md && open presentation.html
 
 Or get it as a PDF document, at least if PrinceXML is installed and available on your system:
 
-    $ ./render.py README.md -d readme.pdf
+    $ ./landslide README.md -d readme.pdf
     $ open readme.pdf
 
 ---
@@ -79,8 +80,8 @@ Options
 
 Several options are available using the command line:
 
-    $ ./render.py --help
-    Usage: render.py [options] input ...
+    $ ./landslide --help
+    Usage: landslide [options] input ...
 
     Generates fancy HTML5 or PDF slideshows from Markdown sources
 
@@ -110,27 +111,27 @@ Advanced Usage
 
 ### Setting Custom Destination File
 
-    $ ./render.py slides.md -d ~/MyPresentations/KeynoteKiller.html
+    $ ./landslide slides.md -d ~/MyPresentations/KeynoteKiller.html
 
 ### Working with Directories
 
-    $ ./render.py slides/
+    $ ./landslide slides/
 
 ### Working with Direct Output
 
-    $ ./render.py slides.md -o |tidy
+    $ ./landslide slides.md -o | tidy
 
 ### Using an Alternate Jinja2 Template
 
-    $ ./render.py slides.md -t ~/templates/mytemplate.html
+    $ ./landslide slides.md -t ~/templates/mytemplate.html
 
 ### Embedding Base-64-Encoded Images
 
-    $ ./render.py slides.md -i
+    $ ./landslide slides.md -i
 
 ### Exporting to PDF
 
-    $ ./render.py slides.md -d PowerpointIsDead.pdf
+    $ ./landslide slides.md -d PowerpointIsDead.pdf
 
 ---
 
@@ -152,7 +153,4 @@ TODO
 Authors
 =======
 
-- [Adam Zapletal](http://github.com/adamzap)
-- [Brad Cupit](github.com/bradcupit) ([fork](http://github.com/bradcupit/html5-slides-markdown))
-- [Nicolas Perriault](github.com/n1k0) ([fork](http://github.com/n1k0/html5-slides-markdown))
-- [Vincent Agnano](github.com/vinyll) ([fork](http://github.com/vinyll/html5-slides-markdown))
+See AUTHORS.md
