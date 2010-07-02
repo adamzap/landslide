@@ -22,7 +22,7 @@ News
 --------
 
 - Version 0.4.0 is tagged, and Landslide is on [pypi](http://pypi.python.org/pypi/landslide/0.4.0).
-- Landslide installs as a command line script if you install it via easy_install or pip.
+- Landslide installs as a command line script if you install it via `easy_install` or `pip`.
 
 ---
 
@@ -61,16 +61,16 @@ Rendering Instructions
 ======================
 
 - Put your markdown content in a Markdown file, eg `slides.md`
-- Run `./landslide slides.md`
+- Run `landslide slides.md`
 - Enjoy your newly generated `presentation.html`
 
 As a proof of concept, you can even transform this annoying `README` into a fancy presentation:
 
-    $ ./landslide README.md && open presentation.html
+    $ landslide README.md && open presentation.html
 
 Or get it as a PDF document, at least if PrinceXML is installed and available on your system:
 
-    $ ./landslide README.md -d readme.pdf
+    $ landslide README.md -d readme.pdf
     $ open readme.pdf
 
 ---
@@ -80,7 +80,7 @@ Options
 
 Several options are available using the command line:
 
-    $ ./landslide --help
+    $ landslide --help
     Usage: landslide [options] input ...
 
     Generates fancy HTML5 or PDF slideshows from Markdown sources
@@ -111,41 +111,39 @@ Advanced Usage
 
 ### Setting Custom Destination File
 
-    $ ./landslide slides.md -d ~/MyPresentations/KeynoteKiller.html
+    $ landslide slides.md -d ~/MyPresentations/KeynoteKiller.html
 
 ### Working with Directories
 
-    $ ./landslide slides/
+    $ landslide slides/
 
 ### Working with Direct Output
 
-    $ ./landslide slides.md -o | tidy
+    $ landslide slides.md -o | tidy
 
 ### Using an Alternate Jinja2 Template
 
-    $ ./landslide slides.md -t ~/templates/mytemplate.html
+    $ landslide slides.md -t ~/templates/mytemplate.html
 
 ### Embedding Base-64-Encoded Images
 
-    $ ./landslide slides.md -i
+    $ landslide slides.md -i
 
 ### Exporting to PDF
 
-    $ ./landslide slides.md -d PowerpointIsDead.pdf
+    $ landslide slides.md -d PowerpointIsDead.pdf
 
 ---
 
-TODO
-====
+TODO(?)
+=======
 
-- Create a `pip` and `setuptools` compatible package, and therefore find a cool name for it
+- Abstract use of Markdown syntax and allow use of RST, Textile, etc.
 - Manage presentation *projects*, each one having its own configuration file; the configuration file could configure:
     - theme (template, assets, etc)
     - sources to order and aggregate
     - destination
     - options
-- Make sure images are correctly embedded, both in html and pdf presentations
-- Write tests
 - Handle the case of markdown files aggregation, atm its necessary to write a `---` separator at the end of each one but the last
 
 ---
@@ -153,4 +151,4 @@ TODO
 Authors
 =======
 
-See AUTHORS.md
+See `AUTHORS.md`
