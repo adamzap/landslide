@@ -4,7 +4,9 @@ Landslide
 ---
 
 Landslide
-=========
+---------
+
+<div class="notes">foo</div>
 
 Generates a slideshow using the slides that power
 [the html5-slides presentation](http://apirocks.com/html5/html5.html).

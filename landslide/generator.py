@@ -34,6 +34,7 @@ from subprocess import *
 
 BASE_DIR = os.path.dirname(__file__)
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+TOC_MAX_LEVEL = 2
 
 
 class Generator:
@@ -47,6 +48,8 @@ class Generator:
         self.direct = direct
         self.encoding = encoding
         self.logger = None
+        self.num_slides = 0
+        self.__toc = []
 
         if logger:
             if callable(logger):
@@ -78,7 +81,7 @@ class Generator:
                            "please use one of these file extensions in the "
                            "destination")
 
-        self.embed = True if self.file_type == 'pdf' else embed
+        self.embed = True if self.file_type is 'pdf' else embed
 
         if not template_file:
             template_file = os.path.join(TEMPLATE_DIR, 'base.html')
@@ -87,6 +90,29 @@ class Generator:
             self.template_file = template_file
         else:
             raise IOError(u"Template file %s does not exist" % template_file)
+
+    def add_toc_entry(self, title, level, slide_number):
+        self.__toc.append({'title': title, 'number': slide_number,
+                           'level': level})
+
+    def get_toc(self):
+        """Smart getter for Table of Content list
+        """
+        toc = []
+        stack = [toc]
+        for entry in self.__toc:
+            entry['sub'] = []
+            while entry['level'] < len(stack):
+                stack.pop()
+            while entry['level'] > len(stack):
+                stack.append(stack[-1][-1]['sub'])
+            stack[-1].append(entry)
+        return toc
+
+    def set_toc(self, value):
+        raise ValueError("toc is read-only")
+
+    toc = property(get_toc, set_toc)
 
     def embed_images(self, html_contents, from_source):
         """Extracts images url and embed them using the base64 algorithm
@@ -112,7 +138,7 @@ class Generator:
             elif os.path.isabs(image_url):
                 image_real_path = image_url
             else:
-                image_real_path = os.path.join(os.path.dirname(from_source), 
+                image_real_path = os.path.join(os.path.dirname(from_source),
                                                image_url)
 
             if not os.path.exists(image_real_path):
@@ -151,7 +177,7 @@ class Generator:
         """Execute this generator regarding its current configuration
         """
         if self.direct:
-            if self.file_type == 'pdf':
+            if self.file_type is 'pdf':
                 raise IOError(u"Direct output mode is not available for PDF "
                                "export")
             else:
@@ -159,6 +185,7 @@ class Generator:
         else:
             self.write()
             self.log(u"Generated file: %s" % self.destination_file)
+        print self.toc
 
     def fetch_contents(self, source):
         """Recursively fetches Markdown contents from a single file or
@@ -188,21 +215,28 @@ class Generator:
         return contents
 
     def get_slide_vars(self, slide_src, slide_number):
-        """Computes a single slide template vars from its html source code
+        """Computes a single slide template vars from its html source code.
+           Also extracts slide informations for the table of contents.
         """
         vars = {'header': None, 'content': None}
 
-        find = re.search(r'^\s?(<h\d?>.+?</h\d>)\s?(.+)?', slide_src,
+        find = re.search(r'^\s?(<h(\d?)>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
         if not find:
             header = None
             content = slide_src
         else:
             header = find.group(1)
-            content = find.group(2)
+            level = int(find.group(2))
+            title = find.group(3)
+            content = find.group(4)
+            if level <= TOC_MAX_LEVEL:
+                self.add_toc_entry(title, level, slide_number)
 
         if content:
             content = self.highlight_code(content.strip())
+
+        self.num_slides += 1
 
         return {'header': header, 'content': content, 'number': slide_number}
 
@@ -224,13 +258,14 @@ class Generator:
                 continue
             slides.append(slide_vars)
 
-        return {'head_title': head_title, 'slides': slides}
+        return {'head_title': head_title, 'slides': slides, 
+                'num_slides': str(self.num_slides), 'toc': self.toc}
 
     def highlight_code(self, content):
         """Performs syntax coloration in slide code blocks
         """
         while u'<code>!' in content:
-            code_match = re.search('<code>!(.+?)\n(.+?)</code>', content,
+            code_match = re.search(r'<code>!(.+?)\n(.+?)</code>', content,
                                    re.DOTALL)
 
             if code_match:
@@ -280,7 +315,7 @@ class Generator:
         """
         html = self.render()
 
-        if self.file_type == 'pdf':
+        if self.file_type is 'pdf':
             self.write_pdf(html)
         else:
             outfile = codecs.open(self.destination_file, 'w',
