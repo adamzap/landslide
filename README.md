@@ -138,14 +138,12 @@ Advanced Usage
 TODO
 ====
 
-- Create a `pip` and `setuptools` compatible package, and therefore find a cool name for it
 - Manage presentation *projects*, each one having its own configuration file; the configuration file could configure:
     - theme (template, assets, etc)
     - sources to order and aggregate
     - destination
     - options
 - Make sure images are correctly embedded, both in html and pdf presentations
-- Write tests
 - Handle the case of markdown files aggregation, atm its necessary to write a `---` separator at the end of each one but the last
 
 ---
