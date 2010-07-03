@@ -33,13 +33,13 @@ from subprocess import *
 
 
 BASE_DIR = os.path.dirname(__file__)
-TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+THEMES_DIR = os.path.join(BASE_DIR, 'themes')
 TOC_MAX_LEVEL = 2
 
 
 class Generator:
     def __init__(self, source, destination_file='presentation.html',
-                 template_file=None, direct=False, debug=False, verbose=True,
+                 theme='default', direct=False, debug=False, verbose=True,
                  embed=False, encoding='utf8', logger=None):
         """Configures this generator from its properties. "args" are not used
         (yet?)
@@ -83,15 +83,24 @@ class Generator:
 
         self.embed = True if self.file_type is 'pdf' else embed
 
-        if not template_file:
-            template_file = os.path.join(TEMPLATE_DIR, 'base.html')
+        self.theme = theme if theme else 'default'
 
-        if os.path.exists(template_file):
-            self.template_file = template_file
+        if os.path.exists(theme):
+            self.theme_dir = theme
+        elif os.path.exists(os.path.join(THEMES_DIR, theme)):
+            self.theme_dir = os.path.join(THEMES_DIR, theme)
         else:
-            raise IOError(u"Template file %s does not exist" % template_file)
+            raise IOError(u"Theme %s not found or invalid" % theme)
+
+        if not os.path.exists(os.path.join(self.theme_dir, 'base.html')):
+            raise IOError(u"Cannot find base.html template filein theme %s"
+                          % theme)
+        else:
+            self.template_file = os.path.join(self.theme_dir, 'base.html')
 
     def add_toc_entry(self, title, level, slide_number):
+        """Adds a new entry to current presentation Table of Contents
+        """
         self.__toc.append({'title': title, 'number': slide_number,
                            'level': level})
 
@@ -213,6 +222,29 @@ class Generator:
 
         return contents
 
+    def get_css(self):
+        """Fetches and returns stylesheet contents, for both print and screen
+        contexts
+        """
+        css = {}
+
+        print_css = os.path.join(self.theme_dir, 'css', 'print.css')
+        if (os.path.exists(print_css)):
+            css['print'] = open(print_css).read()
+
+        screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
+        if (os.path.exists(screen_css)):
+            css['screen'] = open(screen_css).read()
+
+        return css
+
+    def get_js(self):
+        """Fetches and returns javascript contents
+        """
+        js_file = os.path.join(self.theme_dir, 'js', 'slides.js')
+        if (os.path.exists(js_file)):
+            return open(js_file).read()
+
     def get_slide_vars(self, slide_src, slide_number):
         """Computes a single slide template vars from its html source code.
            Also extracts slide informations for the table of contents.
@@ -257,8 +289,9 @@ class Generator:
                 continue
             slides.append(slide_vars)
 
-        return {'head_title': head_title, 'slides': slides, 
-                'num_slides': str(self.num_slides), 'toc': self.toc}
+        return {'head_title': head_title, 'slides': slides,
+                'num_slides': str(self.num_slides), 'toc': self.toc,
+                'css': self.get_css(), 'js': self.get_js()}
 
     def highlight_code(self, content):
         """Performs syntax coloration in slide code blocks

@@ -18,6 +18,13 @@ A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 News
 ====
 
+07/03/10
+--------
+
+- Themes have landed. A Landslide theme is a directory having a `base.html` Jinja2 templates and optionnaly stylesheets and javascript. Have a look at the dedicated section in the present document. Please note that the `-t` option doesn't reference a template filepath anymore, but rather a theme name or path.
+- A Table of Contents is now generated and available by hitting the `t` key (styles will be enhanced later)
+- Slide numbers are now displayed
+
 06/24/10
 --------
 
@@ -80,8 +87,8 @@ Options
 
 Several options are available using the command line:
 
-    $ landslide --help
-    Usage: landslide [options] input ...
+    $ landslide/landslide 
+    Usage: landslide [options] input.md ...
 
     Generates fancy HTML5 or PDF slideshows from Markdown sources
 
@@ -94,8 +101,8 @@ Several options are available using the command line:
       -e ENCODING, --encoding=ENCODING
                             The encoding of your files (defaults to utf8)
       -i, --embed           Embed base64-encoded images in presentation
-      -t FILE, --template=FILE
-                            The path to a Jinja2 compatible template file
+      -t THEME, --theme=THEME
+                            A theme name, or path to a landlside theme directory
       -o, --direct-ouput    Prints the generated HTML code to stdin; won't work
                             with PDF export
       -q, --quiet           Won't write anything to stdin (silent mode)
@@ -121,9 +128,10 @@ Advanced Usage
 
     $ landslide slides.md -o | tidy
 
-### Using an Alternate Jinja2 Template
+### Using an Alternate Landslide Theme
 
-    $ landslide slides.md -t ~/templates/mytemplate.html
+    $ landslide slides.md -t mytheme
+    $ landslide slides.md -t /path/to/theme/dir
 
 ### Embedding Base-64-Encoded Images
 
@@ -134,6 +142,33 @@ Advanced Usage
     $ landslide slides.md -d PowerpointIsDead.pdf
 
 ---
+
+Theming
+=======
+
+A Landlside theme is a directory following this simple structure:
+
+    mytheme/
+    |-- base.html
+    |-- css
+    |   |-- print.css
+    |   `-- screen.css
+    `-- js
+        `-- slides.js
+
+The `base.html` must be a [Jinja2 template file](http://jinja.pocoo.org/2/documentation/templates) where you can harness the following template variables:
+
+- `css`: the stylesheet contents, available via two keys: `print` and `screen`
+- `js`: thje javascript contents
+- `slides`: the slides list, each one having these properties:
+  - `header`: the slide title
+  - `content`: the slide contents
+  - `number`: the slide number
+- `num_slide`: the numbe rof slides in current presentation
+- `toc`: the Table of Contents, listing sections of the document. Each section has these properties available:
+  - `title`: the section title
+  - `number`: the slide number of the section
+  - `sub`: subsections, if any
 
 TODO(?)
 =======
