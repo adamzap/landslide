@@ -185,7 +185,6 @@ class Generator:
         else:
             self.write()
             self.log(u"Generated file: %s" % self.destination_file)
-        print self.toc
 
     def fetch_contents(self, source):
         """Recursively fetches Markdown contents from a single file or
