@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name = 'landslide',
     packages = ['landslide'],
-    package_data = {'landslide': ['themes/*']},
+    package_data = {'landslide': ['themes/default/*.html', 'themes/default/css/*.css', 'themes/default/js/*.js']},
     version = '0.4.0',
     description = 'Wiki syntax based html5 slideshow generator',
     author = 'Adam Zapletal',
