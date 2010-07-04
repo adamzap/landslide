@@ -18,6 +18,11 @@ A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 News
 ====
 
+07/04/10
+--------
+
+- Due to popular demand, added support for [ReStructuredText syntax](http://docutils.sourceforge.net/rst.html) for slide contents. See the `example3` folder added in the `samples` directory. More wiki syntaxes may be added in the future.
+
 07/03/10
 --------
 
@@ -36,8 +41,8 @@ News
 Features
 ========
 
-- Write your slide contents easily using the [Markdown syntax](http://daringfireball.net/projects/markdown/syntax)
-- HTML5, Web based, stand-alone document (embedded local images), fancy transitions
+- Write your slide contents easily using the [Markdown](http://daringfireball.net/projects/markdown/syntax) or [ReStructuredText](http://docutils.sourceforge.net/rst.html) syntaxes
+- [HTML5](http://dev.w3.org/html5/spec/), Web based, stand-alone document (embedded local images), fancy transitions
 - PDF export (using [PrinceXML](http://www.princexml.com/) if available)
 
 ---
@@ -48,27 +53,37 @@ Requirements
 `python` and the following modules:
 
 - `jinja2`
-- `markdown`
-- `pygments`
+- `pygments` for code blocks syntax coloration
+
+Eventually:
+
+- `markdown` if you use Markdown syntax for your slide contents
+- `docutils` if you use ReStructuredText syntax for your slide contents
 
 ---
 
-Markdown Formatting Instructions
-================================
+Formatting Instructions
+=======================
+
+### Markdown
 
 - To create a title slide, render a single `h1` element (eg. `# My Title`)
 - Separate your slides with a horizontal rule (`---` in markdown)
 - Your other slides should have a heading that renders to an `h1` element
 - To highlight blocks of code, put !`{lang}` where `{lang}` is the pygment supported language identifier as the first indented line
-- See the included `slides.md` for an example
+
+### ReStructuredText
+
+- Use headings for slide titles
+- Separate your slides using an horizontal rule (`----` in RST)
 
 ---
 
 Rendering Instructions
 ======================
 
-- Put your markdown content in a Markdown file, eg `slides.md`
-- Run `landslide slides.md`
+- Put your markdown or rst content in a file, eg `slides.md` or `slides.rst`
+- Run `landslide slides.md` or `landslide slides.rst`
 - Enjoy your newly generated `presentation.html`
 
 As a proof of concept, you can even transform this annoying `README` into a fancy presentation:
@@ -173,7 +188,6 @@ The `base.html` must be a [Jinja2 template file](http://jinja.pocoo.org/2/docume
 TODO(?)
 =======
 
-- Abstract use of Markdown syntax and allow use of RST, Textile, etc.
 - Manage presentation *projects*, each one having its own configuration file; the configuration file could configure:
     - theme (template, assets, etc)
     - sources to order and aggregate

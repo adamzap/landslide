@@ -21,10 +21,11 @@ import base64
 import codecs
 import mimetypes
 import jinja2
-import markdown
 import pygments
 import tempfile
 import sys
+
+from parser import Parser
 
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
@@ -202,18 +203,21 @@ class Generator:
         contents = ""
 
         if os.path.isdir(source):
-            self.log(u"Entering %s/" % source)
+            self.log(u"Entering %s" % source)
 
             for entry in os.listdir(source):
-                current = os.path.join(source, entry)
-                if (os.path.isdir(current) or current.endswith('.md')
-                    or current.endswith('.markdown')):
-                    contents = contents + self.fetch_contents(current)
+                contents += self.fetch_contents(os.path.join(source, entry))
         else:
-            self.log(u"Adding   %s" % source)
+            try:
+                parser = Parser(os.path.splitext(source)[1], self.encoding)
+            except NotImplementedError:
+                return contents
+            
+            self.log(u"Adding   %s (%s)" % (source, parser.format))
 
-            md_contents = codecs.open(source, encoding=self.encoding).read()
-            contents = markdown.markdown(md_contents)
+            file_contents = codecs.open(source, encoding=self.encoding).read()
+            contents = parser.parse(file_contents)
+
             if self.embed:
                 contents = self.embed_images(contents, source)
 
@@ -334,7 +338,7 @@ class Generator:
     def render(self):
         """Returns generated html code
         """
-        slides_src = self.fetch_contents(self.source).split(u'<hr />')
+        slides_src = re.split(r'<hr.*?/>', self.fetch_contents(self.source))
 
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
