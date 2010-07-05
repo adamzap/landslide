@@ -6,6 +6,7 @@ function main() {
 
   var currentSlideNo;
   var notesOn = false;
+  var pageNumbersOn = true;
   var slides = document.getElementsByClassName('slide');
   var touchStartX = 0;
 
@@ -125,12 +126,20 @@ function main() {
     notesOn = (notesOn) ? false:true;
   };
   
+  var showPageNumbers = function() {
+    var pn = document.querySelectorAll('.page_number');
+    for (var i = 0, len = pn.length; i < len; i++) {
+      pn[i].style.display = (pageNumbersOn) ? 'none':'block';
+    }
+    pageNumbersOn = (pageNumbersOn) ? false:true;
+  };
+  
   var showToc = function() {
     var toc = document.getElementById('toc');
     var hidden = toc.style.display != 'block';
     toc.style.display = hidden ? 'block' : 'none';
     return false;
-  }
+  };
 
   var switch3D = function() {
     if (document.body.className.indexOf('three-d') == -1) {
@@ -143,7 +152,6 @@ function main() {
   };
 
   var handleBodyKeyDown = function(event) {
-    // console.log(event.keyCode);
     switch (event.keyCode) {
       case 37: // left arrow
         prevSlide();
@@ -157,6 +165,9 @@ function main() {
         break;
       case 51: // 3
         switch3D();
+        break;
+      case 78: // n
+        showPageNumbers();
         break;
       case 84: // t
         showToc();

@@ -36,12 +36,16 @@ class Parser():
             try:
                 import markdown
             except ImportError:
-                raise RuntimeError("Looks like markdown is not installed")
+                raise RuntimeError(u"Looks like markdown is not installed")
 
             return markdown.markdown(text)
         elif self.format == 'restructuredtext':
-            from rst import html_parts, html_body
-            return html_body(text, input_encoding=self.encoding, 
+            try:
+                from rst import html_parts, html_body
+            except ImportError:
+                raise RuntimeError(u"Looks like docutils are not installed")
+
+            return html_body(text, input_encoding=self.encoding,
                              output_encoding=self.encoding)
         else:
             raise NotImplementedError(u"Unsupported format, cannot parse")
