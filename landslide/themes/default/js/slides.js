@@ -124,7 +124,17 @@ function main() {
     }
     notesOn = (notesOn) ? false:true;
   };
-  
+
+  var showSlideNumbers = function() {
+    // We only use aside elements for slide numbers, so this is safe
+    var asides = document.getElementsByTagName('aside');
+    var hidden = asides[0].style.display != 'block';
+
+    for (var i = 0; i < asides.length; i++) {
+      asides[i].style.display = hidden ? 'block' : 'none';
+    }
+  }
+
   var showToc = function() {
     var toc = document.getElementById('toc');
     var hidden = toc.style.display != 'block';
@@ -157,6 +167,9 @@ function main() {
         break;
       case 51: // 3
         switch3D();
+        break;
+      case 78: // n
+        showSlideNumbers();
         break;
       case 84: // t
         showToc();
