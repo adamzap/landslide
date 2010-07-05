@@ -42,9 +42,7 @@ class Generator:
     def __init__(self, source, destination_file='presentation.html',
                  theme='default', direct=False, debug=False, verbose=True,
                  embed=False, encoding='utf8', logger=None):
-        """Configures this generator from its properties. "args" are not used
-        (yet?)
-        """
+        """Configures this generator from its properties."""
         self.debug = debug
         self.direct = direct
         self.encoding = encoding
@@ -78,8 +76,8 @@ class Generator:
         elif self.destination_file.endswith('.pdf'):
             self.file_type = 'pdf'
         else:
-            raise IOError(u"This program can only write html or pdf files, "
-                           "please use one of these file extensions in the "
+            raise IOError(u"This program can only write html or pdf files. "
+                           "Please use one of these file extensions in the "
                            "destination")
 
         self.embed = True if self.file_type is 'pdf' else embed
@@ -100,14 +98,12 @@ class Generator:
             self.template_file = os.path.join(self.theme_dir, 'base.html')
 
     def add_toc_entry(self, title, level, slide_number):
-        """Adds a new entry to current presentation Table of Contents
-        """
+        """Adds a new entry to current presentation Table of Contents"""
         self.__toc.append({'title': title, 'number': slide_number,
                            'level': level})
 
     def get_toc(self):
-        """Smart getter for Table of Content list
-        """
+        """Smart getter for Table of Content list"""
         toc = []
         stack = [toc]
         for entry in self.__toc:
@@ -125,8 +121,7 @@ class Generator:
     toc = property(get_toc, set_toc)
 
     def embed_images(self, html_contents, from_source):
-        """Extracts images url and embed them using the base64 algorithm
-        """
+        """Extracts images url and embed them using the base64 algorithm"""
         images = re.findall(r'<img\s.*?src="(.+?)"\s?.*?/?>', html_contents,
                             re.DOTALL | re.UNICODE)
 
@@ -184,8 +179,7 @@ class Generator:
         return html_contents
 
     def execute(self):
-        """Execute this generator regarding its current configuration
-        """
+        """Execute this generator regarding its current configuration"""
         if self.direct:
             if self.file_type is 'pdf':
                 raise IOError(u"Direct output mode is not available for PDF "
@@ -212,7 +206,7 @@ class Generator:
                 parser = Parser(os.path.splitext(source)[1], self.encoding)
             except NotImplementedError:
                 return contents
-            
+
             self.log(u"Adding   %s (%s)" % (source, parser.format))
 
             file_contents = codecs.open(source, encoding=self.encoding).read()
@@ -243,8 +237,7 @@ class Generator:
         return css
 
     def get_js(self):
-        """Fetches and returns javascript contents
-        """
+        """Fetches and returns javascript contents"""
         js_file = os.path.join(self.theme_dir, 'js', 'slides.js')
         if (os.path.exists(js_file)):
             return open(js_file).read()
@@ -276,8 +269,7 @@ class Generator:
         return {'header': header, 'content': content, 'number': slide_number}
 
     def get_template_vars(self, slides_src):
-        """Computes template vars from slides html source code
-        """
+        """Computes template vars from slides html source code"""
         try:
             head_title = slides_src[0].split('>')[1].split('<')[0]
         except IndexError:
@@ -298,8 +290,7 @@ class Generator:
                 'css': self.get_css(), 'js': self.get_js()}
 
     def highlight_code(self, content):
-        """Performs syntax coloration in slide code blocks
-        """
+        """Performs syntax coloration in slide code blocks with pygments"""
         while u'<code>!' in content:
             code_match = re.search(r'<code>!(.+?)\n(.+?)</code>', content,
                                    re.DOTALL)
@@ -330,14 +321,12 @@ class Generator:
         return content
 
     def log(self, message, type='notice'):
-        """Log a message (eventually, override to do something more clever)
-        """
+        """Log a message (eventually, override to do something more clever)"""
         if self.verbose and self.logger:
             self.logger(message, type)
 
     def render(self):
-        """Returns generated html code
-        """
+        """Returns generated html code"""
         slides_src = re.split(r'<hr.*?/>', self.fetch_contents(self.source))
 
         template_src = codecs.open(self.template_file, encoding=self.encoding)
@@ -347,8 +336,7 @@ class Generator:
         return template.render(template_vars)
 
     def write(self):
-        """Writes generated presentation code into the destination file
-        """
+        """Writes generated presentation code into the destination file"""
         html = self.render()
 
         if self.file_type is 'pdf':

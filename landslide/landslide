@@ -25,8 +25,8 @@ except ImportError:
 from optparse import OptionParser
 
 parser = OptionParser(usage="%prog [options] input.md ...",
-                      description="Generates fancy HTML5 or PDF slideshows "
-                                  "from Markdown sources ",
+                      description="Generates an HTML5 or PDF "
+                                  "slideshow from Markdown or other formats",
                       epilog="Note: PDF export requires the `prince` program: "
                              "http://princexml.com/")
 parser.add_option("-b", "--debug",
