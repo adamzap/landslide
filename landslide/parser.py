@@ -32,6 +32,7 @@ class Parser():
             raise NotImplementedError(u"Unsupported format %s" % extension)
 
     def parse(self, text):
+        """Parses and renders a text as HTML regarding current format"""
         if self.format == 'markdown':
             try:
                 import markdown

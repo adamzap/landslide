@@ -19,6 +19,7 @@ import re
 import unittest
 
 from generator import Generator
+from parser import Parser
 
 
 SAMPLES_DIR = os.path.join(os.path.dirname(__file__), '..', 'samples')
@@ -100,6 +101,13 @@ class GeneratorTest(unittest.TestCase):
         self.assertTrue(hl.startswith('<pre><div class="highlight">'))
         input = "<p>Nothing to declare</p>"
         self.assertEqual(g.highlight_code(input), input)
+
+class ParserTest(unittest.TestCase):
+    def test___init__(self):
+        self.assertEqual(Parser('.md').format, 'markdown')
+        self.assertEqual(Parser('.markdown').format, 'markdown')
+        self.assertEqual(Parser('.rst').format, 'restructuredtext')
+        self.assertRaises(NotImplementedError, Parser, '.txt')
 
 if __name__ == '__main__':
     unittest.main()
