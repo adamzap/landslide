@@ -61,16 +61,14 @@
   {% for section in toc %}
     <li>
       <a href="#slide{{ section.number }}">
-        {{ section.title }}
-        <em>{{ section.number }}</em>
+        {{ section.title }}...{{ section.number }}
       </a>
       {% if section.sub %}
       <ul>
       {% for subsection in section.sub %}
         <li>
           <a href="#slide{{ subsection.number }}">
-            {{ subsection.title }}
-            <em>{{ subsection.number }}</em>
+            {{ subsection.title }}...{{ subsection.number}}
           </a>
         </li>
       {% endfor %}

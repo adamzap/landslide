@@ -219,3 +219,7 @@ li {
   right: 10px;
   text-indent: 10px;
 }
+
+aside {
+  display: none;
+}
