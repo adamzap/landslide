@@ -50,11 +50,10 @@ parser.add_option("-i", "--embed",
                   dest="embed",
                   help="Embed base64-encoded images in presentation",
                   default=False)
-parser.add_option("-t", "--template",
-                  dest="template_file",
-                  help="The path to a Jinja2 compatible template file",
-                  metavar="FILE",
-                  default=None)
+parser.add_option("-t", "--theme",
+                  dest="theme",
+                  help="A theme name, or path to a landlside theme directory",
+                  default='default')
 parser.add_option("-o", "--direct-ouput",
                   action="store_true",
                   dest="direct",
@@ -89,7 +88,7 @@ def log(message, type):
 
 def run():
     generator = Generator(args[0], options.destination_file,
-                          options.template_file, direct=options.direct,
+                          options.theme, direct=options.direct,
                           debug=options.debug, verbose=options.verbose,
                           embed=options.embed, encoding=options.encoding,
                           logger=log)

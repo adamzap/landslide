@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2010 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  Original slides: Marcin Wichary (mwichary@google.com)
+  Modifications: Ernest Delgado (ernestd@google.com)
+                 Alex Russell (slightlyoff@chromium.org)
+
+  landslide modifications: Adam Zapletal (adamzap@gmail.com)
+-->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>{{ head_title }}</title>
+    <style type="text/css" media="print">
+      {{ css.print }}
+    </style>
+    <style type="text/css" media="screen, projection">
+      {{ css.screen }}
+    </style>
+    <script>
+      {{ js }}
+    </script
+</head>
+<body>
+  <div class="presentation">
+    <div class="slides">
+      {% for slide in slides %}
+        <div class="slide">
+          <div class="inner">
+            {% if slide.header %}
+            <header>{{ slide.header }}</header>
+            {% endif %}
+            {% if slide.content %}
+            <section>{{ slide.content }}</section>
+            {% endif %}
+          </div>
+          <aside>
+            <span class="page_number">{{ slide.number }}/{{ num_slides }}</span>
+          </aside>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% if toc %}
+  <ul id="toc">
+    <li><h2>Table of Contents</h2></li>
+  {% for section in toc %}
+    <li>
+      <a href="#slide{{ section.number }}">
+        {{ section.title }}
+        <em>{{ section.number }}</em>
+      </a>
+      {% if section.sub %}
+      <ul>
+      {% for subsection in section.sub %}
+        <li>
+          <a href="#slide{{ subsection.number }}">
+            {{ subsection.title }}
+            <em>{{ subsection.number }}</em>
+          </a>
+        </li>
+      {% endfor %}
+      </ul>
+      {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+  <script>main()</script>
+</body>
+</html>

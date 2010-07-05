@@ -44,6 +44,25 @@ class GeneratorTest(unittest.TestCase):
     def test___init__(self):
         self.assertRaises(IOError, Generator, None)
         self.assertRaises(IOError, Generator, 'foo.md')
+    
+    def test_get_toc(self):
+        base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
+        g = Generator(base_dir, logger=self.logtest)
+        g.add_toc_entry('Section 1', 1, 1)
+        g.add_toc_entry('Section 1.1', 2, 2)
+        g.add_toc_entry('Section 1.2', 2, 3)
+        g.add_toc_entry('Section 2', 1, 4)
+        g.add_toc_entry('Section 2.1', 2, 5)
+        g.add_toc_entry('Section 3', 1, 6)
+        toc = g.toc
+        self.assertEqual(len(toc), 3)
+        self.assertEqual(toc[0]['title'], 'Section 1')
+        self.assertEqual(len(toc[0]['sub']), 2)
+        self.assertEqual(toc[0]['sub'][1]['title'], 'Section 1.2')
+        self.assertEqual(toc[1]['title'], 'Section 2')
+        self.assertEqual(len(toc[1]['sub']), 1)
+        self.assertEqual(toc[2]['title'], 'Section 3')
+        self.assertEqual(len(toc[2]['sub']), 0)
 
     def test_embed_images(self):
         base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
@@ -56,9 +75,10 @@ class GeneratorTest(unittest.TestCase):
 
     def test_get_slide_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
-        vars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n<p>bar</p>\n")
+        vars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n<p>bar</p>\n", 1)
         self.assertEqual(vars['header'], '<h1>heading</h1>')
         self.assertEqual(vars['content'], '<p>foo</p>\n<p>bar</p>')
+        self.assertEqual(vars['number'], 1)
 
     def test_get_template_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
