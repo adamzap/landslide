@@ -76,12 +76,13 @@ function main() {
 
   var getSlideTitle = function(slideNo) {
     var el = getSlideEl(slideNo);
-
     if (el) {
-      return el.getElementsByTagName('header')[0].innerHTML;
-    } else {
-      return null;
+      var headers = el.getElementsByTagName('header');
+      if (headers.length > 0) {
+        return el.getElementsByTagName('header')[0].innerText;
+      }
     }
+    return null;
   };
 
   var changeSlideElClass = function(slideNo, className) {
@@ -100,6 +101,8 @@ function main() {
     changeSlideElClass(currentSlideNo, 'current');
     changeSlideElClass(currentSlideNo + 1, 'future');
     changeSlideElClass(currentSlideNo + 2, 'far-future');
+    
+    document.getElementsByTagName('title')[0].innerText = getSlideTitle(currentSlideNo);
   };
 
   var nextSlide = function() {
