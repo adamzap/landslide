@@ -45,7 +45,7 @@ class GeneratorTest(unittest.TestCase):
     def test___init__(self):
         self.assertRaises(IOError, Generator, None)
         self.assertRaises(IOError, Generator, 'foo.md')
-    
+
     def test_get_toc(self):
         base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
         g = Generator(base_dir, logger=self.logtest)

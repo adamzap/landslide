@@ -8,17 +8,6 @@ function main() {
   var notesOn = false;
   var slides = document.getElementsByClassName('slide');
   var touchStartX = 0;
-
-  // var slide_hash = window.location.hash.replace(/#/, '');
-  // if (slide_hash) {
-  //   for (var i = 0, len = slides.length; i < len; i++) {
-  //     if (slides[i].id == slide_hash) {
-  //       currentSlideNo = i;
-  //       updateSlideClasses();
-  //     }
-  //   }
-  // }
-
   var spaces = /\s+/, a1 = [""];
 
   var str2array = function(s) {
@@ -87,7 +76,6 @@ function main() {
 
   var changeSlideElClass = function(slideNo, className) {
     var el = getSlideEl(slideNo);
-
     if (el) {
       removeClass(el, 'far-past past current future far-future');
       addClass(el, className);
@@ -109,7 +97,6 @@ function main() {
     if (currentSlideNo < slides.length) {
       currentSlideNo++;
     }
-
     updateSlideClasses();
   };
 
@@ -132,11 +119,10 @@ function main() {
     // We only use aside elements for slide numbers, so this is safe
     var asides = document.getElementsByTagName('aside');
     var hidden = asides[0].style.display != 'block';
-
     for (var i = 0; i < asides.length; i++) {
       asides[i].style.display = hidden ? 'block' : 'none';
     }
-  }
+  };
 
   var showToc = function() {
     var toc = document.getElementById('toc');
