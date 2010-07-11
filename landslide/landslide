@@ -80,10 +80,7 @@ if not args:
 
 
 def log(message, type):
-    if type == 'notice':
-        return sys.stdout.write(message + "\n")
-    else:
-        return sys.stderr.write(message + "\n")
+    (sys.stdout if type == 'notice' else sys.stderr).write(message + "\n")
 
 
 def run():

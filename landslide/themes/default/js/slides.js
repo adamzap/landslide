@@ -89,7 +89,6 @@ function main() {
     changeSlideElClass(currentSlideNo, 'current');
     changeSlideElClass(currentSlideNo + 1, 'future');
     changeSlideElClass(currentSlideNo + 2, 'far-future');
-    
     document.getElementsByTagName('title')[0].innerText = getSlideTitle(currentSlideNo);
   };
 
