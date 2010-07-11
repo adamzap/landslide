@@ -171,6 +171,11 @@ A Landlside theme is a directory following this simple structure:
     `-- js
         `-- slides.js
 
+---
+
+Theme Variables
+---------------
+
 The `base.html` must be a [Jinja2 template file](http://jinja.pocoo.org/2/documentation/templates) where you can harness the following template variables:
 
 - `css`: the stylesheet contents, available via two keys: `print` and `screen`
@@ -184,6 +189,16 @@ The `base.html` must be a [Jinja2 template file](http://jinja.pocoo.org/2/docume
   - `title`: the section title
   - `number`: the slide number of the section
   - `sub`: subsections, if any
+
+---
+
+Styles Scope
+------------
+
+* To change HTML5 presentation styles, you have to tweak the `css/screen.css` stylesheet bundled with the used theme. 
+* For PDF one, modify the `css/print.css` one.
+
+---
 
 TODO(?)
 =======

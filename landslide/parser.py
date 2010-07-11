@@ -15,8 +15,8 @@
 #  limitations under the License.
 
 SUPPORTED_FORMATS = {
-    'markdown':         ['.md', '.markdown'],
-    'restructuredtext': ['.rst'],
+    'markdown':         ['.mdown', '.markdown', '.markdn', '.md'],
+    'restructuredtext': ['.rst', '.rest'],
 }
 
 
