@@ -38,9 +38,9 @@ div.slide {
   top: 50%;
   margin-top: -350px;
   background: -webkit-gradient(linear, left bottom, left top, from(#bbd), to(#fff));
-  -webkit-transition: margin 0.25s ease-in-out;
   background-color: #eee;
   background: -moz-linear-gradient(bottom, #bbd, #fff);
+  -webkit-transition: margin 0.25s ease-in-out;
   -moz-transition: margin 0.25s ease-in-out;
   -o-transition: margin 0.25s ease-in-out;
   border-top-left-radius: 20px;
@@ -172,13 +172,25 @@ li {
   z-index: 9999999;
   height: 100%;
   overflow: hidden;
-  left: 0;
   top: 0;
   position: absolute;
-  display: none;
+  display: block;
   margin: 0;
   padding: 10px 16px;
   overflow: auto;
+  -webkit-transition: margin 0.2s ease-in-out;
+  -moz-transition: margin 0.2s ease-in-out;
+  -o-transition: margin 0.2s ease-in-out;
+}
+
+#toc.hidden {
+  display: block;
+  margin-left: -400px;
+}
+
+#toc.visible {
+  display: block;
+  margin-left: 0px;
 }
 
 #toc h2 {

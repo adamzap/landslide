@@ -147,8 +147,8 @@ function main() {
 
   var showToc = function() {
     var toc = document.getElementById('toc');
-    var hidden = toc.style.display != 'block';
-    toc.style.display = hidden ? 'block' : 'none';
+    var hidden = toc.className != 'visible';
+    toc.className = hidden ? 'visible' : 'hidden';
     return false;
   };
 
