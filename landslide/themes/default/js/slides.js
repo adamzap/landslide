@@ -84,11 +84,19 @@ function main() {
 
   var updateSlideClasses = function() {
     window.location.hash = "slide" + currentSlideNo;
-    changeSlideElClass(currentSlideNo - 2, 'far-past');
+
+    for (var i=1; i<currentSlideNo-2; i++) {
+      changeSlideElClass(i, 'far-past');
+    }
+
     changeSlideElClass(currentSlideNo - 1, 'past');
     changeSlideElClass(currentSlideNo, 'current');
     changeSlideElClass(currentSlideNo + 1, 'future');
-    changeSlideElClass(currentSlideNo + 2, 'far-future');
+
+    for (var i=currentSlideNo+2; i<slides.length+1; i++) {
+      changeSlideElClass(i, 'far-future');
+    }
+
     document.getElementsByTagName('title')[0].innerText = getSlideTitle(currentSlideNo);
   };
 
@@ -179,7 +187,7 @@ function main() {
       }
     }, false);
   };
-  
+
   var addTocLinksListeners = function() {
     var tocLinks = document.getElementById('toc').getElementsByTagName('a');
     for (var i=0; i < tocLinks.length; i++) {
@@ -210,7 +218,7 @@ function main() {
 
     // add support for finger events (filter it by property detection?)
     addTouchListeners();
-    
+
     addTocLinksListeners();
   })();
 };
