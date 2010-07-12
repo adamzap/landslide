@@ -97,8 +97,22 @@ function main() {
       changeSlideElClass(i, 'far-future');
     }
 
+    highlightCurrentTocLink();
+
     document.getElementsByTagName('title')[0].innerText = getSlideTitle(currentSlideNo);
   };
+
+  var highlightCurrentTocLink = function() {
+    var tocLinks = document.getElementById('toc').getElementsByTagName('a');
+    for (var i=0; i<tocLinks.length; i++) {
+      removeClass(tocLinks[i], 'active');
+    }
+
+    var tocEl = document.getElementById('toc-link-' + currentSlideNo);
+    if (tocEl) {
+      addClass(tocEl, 'active');
+    }
+  }
 
   var nextSlide = function() {
     if (currentSlideNo < slides.length) {

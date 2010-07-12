@@ -177,17 +177,22 @@ li {
   position: absolute;
   display: none;
   margin: 0;
-  padding: 10px;
+  padding: 10px 16px;
+  overflow: auto;
 }
 
 #toc h2 {
   text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
-  margin: 0;
+  margin: 0 0 16px;
   padding: 0;
 }
 
 #toc a {
   font-size: 90%;
+}
+
+#toc a.active {
+  background: #ff0;
 }
 
 #toc ul {

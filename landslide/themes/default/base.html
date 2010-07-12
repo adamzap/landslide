@@ -74,7 +74,7 @@
     <li><h2>Table of Contents</h2></li>
   {% for section in toc %}
     <li>
-      <a href="#slide{{ section.number }}">
+      <a href="#slide{{ section.number }}" id="toc-link-{{ section.number }}">
         {{ section.title }}...{{ section.number }}
       </a>
       {% if section.sub %}
