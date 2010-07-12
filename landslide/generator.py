@@ -217,6 +217,8 @@ class Generator:
 
         if not contents.strip():
             self.log(u"No contents found in %s" % source, 'warning')
+        elif not re.match(r'.*?<hr\s?/?>\s?$', contents):
+            contents += u'<hr />'
 
         return contents
 
@@ -260,7 +262,7 @@ class Generator:
         """Returns the absolute url for a given local path"""
         return "file://%s" % os.path.abspath(path)
 
-    def get_slide_vars(self, slide_src, slide_number):
+    def get_slide_vars(self, slide_src):
         """Computes a single slide template vars from its html source code.
            Also extracts slide informations for the table of contents.
         """
@@ -269,22 +271,20 @@ class Generator:
         find = re.search(r'^\s?(<h(\d?)>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
         if not find:
-            header = None
+            header = level = title = None
             content = slide_src
         else:
             header = find.group(1)
             level = int(find.group(2))
             title = find.group(3)
             content = find.group(4)
-            if level <= TOC_MAX_LEVEL:
-                self.add_toc_entry(title, level, slide_number)
 
-        if content:
+        if content and content.strip():
             content = self.highlight_code(content.strip())
 
-        self.num_slides += 1
-
-        return {'header': header, 'content': content, 'number': slide_number}
+        if header or content:
+            return {'header': header, 'title': title, 'level': level,
+                    'content': content}
 
     def get_template_vars(self, slides_src):
         """Computes template vars from slides html source code"""
@@ -296,12 +296,15 @@ class Generator:
         slides = []
 
         for slide_index, slide_src in enumerate(slides_src):
-            slide_number = slide_index + 1
-            slide_vars = self.get_slide_vars(slide_src.strip(), slide_number)
-            if not slide_vars['header'] and not slide_vars['content']:
-                self.log(u"empty slide contents, skipping")
+            slide_vars = self.get_slide_vars(slide_src.strip())
+            if not slide_vars:
                 continue
+            self.num_slides += 1
             slides.append(slide_vars)
+            slide_number = slide_vars['number'] = self.num_slides
+            if slide_vars['level'] and slide_vars['level'] <= TOC_MAX_LEVEL:
+                self.add_toc_entry(slide_vars['title'], slide_vars['level'],
+                                   slide_number)
 
         return {'head_title': head_title, 'num_slides': str(self.num_slides),
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,
@@ -345,7 +348,7 @@ class Generator:
 
     def render(self):
         """Returns generated html code"""
-        slides_src = re.split(r'<hr.*?/>', self.fetch_contents(self.source))
+        slides_src = re.split(r'.*?<hr\s?/?>', self.fetch_contents(self.source))
 
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
@@ -382,7 +385,7 @@ class Generator:
 
             process = Popen(command, stderr=dummy_fh).communicate()
         except Exception:
-            raise EnvironmentError(u"Unable to generate PDF file using prince."
-                                    "Is it installed and available?")
+            raise EnvironmentError(u"Unable to generate PDF file using "
+                                    "prince. Is it installed and available?")
         finally:
             dummy_fh.close()
