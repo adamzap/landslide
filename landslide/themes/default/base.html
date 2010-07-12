@@ -35,8 +35,8 @@
       {{ css.screen.contents }}
     </style>
     {% else %}
-    <link rel="stylesheet" type="text/css" media="print" href="{{ css.print.path_url }}" />
-    <link rel="stylesheet" type="text/css" media="screen, projection" href="{{ css.screen.path_url }}" />
+    <link rel="stylesheet" type="text/css" media="print" href="{{ css.print.path_url }}">
+    <link rel="stylesheet" type="text/css" media="screen, projection" href="{{ css.screen.path_url }}">
     {% endif %}
     <!-- /Styles -->
     <!-- Javascripts -->
@@ -53,43 +53,43 @@
   <div class="presentation">
     <div class="slides">
       {% for slide in slides %}
-        <div class="slide">
-          <div class="inner">
-            {% if slide.header %}
-            <header>{{ slide.header }}</header>
-            {% endif %}
-            {% if slide.content %}
-            <section>{{ slide.content }}</section>
-            {% endif %}
-          </div>
-          <aside>
-            <span class="page_number">{{ slide.number }}/{{ num_slides }}</span>
-          </aside>
+      <div class="slide">
+        <div class="inner">
+          {% if slide.header %}
+          <header>{{ slide.header }}</header>
+          {% endif %}
+          {% if slide.content %}
+          <section>{{ slide.content }}</section>
+          {% endif %}
         </div>
+        <aside>
+          <span class="page_number">{{ slide.number }}/{{ num_slides }}</span>
+        </aside>
+      </div>
       {% endfor %}
     </div>
   </div>
   {% if toc %}
   <ul id="toc" class="hidden">
     <li><h2>Table of Contents</h2></li>
-  {% for section in toc %}
+    {% for section in toc %}
     <li>
       <a href="#slide{{ section.number }}" id="toc-link-{{ section.number }}">
         {{ section.title }}...{{ section.number }}
       </a>
       {% if section.sub %}
       <ul>
-      {% for subsection in section.sub %}
+        {% for subsection in section.sub %}
         <li>
-          <a href="#slide{{ subsection.number }}">
+          <a href="#slide{{ subsection.number }}" id="toc-link-{{ section.number }}">
             {{ subsection.title }}...{{ subsection.number}}
           </a>
         </li>
-      {% endfor %}
+        {% endfor %}
       </ul>
       {% endif %}
     </li>
-  {% endfor %}
+    {% endfor %}
   </ul>
   {% endif %}
   <script>main()</script>
