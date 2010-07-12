@@ -221,26 +221,44 @@ class Generator:
         return contents
 
     def get_css(self):
-        """Fetches and returns stylesheet contents, for both print and screen
-        contexts
+        """Fetches and returns stylesheet file path or contents, for both print
+        and screen contexts, depending if we want a standalone presentation or
+        not
         """
         css = {}
 
         print_css = os.path.join(self.theme_dir, 'css', 'print.css')
         if (os.path.exists(print_css)):
-            css['print'] = open(print_css).read()
+            css['print'] = {'path_url': self.get_abs_path_url(print_css),
+                            'contents': open(print_css).read()}
+        else:
+            self.log(u"No print stylesheet provided in current theme",
+                      'warning')
 
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
         if (os.path.exists(screen_css)):
-            css['screen'] = open(screen_css).read()
+            css['screen'] = {'path_url': self.get_abs_path_url(screen_css),
+                             'contents': open(screen_css).read()}
+        else:
+            self.log(u"No screen stylesheet provided in current theme",
+                      'warning')
 
         return css
 
     def get_js(self):
-        """Fetches and returns javascript contents"""
+        """Fetches and returns javascript fiel path or contents, depending if
+        we want a standalone presentation or not
+        """
         js_file = os.path.join(self.theme_dir, 'js', 'slides.js')
         if (os.path.exists(js_file)):
-            return open(js_file).read()
+            return {'path_url': self.get_abs_path_url(js_file),
+                    'contents': open(js_file).read()}
+        else:
+            self.log(u"No javascript provided in current theme", 'warning')
+
+    def get_abs_path_url(self, path):
+        """Returns the absolute url for a given local path"""
+        return "file://%s" % os.path.abspath(path)
 
     def get_slide_vars(self, slide_src, slide_number):
         """Computes a single slide template vars from its html source code.
@@ -285,8 +303,8 @@ class Generator:
                 continue
             slides.append(slide_vars)
 
-        return {'head_title': head_title, 'slides': slides,
-                'num_slides': str(self.num_slides), 'toc': self.toc,
+        return {'head_title': head_title, 'num_slides': str(self.num_slides),
+                'slides': slides, 'toc': self.toc, 'embed': self.embed,
                 'css': self.get_css(), 'js': self.get_js()}
 
     def highlight_code(self, content):

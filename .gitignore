@@ -1,4 +1,4 @@
 *.pyc
 presentation.html
 *.pdf
-
+samples/.DS_Store

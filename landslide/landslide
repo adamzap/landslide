@@ -48,7 +48,9 @@ parser.add_option("-e", "--encoding",
 parser.add_option("-i", "--embed",
                   action="store_true",
                   dest="embed",
-                  help="Embed base64-encoded images in presentation",
+                  help="Embed stylesheet and javascript contents, "
+                       "base64-encoded images in presentation to make a "
+                       "standalone document",
                   default=False)
 parser.add_option("-t", "--theme",
                   dest="theme",

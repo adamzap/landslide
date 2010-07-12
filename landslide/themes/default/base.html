@@ -26,15 +26,28 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>{{ head_title }}</title>
+    <!-- Styles -->
+    {% if embed %}
     <style type="text/css" media="print">
-      {{ css.print }}
+      {{ css.print.contents }}
     </style>
     <style type="text/css" media="screen, projection">
-      {{ css.screen }}
+      {{ css.screen.contents }}
     </style>
+    {% else %}
+    <link rel="stylesheet" type="text/css" media="print" href="{{ css.print.path_url }}" />
+    <link rel="stylesheet" type="text/css" media="screen, projection" href="{{ css.screen.path_url }}" />
+    {% endif %}
+    <!-- /Styles -->
+    <!-- Javascripts -->
+    {% if embed %}
     <script>
-      {{ js }}
-    </script
+      {{ js.contents }}
+    </script>
+    {% else %}
+    <script type="text/javascript" src="{{ js.path_url }}"></script>
+    {% endif %}
+    <!-- /Javascripts -->
 </head>
 <body>
   <div class="presentation">

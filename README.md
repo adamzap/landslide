@@ -178,12 +178,17 @@ Theme Variables
 
 The `base.html` must be a [Jinja2 template file](http://jinja.pocoo.org/2/documentation/templates) where you can harness the following template variables:
 
-- `css`: the stylesheet contents, available via two keys: `print` and `screen`
-- `js`: the javascript contents
+- `css`: the stylesheet contents, available via two keys, `print` and `screen`, both having:
+  - a `path_url` key storing the url to the asset file path 
+  - a `contents` key storing the asset contents
+- `js`: the javascript contents, having:
+  - a `path_url` key storing the url to the asset file path 
+  - a `contents` key storing the asset contents
 - `slides`: the slides list, each one having these properties:
   - `header`: the slide title
   - `content`: the slide contents
   - `number`: the slide number
+- `embed`: is the current document a standalone one?
 - `num_slides`: the number of slides in current presentation
 - `toc`: the Table of Contents, listing sections of the document. Each section has these properties available:
   - `title`: the section title
