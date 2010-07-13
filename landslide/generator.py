@@ -19,6 +19,7 @@ import re
 import glob
 import base64
 import codecs
+import htmlentitydefs
 import mimetypes
 import jinja2
 import pygments
@@ -34,6 +35,7 @@ from subprocess import *
 
 
 BASE_DIR = os.path.dirname(__file__)
+RE_HTML_ENTITY = re.compile('&(\w+?);')
 THEMES_DIR = os.path.join(BASE_DIR, 'themes')
 TOC_MAX_LEVEL = 2
 
@@ -119,6 +121,16 @@ class Generator:
         raise ValueError("toc is read-only")
 
     toc = property(get_toc, set_toc)
+
+    def descape(self, content, defs=htmlentitydefs.entitydefs):
+        """Decodes html entities"""
+        try:
+            return defs[m.group(1)]
+        except KeyError:
+            return m.group(0)
+
+    def html_entity_decode(string):
+        return pattern.sub(html_entity_decode_char, string)
 
     def embed_images(self, html_contents, from_source):
         """Extracts images url and embed them using the base64 algorithm"""
@@ -296,6 +308,8 @@ class Generator:
         slides = []
 
         for slide_index, slide_src in enumerate(slides_src):
+            if not slide_src:
+                continue
             slide_vars = self.get_slide_vars(slide_src.strip())
             if not slide_vars:
                 continue
@@ -312,32 +326,27 @@ class Generator:
 
     def highlight_code(self, content):
         """Performs syntax coloration in slide code blocks with pygments"""
-        while u'<code>!' in content:
-            code_match = re.search(r'<code>!(.+?)\n(.+?)</code>', content,
-                                   re.DOTALL)
+        code_blocks = re.findall(r'(<code>!(.+?)\n(.+?)</code>)', content,
+                                 re.DOTALL | re.UNICODE)
+        if not code_blocks:
+            return content
 
-            if code_match:
-                lang, code = code_match.groups()
+        for block, lang, code in code_blocks:
+            hl_code = code.replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&')
 
-                code = code.replace('&lt;', '<').replace('&gt;', '>')
-                code = code.replace('&amp;', '&')
+            try:
+                lexer = get_lexer_by_name(lang)
+            except Exception:
+                self.log(u"Unknown pygment lexer \"%s\", code higlighting "
+                          "skipped for this block" % lang)
+                return content
 
-                try:
-                    lexer = get_lexer_by_name(lang)
-                except Exception:
-                    self.log(u"Unknown pygment lexer \"%s\", code higlighting "
-                              "skipped" % lang)
-                    continue
+            formatter = HtmlFormatter(linenos='inline', noclasses=True,
+                                      nobackground=True)
 
-                formatter = HtmlFormatter(linenos='inline', noclasses=True,
-                                          nobackground=True)
+            pretty_code = pygments.highlight(hl_code, lexer, formatter)
 
-                pretty_code = pygments.highlight(code, lexer, formatter)
-
-                before_code = content.split(u'<code>', 1)[0]
-                after_code = content.split(u'</code>', 1)[1]
-
-                content = before_code + pretty_code + after_code
+            content = content.replace(block, pretty_code, 1)
 
         return content
 
@@ -348,7 +357,8 @@ class Generator:
 
     def render(self):
         """Returns generated html code"""
-        slides_src = re.split(r'.*?<hr\s?/?>', self.fetch_contents(self.source))
+        slides_src = re.split(r'<hr\s?/?>', self.fetch_contents(self.source),
+                              re.DOTALL | re.UNICODE)
 
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
