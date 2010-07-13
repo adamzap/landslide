@@ -122,15 +122,10 @@ class Generator:
 
     toc = property(get_toc, set_toc)
 
-    def descape(self, content, defs=htmlentitydefs.entitydefs):
+    def descape(self, string, defs=htmlentitydefs.entitydefs):
         """Decodes html entities"""
-        try:
-            return defs[m.group(1)]
-        except KeyError:
-            return m.group(0)
-
-    def html_entity_decode(string):
-        return pattern.sub(html_entity_decode_char, string)
+        f = lambda m: defs[m.group(1)] if len(m.groups()) > 0 else m.group(0)
+        return RE_HTML_ENTITY.sub(f, string)
 
     def embed_images(self, html_contents, from_source):
         """Extracts images url and embed them using the base64 algorithm"""
@@ -332,8 +327,6 @@ class Generator:
             return content
 
         for block, lang, code in code_blocks:
-            hl_code = code.replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&')
-
             try:
                 lexer = get_lexer_by_name(lang)
             except Exception:
@@ -344,7 +337,8 @@ class Generator:
             formatter = HtmlFormatter(linenos='inline', noclasses=True,
                                       nobackground=True)
 
-            pretty_code = pygments.highlight(hl_code, lexer, formatter)
+            pretty_code = pygments.highlight(self.descape(code), lexer, 
+                                             formatter)
 
             content = content.replace(block, pretty_code, 1)
 

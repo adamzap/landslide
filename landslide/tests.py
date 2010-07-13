@@ -46,6 +46,14 @@ class GeneratorTest(unittest.TestCase):
         self.assertRaises(IOError, Generator, None)
         self.assertRaises(IOError, Generator, 'foo.md')
 
+    def test_descape(self):
+        base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
+        g = Generator(base_dir, logger=self.logtest)
+        self.assertEqual(g.descape('&gt;'), '>')
+        self.assertEqual(g.descape('&lt;'), '<')
+        self.assertEqual(g.descape('&lt;span&gt;'), '<span>')
+        self.assertEqual(g.descape('&lt;spam&amp;eggs&gt;'), '<spam&eggs>')
+
     def test_get_toc(self):
         base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
         g = Generator(base_dir, logger=self.logtest)
