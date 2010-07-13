@@ -337,7 +337,7 @@ class Generator:
             formatter = HtmlFormatter(linenos='inline', noclasses=True,
                                       nobackground=True)
 
-            pretty_code = pygments.highlight(self.descape(code), lexer, 
+            pretty_code = pygments.highlight(self.descape(code), lexer,
                                              formatter)
 
             content = content.replace(block, pretty_code, 1)

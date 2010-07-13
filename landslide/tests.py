@@ -111,6 +111,7 @@ class GeneratorTest(unittest.TestCase):
         input = "<p>Nothing to declare</p>"
         self.assertEqual(g.highlight_code(input), input)
 
+
 class ParserTest(unittest.TestCase):
     def test___init__(self):
         self.assertEqual(Parser('.md').format, 'markdown')

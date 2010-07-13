@@ -51,6 +51,7 @@ def html_parts(input_string, source_path=None, destination_path=None,
         writer_name='html', settings_overrides=overrides)
     return parts
 
+
 def html_body(input_string, source_path=None, destination_path=None,
               input_encoding='unicode', output_encoding='unicode',
               doctitle=1, initial_header_level=1):
