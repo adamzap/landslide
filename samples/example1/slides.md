@@ -6,7 +6,7 @@ Landslide
 Landslide
 ---------
 
-<div class="notes">foo</div>
+.notes: plop
 
 Generates a slideshow using the slides that power
 [the html5-slides presentation](http://apirocks.com/html5/html5.html).
@@ -33,6 +33,8 @@ Rendering Instructions
 
 Slide #2
 ========
+
+.fx: foo bar
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna tellus,
 fermentum nec venenatis nec, dapibus id metus. Phasellus nulla massa, consequat

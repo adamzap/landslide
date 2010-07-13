@@ -224,7 +224,7 @@ class Generator:
 
         if not contents.strip():
             self.log(u"No contents found in %s" % source, 'warning')
-        elif not re.match(r'.*?<hr\s?/?>\s?$', contents):
+        elif not re.match(r'.*?<hr\s?/?>$', contents.strip()):
             contents += u'<hr />'
 
         return contents
@@ -286,12 +286,20 @@ class Generator:
             title = find.group(3)
             content = find.group(4)
 
+        slide_classes = None
+
         if content and content.strip():
             content = self.highlight_code(content.strip())
+            try:
+                processed_content = self.process_macros(content)
+                content = processed_content['content']
+                slide_classes = processed_content['classes']
+            except Exception:
+                pass
 
         if header or content:
             return {'header': header, 'title': title, 'level': level,
-                    'content': content}
+                    'content': content, 'classes': slide_classes}
 
     def get_template_vars(self, slides_src):
         """Computes template vars from slides html source code"""
@@ -348,6 +356,17 @@ class Generator:
         """Log a message (eventually, override to do something more clever)"""
         if self.verbose and self.logger:
             self.logger(message, type)
+
+    def process_macros(self, content):
+        """Processed text transformation macros"""
+        # Notes
+        content = re.sub(r'<p>\.notes:\s?(.*?)</p>',
+                         r'<p class="notes">\1</p>', content)
+        # FXs
+        fx_match = re.search(r'<p>\.fx:\s?(.*?)</p>', content)
+        classes = fx_match.group(1) if fx_match else None
+
+        return {'content': content, 'classes': classes}
 
     def render(self):
         """Returns generated html code"""

@@ -133,7 +133,7 @@ function main() {
     for (var i = 0, len = notes.length; i < len; i++) {
       notes[i].style.display = (notesOn) ? 'none':'block';
     }
-    notesOn = (notesOn) ? false:true;
+    notesOn = (notesOn) ? false : true;
   };
 
   var showSlideNumbers = function() {

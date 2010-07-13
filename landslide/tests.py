@@ -111,6 +111,17 @@ class GeneratorTest(unittest.TestCase):
         input = "<p>Nothing to declare</p>"
         self.assertEqual(g.highlight_code(input), input)
 
+    def test_process_macros(self):
+        g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
+        # Notes
+        r = g.process_macros('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
+        self.assertEqual(r['content'].find('<p class="notes">bar</p>'), 11)
+        self.assertTrue(not r['classes'])
+        # FXs
+        content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
+        r = g.process_macros(content)
+        self.assertEqual(r['content'], content)
+        self.assertEqual(r['classes'], 'blah blob')
 
 class ParserTest(unittest.TestCase):
     def test___init__(self):

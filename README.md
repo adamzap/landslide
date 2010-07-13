@@ -97,6 +97,26 @@ Or get it as a PDF document, at least if PrinceXML is installed and available on
 
 ---
 
+Macros
+======
+
+You can use macros to enhance your presentation:
+
+Notes
+-----
+
+Add notes to your slides using the `.notes:` keyword, eg.:
+
+    # My Slide Title
+    
+    .notes: These are my notes, hidden by default
+    
+    My visible content goes here
+
+You can toggle display of notes by pressing the `2` key. 
+
+---
+
 Options
 =======
 
