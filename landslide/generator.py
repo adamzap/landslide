@@ -362,9 +362,13 @@ class Generator:
         # Notes
         content = re.sub(r'<p>\.notes:\s?(.*?)</p>',
                          r'<p class="notes">\1</p>', content)
-        # FXs
-        fx_match = re.search(r'<p>\.fx:\s?(.*?)</p>', content)
-        classes = fx_match.group(1) if fx_match else None
+        # FXs (slide classes)
+        classes = None
+        fx_match = re.search(r'(<p>\.fx:\s?(.*?)</p>\n?)', content, 
+                             re.DOTALL | re.UNICODE)
+        if fx_match:
+            classes = fx_match.group(2)
+            content = content.replace(fx_match.group(1), '', 1)
 
         return {'content': content, 'classes': classes}
 

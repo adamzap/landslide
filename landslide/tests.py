@@ -120,7 +120,7 @@ class GeneratorTest(unittest.TestCase):
         # FXs
         content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
         r = g.process_macros(content)
-        self.assertEqual(r['content'], content)
+        self.assertEqual(r['content'], '<p>foo</p>\n<p>baz</p>')
         self.assertEqual(r['classes'], 'blah blob')
 
 class ParserTest(unittest.TestCase):
