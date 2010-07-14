@@ -199,35 +199,45 @@ li {
   padding: 0;
 }
 
+#toc table {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
+}
+
+#toc table caption {
+  display: none;
+}
+
+#toc tr {
+  margin: 2px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+
+#toc th {
+  text-align: left;
+  font-weight: normal;
+}
+  #toc tr.sub th {
+    text-indent: 20px;
+  }
+
+#toc td {
+  text-align: right;
+  min-width: 20px;
+}
+
 #toc a {
-  font-size: 90%;
+  display: block;
+  text-decoration: none;
+  border-bottom: none;
+  padding: 4px 0;
 }
 
-#toc a.active {
+#toc tr.active {
   background: #ff0;
-}
-
-#toc ul {
-  margin: 0;
-  padding: 0 0 0 20px;
-}
-
-#toc li {
-  clear: both;
-  display: block;
-  list-style: none;
-  padding: 0;
-  margin: 4px 0;
-}
-
-#toc li li {
-  padding: 0;
-  margin: 0;
-}
-
-#toc li em {
-  display: block;
-  float: right;
 }
 
 .page_number {
