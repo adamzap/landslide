@@ -19,6 +19,7 @@ import re
 import unittest
 
 from generator import Generator
+from macro import *
 from parser import Parser
 
 
@@ -27,34 +28,18 @@ if (not os.path.exists(SAMPLES_DIR)):
     raise IOError('Sample source files not found, cannot run tests')
 
 
-class WarningMessage(Exception):
-    pass
-
-
-class ErrorMessage(Exception):
-    pass
-
-
-class GeneratorTest(unittest.TestCase):
+class BaseTestCase(unittest.TestCase):
     def logtest(self, message, type):
         if type == 'warning':
             raise WarningMessage(message)
         elif type == 'error':
             raise ErrorMessage(message)
 
+
+class GeneratorTest(BaseTestCase):
     def test___init__(self):
         self.assertRaises(IOError, Generator, None)
         self.assertRaises(IOError, Generator, 'foo.md')
-
-    def test_descape(self):
-        base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
-        g = Generator(base_dir, logger=self.logtest)
-        self.assertEqual(g.descape('foo'), 'foo')
-        self.assertEqual(g.descape('&gt;'), '>')
-        self.assertEqual(g.descape('&lt;'), '<')
-        self.assertEqual(g.descape('&amp;lt;'), '&lt;')
-        self.assertEqual(g.descape('&lt;span&gt;'), '<span>')
-        self.assertEqual(g.descape('&lt;spam&amp;eggs&gt;'), '<spam&eggs>')
 
     def test_get_toc(self):
         base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
@@ -104,31 +89,70 @@ class GeneratorTest(unittest.TestCase):
         self.assertEqual(slides[2]['header'], None)
         self.assertEqual(slides[2]['content'], '<p>no heading here</p>')
 
-    def test_highlight_code(self):
-        g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
-        hl = g.highlight_code("<pre><code>!php\n$foo;</code></pre>")
-        self.assertTrue(hl.startswith('<pre><div class="highlight">'))
-        input = "<p>Nothing to declare</p>"
-        self.assertEqual(g.highlight_code(input), input)
-
     def test_process_macros(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
         # Notes
         r = g.process_macros('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
-        self.assertEqual(r['content'].find('<p class="notes">bar</p>'), 11)
-        self.assertTrue(not r['classes'])
+        self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
+        self.assertTrue(not r[1])
         # FXs
         content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
         r = g.process_macros(content)
-        self.assertEqual(r['content'], '<p>foo</p>\n<p>baz</p>')
-        self.assertEqual(r['classes'], 'blah blob')
+        self.assertEqual(r[0], '<p>foo</p>\n<p>baz</p>')
+        self.assertEqual(r[1], 'blah blob')
 
-class ParserTest(unittest.TestCase):
+
+class CodeHighlightingMacroTest(BaseTestCase):
+    def test_descape(self):
+        m = CodeHighlightingMacro(self.logtest)
+        self.assertEqual(m.descape('foo'), 'foo')
+        self.assertEqual(m.descape('&gt;'), '>')
+        self.assertEqual(m.descape('&lt;'), '<')
+        self.assertEqual(m.descape('&amp;lt;'), '&lt;')
+        self.assertEqual(m.descape('&lt;span&gt;'), '<span>')
+        self.assertEqual(m.descape('&lt;spam&amp;eggs&gt;'), '<spam&eggs>')
+
+    def test_process(self):
+        m = CodeHighlightingMacro(self.logtest)
+        hl = m.process("<pre><code>!php\n$foo;</code></pre>")
+        self.assertTrue(hl[0].startswith('<pre><div class="highlight">'))
+        self.assertTrue(hl[1], 'code')
+        input = "<p>Nothing to declare</p>"
+        self.assertEqual(m.process(input)[0], input)
+        self.assertEqual(m.process(input)[1], '')
+
+
+class FxMacroTest(BaseTestCase):
+    def test_process(self):
+        m = FxMacro(self.logtest)
+        content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
+        r = m.process(content)
+        self.assertEqual(r[0], '<p>foo</p>\n<p>baz</p>')
+        self.assertEqual(r[1], 'blah blob')
+
+
+class NotesMacroTest(BaseTestCase):
+    def test_process(self):
+        m = NotesMacro(self.logtest)
+        r = m.process('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
+        self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
+        self.assertTrue(not r[1])
+
+
+class ParserTest(BaseTestCase):
     def test___init__(self):
         self.assertEqual(Parser('.md').format, 'markdown')
         self.assertEqual(Parser('.markdown').format, 'markdown')
         self.assertEqual(Parser('.rst').format, 'restructuredtext')
         self.assertRaises(NotImplementedError, Parser, '.txt')
+
+
+class WarningMessage(Exception):
+    pass
+
+
+class ErrorMessage(Exception):
+    pass
 
 if __name__ == '__main__':
     unittest.main()
