@@ -97,6 +97,26 @@ Or get it as a PDF document, at least if PrinceXML is installed and available on
 
 ---
 
+Macros
+======
+
+You can use macros to enhance your presentation:
+
+Notes
+-----
+
+Add notes to your slides using the `.notes:` keyword, eg.:
+
+    # My Slide Title
+    
+    .notes: These are my notes, hidden by default
+    
+    My visible content goes here
+
+You can toggle display of notes by pressing the `2` key. 
+
+---
+
 Options
 =======
 
@@ -171,19 +191,39 @@ A Landlside theme is a directory following this simple structure:
     `-- js
         `-- slides.js
 
+---
+
+Theme Variables
+---------------
+
 The `base.html` must be a [Jinja2 template file](http://jinja.pocoo.org/2/documentation/templates) where you can harness the following template variables:
 
-- `css`: the stylesheet contents, available via two keys: `print` and `screen`
-- `js`: the javascript contents
+- `css`: the stylesheet contents, available via two keys, `print` and `screen`, both having:
+  - a `path_url` key storing the url to the asset file path 
+  - a `contents` key storing the asset contents
+- `js`: the javascript contents, having:
+  - a `path_url` key storing the url to the asset file path 
+  - a `contents` key storing the asset contents
 - `slides`: the slides list, each one having these properties:
   - `header`: the slide title
   - `content`: the slide contents
   - `number`: the slide number
+- `embed`: is the current document a standalone one?
 - `num_slides`: the number of slides in current presentation
 - `toc`: the Table of Contents, listing sections of the document. Each section has these properties available:
   - `title`: the section title
   - `number`: the slide number of the section
   - `sub`: subsections, if any
+
+---
+
+Styles Scope
+------------
+
+* To change HTML5 presentation styles, you have to tweak the `css/screen.css` stylesheet bundled with the used theme. 
+* For PDF one, modify the `css/print.css` one.
+
+---
 
 TODO(?)
 =======

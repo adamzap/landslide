@@ -15,13 +15,14 @@
 #  limitations under the License.
 
 SUPPORTED_FORMATS = {
-    'markdown':         ['.md', '.markdown'],
-    'restructuredtext': ['.rst'],
+    'markdown':         ['.mdown', '.markdown', '.markdn', '.md'],
+    'restructuredtext': ['.rst', '.rest'],
 }
 
 
 class Parser():
     def __init__(self, extension, encoding='utf8'):
+        """Configures this parser"""
         self.encoding = encoding
         self.format = None
         for supp_format, supp_extensions in SUPPORTED_FORMATS.items():
@@ -32,16 +33,21 @@ class Parser():
             raise NotImplementedError(u"Unsupported format %s" % extension)
 
     def parse(self, text):
+        """Parses and renders a text as HTML regarding current format"""
         if self.format == 'markdown':
             try:
                 import markdown
             except ImportError:
-                raise RuntimeError("Looks like markdown is not installed")
+                raise RuntimeError(u"Looks like markdown is not installed")
 
             return markdown.markdown(text)
         elif self.format == 'restructuredtext':
-            from rst import html_parts, html_body
-            return html_body(text, input_encoding=self.encoding, 
+            try:
+                from rst import html_parts, html_body
+            except ImportError:
+                raise RuntimeError(u"Looks like docutils are not installed")
+
+            return html_body(text, input_encoding=self.encoding,
                              output_encoding=self.encoding)
         else:
             raise NotImplementedError(u"Unsupported format, cannot parse")

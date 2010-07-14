@@ -19,63 +19,77 @@
                  Alex Russell (slightlyoff@chromium.org)
 
   landslide modifications: Adam Zapletal (adamzap@gmail.com)
+                           Nicolas Perriault (nperriault@gmail.com)
 -->
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>{{ head_title }}</title>
+    <!-- Styles -->
+    {% if embed %}
     <style type="text/css" media="print">
-      {{ css.print }}
+      {{ css.print.contents }}
     </style>
     <style type="text/css" media="screen, projection">
-      {{ css.screen }}
+      {{ css.screen.contents }}
     </style>
+    {% else %}
+    <link rel="stylesheet" type="text/css" media="print" href="{{ css.print.path_url }}">
+    <link rel="stylesheet" type="text/css" media="screen, projection" href="{{ css.screen.path_url }}">
+    {% endif %}
+    <!-- /Styles -->
+    <!-- Javascripts -->
+    {% if embed %}
     <script>
-      {{ js }}
-    </script
+      {{ js.contents }}
+    </script>
+    {% else %}
+    <script type="text/javascript" src="{{ js.path_url }}"></script>
+    {% endif %}
+    <!-- /Javascripts -->
 </head>
 <body>
   <div class="presentation">
     <div class="slides">
       {% for slide in slides %}
-        <div class="slide">
-          <div class="inner">
-            {% if slide.header %}
-            <header>{{ slide.header }}</header>
-            {% endif %}
-            {% if slide.content %}
-            <section>{{ slide.content }}</section>
-            {% endif %}
-          </div>
-          <aside>
-            <span class="page_number">{{ slide.number }}/{{ num_slides }}</span>
-          </aside>
+      <div class="slide{% if slide.classes %} {{ slide.classes }}{% endif %}">
+        <div class="inner">
+          {% if slide.header %}
+          <header>{{ slide.header }}</header>
+          {% endif %}
+          {% if slide.content %}
+          <section>{{ slide.content }}</section>
+          {% endif %}
         </div>
+        <aside>
+          <span class="page_number">{{ slide.number }}/{{ num_slides }}</span>
+        </aside>
+      </div>
       {% endfor %}
     </div>
   </div>
   {% if toc %}
-  <ul id="toc">
+  <ul id="toc" class="hidden">
     <li><h2>Table of Contents</h2></li>
-  {% for section in toc %}
+    {% for section in toc %}
     <li>
-      <a href="#slide{{ section.number }}">
+      <a href="#slide{{ section.number }}" id="toc-link-{{ section.number }}">
         {{ section.title }}...{{ section.number }}
       </a>
       {% if section.sub %}
       <ul>
-      {% for subsection in section.sub %}
+        {% for subsection in section.sub %}
         <li>
-          <a href="#slide{{ subsection.number }}">
+          <a href="#slide{{ subsection.number }}" id="toc-link-{{ subsection.number}}">
             {{ subsection.title }}...{{ subsection.number}}
           </a>
         </li>
-      {% endfor %}
+        {% endfor %}
       </ul>
       {% endif %}
     </li>
-  {% endfor %}
+    {% endfor %}
   </ul>
   {% endif %}
   <script>main()</script>

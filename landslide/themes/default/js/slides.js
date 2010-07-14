@@ -8,17 +8,6 @@ function main() {
   var notesOn = false;
   var slides = document.getElementsByClassName('slide');
   var touchStartX = 0;
-
-  // var slide_hash = window.location.hash.replace(/#/, '');
-  // if (slide_hash) {
-  //   for (var i = 0, len = slides.length; i < len; i++) {
-  //     if (slides[i].id == slide_hash) {
-  //       currentSlideNo = i;
-  //       updateSlideClasses();
-  //     }
-  //   }
-  // }
-
   var spaces = /\s+/, a1 = [""];
 
   var str2array = function(s) {
@@ -76,17 +65,17 @@ function main() {
 
   var getSlideTitle = function(slideNo) {
     var el = getSlideEl(slideNo);
-
     if (el) {
-      return el.getElementsByTagName('header')[0].innerHTML;
-    } else {
-      return null;
+      var headers = el.getElementsByTagName('header');
+      if (headers.length > 0) {
+        return el.getElementsByTagName('header')[0].innerText;
+      }
     }
+    return null;
   };
 
   var changeSlideElClass = function(slideNo, className) {
     var el = getSlideEl(slideNo);
-
     if (el) {
       removeClass(el, 'far-past past current future far-future');
       addClass(el, className);
@@ -95,18 +84,40 @@ function main() {
 
   var updateSlideClasses = function() {
     window.location.hash = "slide" + currentSlideNo;
-    changeSlideElClass(currentSlideNo - 2, 'far-past');
+
+    for (var i=1; i<currentSlideNo-2; i++) {
+      changeSlideElClass(i, 'far-past');
+    }
+
     changeSlideElClass(currentSlideNo - 1, 'past');
     changeSlideElClass(currentSlideNo, 'current');
     changeSlideElClass(currentSlideNo + 1, 'future');
-    changeSlideElClass(currentSlideNo + 2, 'far-future');
+
+    for (var i=currentSlideNo+2; i<slides.length+1; i++) {
+      changeSlideElClass(i, 'far-future');
+    }
+
+    highlightCurrentTocLink();
+
+    document.getElementsByTagName('title')[0].innerText = getSlideTitle(currentSlideNo);
   };
+
+  var highlightCurrentTocLink = function() {
+    var tocLinks = document.getElementById('toc').getElementsByTagName('a');
+    for (var i=0; i<tocLinks.length; i++) {
+      removeClass(tocLinks[i], 'active');
+    }
+
+    var tocEl = document.getElementById('toc-link-' + currentSlideNo);
+    if (tocEl) {
+      addClass(tocEl, 'active');
+    }
+  }
 
   var nextSlide = function() {
     if (currentSlideNo < slides.length) {
       currentSlideNo++;
     }
-
     updateSlideClasses();
   };
 
@@ -118,29 +129,28 @@ function main() {
   };
 
   var showNotes = function() {
-    var notes = document.querySelectorAll('.notes');
+    var notes = getSlideEl(currentSlideNo).getElementsByClassName('notes');
     for (var i = 0, len = notes.length; i < len; i++) {
       notes[i].style.display = (notesOn) ? 'none':'block';
     }
-    notesOn = (notesOn) ? false:true;
+    notesOn = (notesOn) ? false : true;
   };
 
   var showSlideNumbers = function() {
     // We only use aside elements for slide numbers, so this is safe
     var asides = document.getElementsByTagName('aside');
     var hidden = asides[0].style.display != 'block';
-
     for (var i = 0; i < asides.length; i++) {
       asides[i].style.display = hidden ? 'block' : 'none';
     }
-  }
+  };
 
   var showToc = function() {
     var toc = document.getElementById('toc');
-    var hidden = toc.style.display != 'block';
-    toc.style.display = hidden ? 'block' : 'none';
+    var hidden = toc.className != 'visible';
+    toc.className = hidden ? 'visible' : 'hidden';
     return false;
-  }
+  };
 
   var switch3D = function() {
     if (document.body.className.indexOf('three-d') == -1) {
@@ -153,7 +163,6 @@ function main() {
   };
 
   var handleBodyKeyDown = function(event) {
-    // console.log(event.keyCode);
     switch (event.keyCode) {
       case 37: // left arrow
         prevSlide();
@@ -192,7 +201,7 @@ function main() {
       }
     }, false);
   };
-  
+
   var addTocLinksListeners = function() {
     var tocLinks = document.getElementById('toc').getElementsByTagName('a');
     for (var i=0; i < tocLinks.length; i++) {
@@ -223,7 +232,7 @@ function main() {
 
     // add support for finger events (filter it by property detection?)
     addTouchListeners();
-    
+
     addTocLinksListeners();
   })();
 };

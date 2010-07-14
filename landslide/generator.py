@@ -21,15 +21,11 @@ import base64
 import codecs
 import mimetypes
 import jinja2
-import pygments
 import tempfile
 import sys
 
+from macro import *
 from parser import Parser
-
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters import HtmlFormatter
-
 from subprocess import *
 
 
@@ -47,6 +43,7 @@ class Generator:
         self.direct = direct
         self.encoding = encoding
         self.logger = None
+        self.macros = [CodeHighlightingMacro, FxMacro, NotesMacro]
         self.num_slides = 0
         self.__toc = []
 
@@ -217,32 +214,52 @@ class Generator:
 
         if not contents.strip():
             self.log(u"No contents found in %s" % source, 'warning')
+        elif not re.match(r'.*?<hr\s?/?>$', contents.strip()):
+            contents += u'<hr />'
 
         return contents
 
     def get_css(self):
-        """Fetches and returns stylesheet contents, for both print and screen
-        contexts
+        """Fetches and returns stylesheet file path or contents, for both print
+        and screen contexts, depending if we want a standalone presentation or
+        not
         """
         css = {}
 
         print_css = os.path.join(self.theme_dir, 'css', 'print.css')
         if (os.path.exists(print_css)):
-            css['print'] = open(print_css).read()
+            css['print'] = {'path_url': self.get_abs_path_url(print_css),
+                            'contents': open(print_css).read()}
+        else:
+            self.log(u"No print stylesheet provided in current theme",
+                      'warning')
 
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
         if (os.path.exists(screen_css)):
-            css['screen'] = open(screen_css).read()
+            css['screen'] = {'path_url': self.get_abs_path_url(screen_css),
+                             'contents': open(screen_css).read()}
+        else:
+            self.log(u"No screen stylesheet provided in current theme",
+                      'warning')
 
         return css
 
     def get_js(self):
-        """Fetches and returns javascript contents"""
+        """Fetches and returns javascript fiel path or contents, depending if
+        we want a standalone presentation or not
+        """
         js_file = os.path.join(self.theme_dir, 'js', 'slides.js')
         if (os.path.exists(js_file)):
-            return open(js_file).read()
+            return {'path_url': self.get_abs_path_url(js_file),
+                    'contents': open(js_file).read()}
+        else:
+            self.log(u"No javascript provided in current theme", 'warning')
 
-    def get_slide_vars(self, slide_src, slide_number):
+    def get_abs_path_url(self, path):
+        """Returns the absolute url for a given local path"""
+        return "file://%s" % os.path.abspath(path)
+
+    def get_slide_vars(self, slide_src):
         """Computes a single slide template vars from its html source code.
            Also extracts slide informations for the table of contents.
         """
@@ -251,22 +268,26 @@ class Generator:
         find = re.search(r'^\s?(<h(\d?)>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
         if not find:
-            header = None
-            content = slide_src
+            header = level = title = None
+            content = slide_src.strip()
         else:
             header = find.group(1)
             level = int(find.group(2))
             title = find.group(3)
-            content = find.group(4)
-            if level <= TOC_MAX_LEVEL:
-                self.add_toc_entry(title, level, slide_number)
+            content = find.group(4).strip() if find.group(4) else find.group(4)
+
+        slide_classes = ''
 
         if content:
-            content = self.highlight_code(content.strip())
+            #try:
+            content, slide_classes = self.process_macros(content)
+            #except Exception, e:
+            #    self.log(u"Macro processing failed: %s" % e)
+            #    pass
 
-        self.num_slides += 1
-
-        return {'header': header, 'content': content, 'number': slide_number}
+        if header or content:
+            return {'header': header, 'title': title, 'level': level,
+                    'content': content, 'classes': slide_classes}
 
     def get_template_vars(self, slides_src):
         """Computes template vars from slides html source code"""
@@ -278,56 +299,41 @@ class Generator:
         slides = []
 
         for slide_index, slide_src in enumerate(slides_src):
-            slide_number = slide_index + 1
-            slide_vars = self.get_slide_vars(slide_src.strip(), slide_number)
-            if not slide_vars['header'] and not slide_vars['content']:
-                self.log(u"empty slide contents, skipping")
+            if not slide_src:
                 continue
+            slide_vars = self.get_slide_vars(slide_src.strip())
+            if not slide_vars:
+                continue
+            self.num_slides += 1
             slides.append(slide_vars)
+            slide_number = slide_vars['number'] = self.num_slides
+            if slide_vars['level'] and slide_vars['level'] <= TOC_MAX_LEVEL:
+                self.add_toc_entry(slide_vars['title'], slide_vars['level'],
+                                   slide_number)
 
-        return {'head_title': head_title, 'slides': slides,
-                'num_slides': str(self.num_slides), 'toc': self.toc,
+        return {'head_title': head_title, 'num_slides': str(self.num_slides),
+                'slides': slides, 'toc': self.toc, 'embed': self.embed,
                 'css': self.get_css(), 'js': self.get_js()}
-
-    def highlight_code(self, content):
-        """Performs syntax coloration in slide code blocks with pygments"""
-        while u'<code>!' in content:
-            code_match = re.search(r'<code>!(.+?)\n(.+?)</code>', content,
-                                   re.DOTALL)
-
-            if code_match:
-                lang, code = code_match.groups()
-
-                code = code.replace('&lt;', '<').replace('&gt;', '>')
-                code = code.replace('&amp;', '&')
-
-                try:
-                    lexer = get_lexer_by_name(lang)
-                except Exception:
-                    self.log(u"Unknown pygment lexer \"%s\", code higlighting "
-                              "skipped" % lang)
-                    continue
-
-                formatter = HtmlFormatter(linenos='inline', noclasses=True,
-                                          nobackground=True)
-
-                pretty_code = pygments.highlight(code, lexer, formatter)
-
-                before_code = content.split(u'<code>', 1)[0]
-                after_code = content.split(u'</code>', 1)[1]
-
-                content = before_code + pretty_code + after_code
-
-        return content
 
     def log(self, message, type='notice'):
         """Log a message (eventually, override to do something more clever)"""
         if self.verbose and self.logger:
             self.logger(message, type)
 
+    def process_macros(self, content):
+        """Processed all macros"""
+        classes = u''
+        for macro_class in self.macros:
+            macro = macro_class(self.logger)
+            content, add_classes = macro.process(content)
+            if add_classes:
+                classes += add_classes
+        return content, classes
+
     def render(self):
         """Returns generated html code"""
-        slides_src = re.split(r'<hr.*?/>', self.fetch_contents(self.source))
+        slides_src = re.split(r'<hr\s?/?>', self.fetch_contents(self.source),
+                              re.DOTALL | re.UNICODE)
 
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
@@ -364,7 +370,7 @@ class Generator:
 
             process = Popen(command, stderr=dummy_fh).communicate()
         except Exception:
-            raise EnvironmentError(u"Unable to generate PDF file using prince."
-                                    "Is it installed and available?")
+            raise EnvironmentError(u"Unable to generate PDF file using "
+                                    "prince. Is it installed and available?")
         finally:
             dummy_fh.close()
