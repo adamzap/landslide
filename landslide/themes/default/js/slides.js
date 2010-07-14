@@ -103,14 +103,14 @@ function main() {
   };
 
   var highlightCurrentTocLink = function() {
-    var tocLinks = document.getElementById('toc').getElementsByTagName('a');
-    for (var i=0; i<tocLinks.length; i++) {
-      removeClass(tocLinks[i], 'active');
+    var tocRows = document.getElementById('toc').getElementsByTagName('tr');
+    for (var i=0; i<tocRows.length; i++) {
+      removeClass(tocRows.item(i), 'active');
     }
 
-    var tocEl = document.getElementById('toc-link-' + currentSlideNo);
-    if (tocEl) {
-      addClass(tocEl, 'active');
+    var currentTocRow = document.getElementById('toc-row-' + currentSlideNo);
+    if (currentTocRow) {
+      addClass(currentTocRow, 'active');
     }
   }
 
@@ -131,7 +131,7 @@ function main() {
   var showNotes = function() {
     var notes = getSlideEl(currentSlideNo).getElementsByClassName('notes');
     for (var i = 0, len = notes.length; i < len; i++) {
-      notes[i].style.display = (notesOn) ? 'none':'block';
+      notes.item(i).style.display = (notesOn) ? 'none':'block';
     }
     notesOn = (notesOn) ? false : true;
   };
@@ -141,7 +141,7 @@ function main() {
     var asides = document.getElementsByTagName('aside');
     var hidden = asides[0].style.display != 'block';
     for (var i = 0; i < asides.length; i++) {
-      asides[i].style.display = hidden ? 'block' : 'none';
+      asides.item(i).style.display = hidden ? 'block' : 'none';
     }
   };
 
