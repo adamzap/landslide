@@ -129,7 +129,7 @@ function main() {
   };
 
   var showNotes = function() {
-    var notes = document.querySelectorAll('.notes');
+    var notes = getSlideEl(currentSlideNo).getElementsByClassName('notes');
     for (var i = 0, len = notes.length; i < len; i++) {
       notes[i].style.display = (notesOn) ? 'none':'block';
     }
