@@ -19,23 +19,17 @@ import re
 import glob
 import base64
 import codecs
-import htmlentitydefs
 import mimetypes
 import jinja2
-import pygments
 import tempfile
 import sys
 
+from macro import *
 from parser import Parser
-
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters import HtmlFormatter
-
 from subprocess import *
 
 
 BASE_DIR = os.path.dirname(__file__)
-RE_HTML_ENTITY = re.compile('&(\w+?);')
 THEMES_DIR = os.path.join(BASE_DIR, 'themes')
 TOC_MAX_LEVEL = 2
 
@@ -49,6 +43,7 @@ class Generator:
         self.direct = direct
         self.encoding = encoding
         self.logger = None
+        self.macros = [CodeHighlightingMacro, FxMacro, NotesMacro]
         self.num_slides = 0
         self.__toc = []
 
@@ -121,11 +116,6 @@ class Generator:
         raise ValueError("toc is read-only")
 
     toc = property(get_toc, set_toc)
-
-    def descape(self, string, defs=htmlentitydefs.entitydefs):
-        """Decodes html entities"""
-        f = lambda m: defs[m.group(1)] if len(m.groups()) > 0 else m.group(0)
-        return RE_HTML_ENTITY.sub(f, string)
 
     def embed_images(self, html_contents, from_source):
         """Extracts images url and embed them using the base64 algorithm"""
@@ -279,23 +269,21 @@ class Generator:
                          re.DOTALL | re.UNICODE)
         if not find:
             header = level = title = None
-            content = slide_src
+            content = slide_src.strip()
         else:
             header = find.group(1)
             level = int(find.group(2))
             title = find.group(3)
-            content = find.group(4)
+            content = find.group(4).strip() if find.group(4) else find.group(4)
 
-        slide_classes = None
+        slide_classes = ''
 
-        if content and content.strip():
-            content = self.highlight_code(content.strip())
-            try:
-                processed_content = self.process_macros(content)
-                content = processed_content['content']
-                slide_classes = processed_content['classes']
-            except Exception:
-                pass
+        if content:
+            #try:
+            content, slide_classes = self.process_macros(content)
+            #except Exception, e:
+            #    self.log(u"Macro processing failed: %s" % e)
+            #    pass
 
         if header or content:
             return {'header': header, 'title': title, 'level': level,
@@ -327,50 +315,20 @@ class Generator:
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,
                 'css': self.get_css(), 'js': self.get_js()}
 
-    def highlight_code(self, content):
-        """Performs syntax coloration in slide code blocks with pygments"""
-        code_blocks = re.findall(r'(<code>!(.+?)\n(.+?)</code>)', content,
-                                 re.DOTALL | re.UNICODE)
-        if not code_blocks:
-            return content
-
-        for block, lang, code in code_blocks:
-            try:
-                lexer = get_lexer_by_name(lang)
-            except Exception:
-                self.log(u"Unknown pygment lexer \"%s\", code higlighting "
-                          "skipped for this block" % lang)
-                return content
-
-            formatter = HtmlFormatter(linenos='inline', noclasses=True,
-                                      nobackground=True)
-
-            pretty_code = pygments.highlight(self.descape(code), lexer,
-                                             formatter)
-
-            content = content.replace(block, pretty_code, 1)
-
-        return content
-
     def log(self, message, type='notice'):
         """Log a message (eventually, override to do something more clever)"""
         if self.verbose and self.logger:
             self.logger(message, type)
 
     def process_macros(self, content):
-        """Processed text transformation macros"""
-        # Notes
-        content = re.sub(r'<p>\.notes:\s?(.*?)</p>',
-                         r'<p class="notes">\1</p>', content)
-        # FXs (slide classes)
-        classes = None
-        fx_match = re.search(r'(<p>\.fx:\s?(.*?)</p>\n?)', content, 
-                             re.DOTALL | re.UNICODE)
-        if fx_match:
-            classes = fx_match.group(2)
-            content = content.replace(fx_match.group(1), '', 1)
-
-        return {'content': content, 'classes': classes}
+        """Processed all macros"""
+        classes = u''
+        for macro_class in self.macros:
+            macro = macro_class(self.logger)
+            content, add_classes = macro.process(content)
+            if add_classes:
+                classes += add_classes
+        return content, classes
 
     def render(self):
         """Returns generated html code"""
