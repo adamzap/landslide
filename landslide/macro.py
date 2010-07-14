@@ -18,6 +18,9 @@ import re
 import htmlentitydefs
 import pygments
 
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters import HtmlFormatter
+
 RE_HTML_ENTITY = re.compile('&(\w+?);')
 
 
@@ -26,27 +29,18 @@ class Macro():
         self.logger = logger
 
     def process(self, content):
+        """Generic processor (dioes actually nothing)"""
         return content, ''
 
 
 class CodeHighlightingMacro(Macro):
-    def __init__(self, logger):
-        Macro.__init__(self, logger)
-
     def descape(self, string, defs=htmlentitydefs.entitydefs):
-        """Decodes html entities"""
+        """Decodes html entities from a given string"""
         f = lambda m: defs[m.group(1)] if len(m.groups()) > 0 else m.group(0)
         return RE_HTML_ENTITY.sub(f, string)
 
     def process(self, content):
         """Performs syntax coloration in slide code blocks using Pygments"""
-        try:
-            from pygments.lexers import get_lexer_by_name
-            from pygments.formatters import HtmlFormatter
-        except ImportError:
-            self.logger.log(u"Pygments is not installed nor available")
-            return content, ''
-
         code_blocks = re.findall(r'(<code>!(.+?)\n(.+?)</code>)', content,
                                  re.DOTALL | re.UNICODE)
         if not code_blocks:
@@ -56,8 +50,9 @@ class CodeHighlightingMacro(Macro):
             try:
                 lexer = get_lexer_by_name(lang)
             except Exception:
-                self.log(u"Unknown pygment lexer \"%s\", code higlighting "
-                          "skipped for this block" % lang)
+                self.logger(u"Unknown pygment lexer \"%s\", code "
+                             "higlighting skipped for this block" % lang,
+                            'warning')
                 return content, ''
             formatter = HtmlFormatter(linenos='inline', noclasses=True,
                                       nobackground=True)
@@ -80,9 +75,6 @@ class FxMacro(Macro):
 
 
 class NotesMacro(Macro):
-    def __init__(self, logger):
-        Macro.__init__(self, logger)
-
     def process(self, content):
         """Processes Notes"""
         classes = None
