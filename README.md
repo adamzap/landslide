@@ -9,7 +9,7 @@ Overview
 Generates a slideshow using the slides that power
 [the html5-slides presentation](http://apirocks.com/html5/html5.html).
 
-![demo](http://files.droplr.com.s3.amazonaws.com/files/6619162/1bcGcm.html5_presentation.png)
+![demo](http://adamzap.com/random/landslide.png)
 
 A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 
@@ -18,17 +18,18 @@ A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 News
 ====
 
-07/04/10
+07/15/10
 --------
 
-- Due to popular demand, added support for [ReStructuredText syntax](http://docutils.sourceforge.net/rst.html) for slide contents. See the `example3` folder added in the `samples` directory. More wiki syntaxes may be added in the future.
+Version 0.6.0 is tagged and pushed to [pypi](http://pypi.python.org/pypi/landslide/0.6.0). New features:
 
-07/03/10
---------
-
-- Themes have landed. A Landslide theme is a directory having a `base.html` Jinja2 templates and optionnaly stylesheets and javascript. Have a look at the dedicated section in the present document. Please note that the `-t` option doesn't reference a template filepath anymore, but rather a theme name or path.
-- A Table of Contents is now generated and available by hitting the `t` key (styles will be enhanced later)
-- Slide numbers are now displayed
+- Press `t` to toggle a table of contents for your presentation
+- Press `n` to toggle slide number visibility
+- Press '2' to toggle notes in your slides (specify with the .notes macro)
+- ReST (Restructured Text) support. It's kind of experimental!
+- Theme support. Develop your own themes!
+- Macros. Easily add functionality to landslide slideshows!
+- Many bug fixes
 
 06/24/10
 --------
@@ -62,8 +63,8 @@ Eventually:
 
 ---
 
-Formatting Instructions
-=======================
+Formatting
+==========
 
 ### Markdown
 
@@ -79,8 +80,8 @@ Formatting Instructions
 
 ---
 
-Rendering Instructions
-======================
+Rendering
+=========
 
 - Put your markdown or rst content in a file, eg `slides.md` or `slides.rst`
 - Run `landslide slides.md` or `landslide slides.rst`
@@ -97,6 +98,17 @@ Or get it as a PDF document, at least if PrinceXML is installed and available on
 
 ---
 
+Viewing
+=======
+
+- Press `left arrow` and `right arrow` to navigate
+- Press `t` to toggle a table of contents for your presentation. Slide titles are links
+- Press `n` to toggle slide number visibility
+- Press '2' to toggle notes in your slides (specify with the .notes macro)
+- Browser zooming is supported
+
+---
+
 Macros
 ======
 
@@ -108,12 +120,12 @@ Notes
 Add notes to your slides using the `.notes:` keyword, eg.:
 
     # My Slide Title
-    
+
     .notes: These are my notes, hidden by default
-    
+
     My visible content goes here
 
-You can toggle display of notes by pressing the `2` key. 
+You can toggle display of notes by pressing the `2` key.
 
 ---
 
@@ -218,26 +230,35 @@ The `base.html` must be a [Jinja2 template file](http://jinja.pocoo.org/2/docume
 ---
 
 Styles Scope
-------------
+============
 
-* To change HTML5 presentation styles, you have to tweak the `css/screen.css` stylesheet bundled with the used theme. 
-* For PDF one, modify the `css/print.css` one.
-
----
-
-TODO(?)
-=======
-
-- Manage presentation *projects*, each one having its own configuration file; the configuration file could configure:
-    - theme (template, assets, etc)
-    - sources to order and aggregate
-    - destination
-    - options
-- Handle the case of markdown files aggregation, atm its necessary to write a `---` separator at the end of each one but the last
+* To change HTML5 presentation styles, tweak the `css/screen.css` stylesheet bundled with the theme you are using
+* For PDF, modify the `css/print.css`
 
 ---
 
 Authors
 =======
 
-See `AUTHORS.md`
+Original Author and Development Lead
+------------------------------------
+
+- Adam Zapletal (adamzap@gmail.com)
+
+Co-Author
+---------
+
+- Nicolas Perriault (nperriault@gmail.com)
+
+Contributors
+------------
+
+- Vincent Agnano (vincent.agnano@particul.es)
+- Brad Cupit
+
+Base Template Authors and Contributors (html5-slides)
+-----------------------------------------------------
+
+- Marcin Wichary (mwichary@google.com)
+- Ernest Delgado (ernestd@google.com)
+- Alex Russell (slightlyoff@chromium.org)
