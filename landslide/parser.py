@@ -14,6 +14,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import re
+
 SUPPORTED_FORMATS = {
     'markdown':         ['.mdown', '.markdown', '.markdn', '.md'],
     'restructuredtext': ['.rst', '.rest'],
@@ -47,7 +49,11 @@ class Parser():
             except ImportError:
                 raise RuntimeError(u"Looks like docutils are not installed")
 
-            return html_body(text, input_encoding=self.encoding,
+            html = html_body(text, input_encoding=self.encoding,
                              output_encoding=self.encoding)
+
+            classless_html = re.sub(' class=".+"', '', html)
+
+            return classless_html.replace('<div>', '').replace('</div>', '')
         else:
             raise NotImplementedError(u"Unsupported format, cannot parse")
