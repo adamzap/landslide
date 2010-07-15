@@ -332,7 +332,7 @@ class Generator:
 
     def render(self):
         """Returns generated html code"""
-        slides_src = re.split(r'<hr\s?/?>', self.fetch_contents(self.source),
+        slides_src = re.split(r'<hr\s?.*?/?>', self.fetch_contents(self.source),
                               re.DOTALL | re.UNICODE)
 
         template_src = codecs.open(self.template_file, encoding=self.encoding)
