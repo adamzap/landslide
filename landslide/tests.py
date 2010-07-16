@@ -94,12 +94,13 @@ class GeneratorTest(BaseTestCase):
         # Notes
         r = g.process_macros('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
         self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
-        self.assertTrue(not r[1])
+        self.assertEqual(r[1], [u'has_notes'])
         # FXs
         content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
         r = g.process_macros(content)
         self.assertEqual(r[0], '<p>foo</p>\n<p>baz</p>')
-        self.assertEqual(r[1], 'blah blob')
+        self.assertEqual(r[1][0], 'blah')
+        self.assertEqual(r[1][1], 'blob')
 
 
 class CodeHighlightingMacroTest(BaseTestCase):
@@ -128,7 +129,8 @@ class FxMacroTest(BaseTestCase):
         content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
         r = m.process(content)
         self.assertEqual(r[0], '<p>foo</p>\n<p>baz</p>')
-        self.assertEqual(r[1], 'blah blob')
+        self.assertEqual(r[1][0], 'blah')
+        self.assertEqual(r[1][1], 'blob')
 
 
 class NotesMacroTest(BaseTestCase):
@@ -136,7 +138,7 @@ class NotesMacroTest(BaseTestCase):
         m = NotesMacro(self.logtest)
         r = m.process('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
         self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
-        self.assertTrue(not r[1])
+        self.assertEqual(r[1], [u'has_notes'])
 
 
 class ParserTest(BaseTestCase):

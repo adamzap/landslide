@@ -53,7 +53,7 @@
   <div class="presentation">
     <div class="slides">
       {% for slide in slides %}
-      <div class="slide{% if slide.classes %} {{ slide.classes }}{% endif %}">
+      <div class="slide{% if slide.classes %}{% for class in slide.classes %} {{ class }}{% endfor %}{% endif %}">
         <div class="inner">
           {% if slide.header %}
           <header>{{ slide.header }}</header>

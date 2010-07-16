@@ -45,7 +45,8 @@ class CodeHighlightingMacro(Macro):
                                  re.DOTALL | re.UNICODE)
         if not code_blocks:
             return content, ''
-        classes = "has_code"
+
+        classes = [u'has_code']
         for block, lang, code in code_blocks:
             try:
                 lexer = get_lexer_by_name(lang)
@@ -65,11 +66,11 @@ class CodeHighlightingMacro(Macro):
 class FxMacro(Macro):
     def process(self, content):
         """Processes FXs"""
-        classes = None
+        classes = []
         fx_match = re.search(r'(<p>\.fx:\s?(.*?)</p>\n?)', content,
                              re.DOTALL | re.UNICODE)
         if fx_match:
-            classes = fx_match.group(2)
+            classes = fx_match.group(2).split(u' ')
             content = content.replace(fx_match.group(1), '', 1)
         return content, classes
 
@@ -77,7 +78,7 @@ class FxMacro(Macro):
 class NotesMacro(Macro):
     def process(self, content):
         """Processes Notes"""
-        classes = None
+        classes = [u'has_notes']
         content = re.sub(r'<p>\.notes:\s?(.*?)</p>',
                          r'<p class="notes">\1</p>', content)
         return content, classes

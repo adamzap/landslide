@@ -211,13 +211,21 @@ class Generator:
 
             if self.embed:
                 contents = self.embed_images(contents, source)
+            else:
+                contents = self.fix_image_paths(contents, source)
 
         if not contents.strip():
-            self.log(u"No contents found in %s" % source, 'warning')
+            self.log(u"Exiting  %s: no contents found" % source, 'notice')
         elif not re.match(r'.*?<hr\s?/?>$', contents.strip()):
             contents += u'<hr />'
 
         return contents
+
+    def fix_image_paths(self, contents, source):
+        """Replace html image paths with fully qualified absolute urls"""
+        base_url = os.path.split(self.get_abs_path_url(source))[0]
+        fn = lambda p: r'<img src="%s" />' % os.path.join(base_url, p.group(1))
+        return re.sub(r'<img.*?src="(.*?)".*/?>', fn, contents, re.UNICODE)
 
     def get_css(self):
         """Fetches and returns stylesheet file path or contents, for both print
@@ -276,7 +284,7 @@ class Generator:
             title = find.group(3)
             content = find.group(4).strip() if find.group(4) else find.group(4)
 
-        slide_classes = ''
+        slide_classes = []
 
         if content:
             #try:
@@ -322,7 +330,7 @@ class Generator:
 
     def process_macros(self, content):
         """Processed all macros"""
-        classes = u''
+        classes = []
         for macro_class in self.macros:
             macro = macro_class(self.logger)
             content, add_classes = macro.process(content)
