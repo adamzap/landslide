@@ -85,7 +85,7 @@ function main() {
   var updateSlideClasses = function() {
     window.location.hash = "slide" + currentSlideNo;
 
-    for (var i=1; i<currentSlideNo-2; i++) {
+    for (var i=1; i<currentSlideNo-1; i++) {
       changeSlideElClass(i, 'far-past');
     }
 
