@@ -221,10 +221,13 @@ class Generator:
         if content:
             content, slide_classes = self.process_macros(content, source)
 
+        source_dict = {'rel_path': source,
+                       'abs_path': os.path.abspath(source)}
+
         if header or content:
             return {'header': header, 'title': title, 'level': level,
                     'content': content, 'classes': slide_classes,
-                    'source': source}
+                    'source': source_dict}
 
     def get_template_vars(self, slides):
         """Computes template vars from slides html source code"""
