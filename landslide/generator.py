@@ -17,12 +17,11 @@
 import os
 import re
 import glob
-import base64
 import codecs
-import mimetypes
 import jinja2
 import tempfile
 import sys
+import utils
 
 from macro import *
 from parser import Parser
@@ -43,7 +42,13 @@ class Generator:
         self.direct = direct
         self.encoding = encoding
         self.logger = None
-        self.macros = [CodeHighlightingMacro, FxMacro, NotesMacro]
+        self.macros = [
+            CodeHighlightingMacro,
+            EmbedImagesMacro,
+            FixImagePathsMacro,
+            FxMacro,
+            NotesMacro,
+        ]
         self.num_slides = 0
         self.__toc = []
 
@@ -117,64 +122,6 @@ class Generator:
 
     toc = property(get_toc, set_toc)
 
-    def embed_images(self, html_contents, from_source):
-        """Extracts images url and embed them using the base64 algorithm"""
-        images = re.findall(r'<img\s.*?src="(.+?)"\s?.*?/?>', html_contents,
-                            re.DOTALL | re.UNICODE)
-
-        if not images:
-            return html_contents
-
-        for image_url in images:
-            if not image_url or image_url.startswith('data:'):
-                continue
-
-            if image_url.startswith('file://'):
-                self.log(u"%s: file:// image urls are not supported: skipped"
-                         % from_source, 'warning')
-                continue
-
-            if (image_url.startswith('http://')
-                or image_url.startswith('https://')):
-                continue
-            elif os.path.isabs(image_url):
-                image_real_path = image_url
-            else:
-                image_real_path = os.path.join(os.path.dirname(from_source),
-                                               image_url)
-
-            if not os.path.exists(image_real_path):
-                self.log(u"%s: image file %s not found: skipped"
-                         % (from_source, image_real_path), 'warning')
-                continue
-
-            mime_type, encoding = mimetypes.guess_type(image_real_path)
-
-            if not mime_type:
-                self.log(u"%s: unknown image mime-type in %s: skipped"
-                         % (from_source, image_real_path), 'warning')
-                continue
-
-            try:
-                image_contents = open(image_real_path).read()
-                encoded_image = base64.b64encode(image_contents)
-            except IOError:
-                self.log(u"%s: unable to read image %s: skipping"
-                         % (from_source, image_real_path), 'warning')
-                continue
-            except Exception:
-                self.log(u"%s: unable to base64-encode image %s: skipping"
-                         % (from_source, image_real_path), 'warning')
-                continue
-
-            encoded_url = u"data:%s;base64,%s" % (mime_type, encoded_image)
-
-            html_contents = html_contents.replace(image_url, encoded_url, 1)
-
-            self.log(u"Embedded image %s" % image_real_path)
-
-        return html_contents
-
     def execute(self):
         """Execute this generator regarding its current configuration"""
         if self.direct:
@@ -191,41 +138,30 @@ class Generator:
         """Recursively fetches Markdown contents from a single file or
         directory containing itself Markdown files
         """
-        contents = ""
+        slides = []
 
         if os.path.isdir(source):
             self.log(u"Entering %s" % source)
-
             for entry in os.listdir(source):
-                contents += self.fetch_contents(os.path.join(source, entry))
+                slides.extend(self.fetch_contents(os.path.join(source, entry)))
         else:
             try:
                 parser = Parser(os.path.splitext(source)[1], self.encoding)
             except NotImplementedError:
-                return contents
+                return slides
 
             self.log(u"Adding   %s (%s)" % (source, parser.format))
 
             file_contents = codecs.open(source, encoding=self.encoding).read()
-            contents = parser.parse(file_contents)
+            inner_slides = re.split(r'<hr.+>', parser.parse(file_contents),
+                                    re.DOTALL | re.UNICODE)
+            for inner_slide in inner_slides:
+                slides.append(self.get_slide_vars(inner_slide, source))
 
-            if self.embed:
-                contents = self.embed_images(contents, source)
-            else:
-                contents = self.fix_image_paths(contents, source)
-
-        if not contents.strip():
+        if not slides:
             self.log(u"Exiting  %s: no contents found" % source, 'notice')
-        elif not re.match(r'.*?<hr\s?/?>$', contents.strip()):
-            contents += u'<hr />'
 
-        return contents
-
-    def fix_image_paths(self, contents, source):
-        """Replace html image paths with fully qualified absolute urls"""
-        base_url = os.path.split(self.get_abs_path_url(source))[0]
-        fn = lambda p: r'<img src="%s" />' % os.path.join(base_url, p.group(1))
-        return re.sub(r'<img.*?src="(.*?)".*/?>', fn, contents, re.UNICODE)
+        return slides
 
     def get_css(self):
         """Fetches and returns stylesheet file path or contents, for both print
@@ -236,7 +172,7 @@ class Generator:
 
         print_css = os.path.join(self.theme_dir, 'css', 'print.css')
         if (os.path.exists(print_css)):
-            css['print'] = {'path_url': self.get_abs_path_url(print_css),
+            css['print'] = {'path_url': utils.get_abs_path_url(print_css),
                             'contents': open(print_css).read()}
         else:
             self.log(u"No print stylesheet provided in current theme",
@@ -244,7 +180,7 @@ class Generator:
 
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
         if (os.path.exists(screen_css)):
-            css['screen'] = {'path_url': self.get_abs_path_url(screen_css),
+            css['screen'] = {'path_url': utils.get_abs_path_url(screen_css),
                              'contents': open(screen_css).read()}
         else:
             self.log(u"No screen stylesheet provided in current theme",
@@ -258,16 +194,12 @@ class Generator:
         """
         js_file = os.path.join(self.theme_dir, 'js', 'slides.js')
         if (os.path.exists(js_file)):
-            return {'path_url': self.get_abs_path_url(js_file),
+            return {'path_url': utils.get_abs_path_url(js_file),
                     'contents': open(js_file).read()}
         else:
             self.log(u"No javascript provided in current theme", 'warning')
 
-    def get_abs_path_url(self, path):
-        """Returns the absolute url for a given local path"""
-        return "file://%s" % os.path.abspath(path)
-
-    def get_slide_vars(self, slide_src):
+    def get_slide_vars(self, slide_src, source=None):
         """Computes a single slide template vars from its html source code.
            Also extracts slide informations for the table of contents.
         """
@@ -287,33 +219,24 @@ class Generator:
         slide_classes = []
 
         if content:
-            #try:
-            content, slide_classes = self.process_macros(content)
-            #except Exception, e:
-            #    self.log(u"Macro processing failed: %s" % e)
-            #    pass
+            content, slide_classes = self.process_macros(content, source)
 
         if header or content:
             return {'header': header, 'title': title, 'level': level,
-                    'content': content, 'classes': slide_classes}
+                    'content': content, 'classes': slide_classes,
+                    'source': source}
 
-    def get_template_vars(self, slides_src):
+    def get_template_vars(self, slides):
         """Computes template vars from slides html source code"""
         try:
-            head_title = slides_src[0].split('>')[1].split('<')[0]
+            head_title = slides[0]['title']
         except IndexError:
             head_title = "Untitled Presentation"
 
-        slides = []
-
-        for slide_index, slide_src in enumerate(slides_src):
-            if not slide_src:
-                continue
-            slide_vars = self.get_slide_vars(slide_src.strip())
+        for slide_index, slide_vars in enumerate(slides):
             if not slide_vars:
                 continue
             self.num_slides += 1
-            slides.append(slide_vars)
             slide_number = slide_vars['number'] = self.num_slides
             if slide_vars['level'] and slide_vars['level'] <= TOC_MAX_LEVEL:
                 self.add_toc_entry(slide_vars['title'], slide_vars['level'],
@@ -328,26 +251,26 @@ class Generator:
         if self.verbose and self.logger:
             self.logger(message, type)
 
-    def process_macros(self, content):
+    def process_macros(self, content, source=None):
         """Processed all macros"""
         classes = []
         for macro_class in self.macros:
-            macro = macro_class(self.logger)
-            content, add_classes = macro.process(content)
-            if add_classes:
-                classes += add_classes
+            try:
+                macro = macro_class(logger=self.logger, embed=self.embed)
+                content, add_classes = macro.process(content, source)
+                if add_classes:
+                    classes += add_classes
+            except Exception, e:
+                self.log(u"%s processing failed in %s: %s"
+                         % (macro, source, e))
         return content, classes
 
     def render(self):
         """Returns generated html code"""
-        slides_src = re.split(r'<hr.+>', self.fetch_contents(self.source),
-                              re.DOTALL | re.UNICODE)
-
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
-        template_vars = self.get_template_vars(slides_src)
-
-        return template.render(template_vars)
+        slides = self.fetch_contents(self.source)
+        return template.render(self.get_template_vars(slides))
 
     def write(self):
         """Writes generated presentation code into the destination file"""
