@@ -48,7 +48,7 @@ class CodeHighlightingMacro(Macro):
 
     def process(self, content, source=None):
         """Performs syntax coloration in slide code blocks using Pygments"""
-        code_blocks = re.findall(r'(<pre><code>!(.+?)\n(.+?)</code></pre>)', 
+        code_blocks = re.findall(r'(<pre><code>!(.+?)\n(.+?)</code></pre>)',
                                  content, re.DOTALL | re.UNICODE)
         if not code_blocks:
             return content, []
@@ -58,9 +58,8 @@ class CodeHighlightingMacro(Macro):
             try:
                 lexer = get_lexer_by_name(lang)
             except Exception:
-                self.logger(u"Unknown pygment lexer \"%s\", code "
-                             "higlighting skipped for this block" % lang,
-                            'warning')
+                self.logger(u"Unknown pygment lexer \"%s\", skipping"
+                            % lang, 'warning')
                 return content, classes
             formatter = HtmlFormatter(linenos='inline', noclasses=True,
                                       nobackground=True)
@@ -138,7 +137,7 @@ class EmbedImagesMacro(Macro):
 
 class FixImagePathsMacro(Macro):
     def process(self, content, source=None):
-        """Replace html image paths with fully qualified absolute urls"""
+        """Replaces html image paths with fully qualified absolute urls"""
         classes = []
 
         if self.embed:

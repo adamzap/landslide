@@ -22,6 +22,7 @@ import jinja2
 import tempfile
 import sys
 import utils
+import ConfigParser
 
 from macro import *
 from parser import Parser
@@ -60,8 +61,21 @@ class Generator:
         self.verbose = False if direct else verbose and self.logger
 
         if source and os.path.exists(source):
-            self.source = source
             self.source_base_dir = os.path.split(os.path.abspath(source))[0]
+            if source.endswith('.cfg'):
+                self.log(u"Config   %s" % source)
+                try:
+                    config = ConfigParser.RawConfigParser()
+                    config.read(source)
+                except Exception, e:
+                    raise RuntimeError(u"Invalid configuration file: %s" % e)
+                self.source = (config.get('landslide', 'source')
+                                     .replace('\r', '').split('\n'))
+                if config.has_option('landslide', 'theme'):
+                    theme = config.get('landslide', 'theme')
+                    self.log(u"Using    configured theme %s" % theme)
+            else:
+                self.source = source
         else:
             raise IOError(u"Source file/directory %s does not exist"
                           % source)
@@ -140,7 +154,10 @@ class Generator:
         """
         slides = []
 
-        if os.path.isdir(source):
+        if type(source) is list:
+            for entry in source:
+                slides.extend(self.fetch_contents(entry))
+        elif os.path.isdir(source):
             self.log(u"Entering %s" % source)
             for entry in os.listdir(source):
                 slides.extend(self.fetch_contents(os.path.join(source, entry)))
@@ -221,8 +238,11 @@ class Generator:
         if content:
             content, slide_classes = self.process_macros(content, source)
 
-        source_dict = {'rel_path': source,
-                       'abs_path': os.path.abspath(source)}
+        source_dict = {}
+
+        if source:
+            source_dict = {'rel_path': source,
+                           'abs_path': os.path.abspath(source)}
 
         if header or content:
             return {'header': header, 'title': title, 'level': level,

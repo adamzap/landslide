@@ -67,7 +67,7 @@ class GeneratorTest(BaseTestCase):
         self.assertEqual(svars['level'], 1)
         self.assertEqual(svars['header'], '<h1>heading</h1>')
         self.assertEqual(svars['content'], '<p>foo</p>\n<p>bar</p>')
-        self.assertEqual(svars['source'], None)
+        self.assertEqual(svars['source'], {})
         self.assertEqual(svars['classes'], [])
 
     def test_get_template_vars(self):
@@ -105,7 +105,7 @@ class CodeHighlightingMacroTest(BaseTestCase):
     def test_process(self):
         m = CodeHighlightingMacro(self.logtest)
         hl = m.process("<pre><code>!php\n$foo;</code></pre>")
-        self.assertTrue(hl[0].startswith('<pre><div class="highlight">'))
+        self.assertTrue(hl[0].startswith('<div class="highlight"><pre'))
         self.assertTrue(hl[1], 'code')
         input = "<p>Nothing to declare</p>"
         self.assertEqual(m.process(input)[0], input)

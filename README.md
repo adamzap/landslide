@@ -109,6 +109,25 @@ Viewing
 
 ---
 
+Presentation Configuration
+==========================
+
+Landslide allows to configure your presentation using a `cfg` configuration file, therefore easing the aggregation of source directories and the reuse of them accross presentations. Landslide configuration files use the `cfg` syntax. If you know `ini` files, you get the picture. Below is a sample configuration file:
+
+    [landslide]
+    theme  = /path/to/my/beautiful/theme
+    source = 0_my_first_slides.md
+             a_directory
+             another_directory
+             now_a_slide.markdown
+             another_one.rst
+
+Please just don't forget to declare the `[landslide]` section. To generate the presentation as configured, just run:
+
+    $ landslide config.cfg
+
+---
+
 Macros
 ======
 
@@ -126,6 +145,8 @@ Add notes to your slides using the `.notes:` keyword, eg.:
     My visible content goes here
 
 You can toggle display of notes by pressing the `2` key.
+
+Some other macros are also available by default: `.fx: foo bar` will add the `foo` and `bar` classes to the corresponding slide `<div>` element, easing styling of your presentation using CSS.
 
 ---
 
