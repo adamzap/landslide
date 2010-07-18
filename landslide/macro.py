@@ -26,6 +26,7 @@ import utils
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
+
 RE_HTML_ENTITY = re.compile('&(\w+?);')
 
 
@@ -40,9 +41,6 @@ class Macro():
 
 
 class CodeHighlightingMacro(Macro):
-    def __str__(self):
-        return u'CodeHighlightingMacro'
-
     def descape(self, string, defs=htmlentitydefs.entitydefs):
         """Decodes html entities from a given string"""
         f = lambda m: defs[m.group(1)] if len(m.groups()) > 0 else m.group(0)
@@ -50,12 +48,12 @@ class CodeHighlightingMacro(Macro):
 
     def process(self, content, source=None):
         """Performs syntax coloration in slide code blocks using Pygments"""
-        code_blocks = re.findall(r'(<code>!(.+?)\n(.+?)</code>)', content,
-                                 re.DOTALL | re.UNICODE)
+        code_blocks = re.findall(r'(<pre><code>!(.+?)\n(.+?)</code></pre>)', 
+                                 content, re.DOTALL | re.UNICODE)
         if not code_blocks:
             return content, []
 
-        classes = [u'has_code']
+        classes = []
         for block, lang, code in code_blocks:
             try:
                 lexer = get_lexer_by_name(lang)
@@ -63,19 +61,17 @@ class CodeHighlightingMacro(Macro):
                 self.logger(u"Unknown pygment lexer \"%s\", code "
                              "higlighting skipped for this block" % lang,
                             'warning')
-                return content, ''
+                return content, classes
             formatter = HtmlFormatter(linenos='inline', noclasses=True,
                                       nobackground=True)
             pretty_code = pygments.highlight(self.descape(code), lexer,
                                              formatter)
             content = content.replace(block, pretty_code, 1)
-        return content, classes
+
+        return content, [u'has_code']
 
 
 class EmbedImagesMacro(Macro):
-    def __str__(self):
-        return u'EmbedImagesMacro'
-
     def process(self, content, source=None):
         """Extracts images url and embed them using the base64 algorithm"""
         classes = []
@@ -141,9 +137,6 @@ class EmbedImagesMacro(Macro):
 
 
 class FixImagePathsMacro(Macro):
-    def __str__(self):
-        return u'FixImagePathsMacro'
-
     def process(self, content, source=None):
         """Replace html image paths with fully qualified absolute urls"""
         classes = []
@@ -159,9 +152,6 @@ class FixImagePathsMacro(Macro):
 
 
 class FxMacro(Macro):
-    def __str__(self):
-        return u'FxMacro'
-
     def process(self, content, source=None):
         """Processes FXs"""
         classes = []
@@ -176,9 +166,6 @@ class FxMacro(Macro):
 
 
 class NotesMacro(Macro):
-    def __str__(self):
-        return u'NotesMacro'
-
     def process(self, content, source=None):
         """Processes Notes"""
         classes = []
