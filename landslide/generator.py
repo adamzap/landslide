@@ -314,7 +314,7 @@ class Generator:
         """
         try:
             f = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
-            f.write(html.encode('ascii', 'xmlcharrefreplace'))
+            f.write(html.encode(self.encoding))
             f.close()
         except Exception:
             raise IOError(u"Unable to create temporary file, aborting")
