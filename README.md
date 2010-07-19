@@ -121,9 +121,11 @@ Landslide allows to configure your presentation using a `cfg` configuration file
              another_directory
              now_a_slide.markdown
              another_one.rst
+    destination = myWonderfulPresentation.html
 
 Please just don't forget to declare the `[landslide]` section. To generate the presentation as configured, just run:
 
+    $ cd /path/to/my/presentation/sources
     $ landslide config.cfg
 
 ---

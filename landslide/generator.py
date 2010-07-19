@@ -74,6 +74,8 @@ class Generator:
                 if config.has_option('landslide', 'theme'):
                     theme = config.get('landslide', 'theme')
                     self.log(u"Using    configured theme %s" % theme)
+                if config.has_option('landslide', 'destination'):
+                    destination_file = config.get('landslide', 'destination')
             else:
                 self.source = source
         else:
