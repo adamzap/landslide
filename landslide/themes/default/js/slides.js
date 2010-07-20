@@ -241,7 +241,7 @@ function main() {
 
     document.addEventListener('keydown', handleBodyKeyDown, false);
     document.addEventListener('DOMMouseScroll', handleWheel, false);
-    window.onmousewheel = document.onmousewheel = handleWhe
+    window.onmousewheel = document.onmousewheel = handleWheel
 
     var els = slides;
     for (var i = 0, el; el = els[i]; i++) {
