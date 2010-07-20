@@ -152,6 +152,24 @@ Some other macros are also available by default: `.fx: foo bar` will add the `fo
 
 ---
 
+Registering Macros
+==================
+
+so macros are used to transform the HTML contents of your slide.
+
+You can register your own macros by creating `landslide.macro.Macro` derived classes, implementing a `process(content, source=None)` method and returning a tuple containing the modified contents and some css classes you may be wanting to add to your slide `<div>` element. For example:
+
+    !python
+    class MyMacro(Macro):
+      def process(self, content, source=None):
+        return content + '<p>plop</p>', ['plopped_slide']
+    
+    g = Generator(source='toto.md')
+    g.register_macro(MyMacro)
+    print g.render()
+
+---
+
 Options
 =======
 

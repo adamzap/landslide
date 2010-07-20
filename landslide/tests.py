@@ -91,6 +91,16 @@ class GeneratorTest(BaseTestCase):
         self.assertEqual(r[1][0], 'blah')
         self.assertEqual(r[1][1], 'blob')
 
+    def test_register_macro(self):
+        g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
+        class SampleMacro(Macro):
+            pass
+        g.register_macro(SampleMacro)
+        self.assertTrue(SampleMacro in g.macros)
+        def plop(foo):
+            pass
+        self.assertRaises(TypeError, g.register_macro, plop)
+
 
 class CodeHighlightingMacroTest(BaseTestCase):
     def test_descape(self):

@@ -30,7 +30,7 @@ from pygments.formatters import HtmlFormatter
 RE_HTML_ENTITY = re.compile('&(\w+?);')
 
 
-class Macro():
+class Macro(object):
     def __init__(self, logger=sys.stdout, embed=False):
         self.logger = logger
         self.embed = embed

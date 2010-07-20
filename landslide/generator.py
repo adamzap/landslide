@@ -34,7 +34,7 @@ THEMES_DIR = os.path.join(BASE_DIR, 'themes')
 TOC_MAX_LEVEL = 2
 
 
-class Generator:
+class Generator(object):
     def __init__(self, source, destination_file='presentation.html',
                  theme='default', direct=False, debug=False, verbose=True,
                  embed=False, encoding='utf8', logger=None):
@@ -43,15 +43,20 @@ class Generator:
         self.direct = direct
         self.encoding = encoding
         self.logger = None
-        self.macros = [
+        self.num_slides = 0
+        self.__toc = []
+        
+        # macros registering
+        self.macros = []
+        default_macros = [
             CodeHighlightingMacro,
             EmbedImagesMacro,
             FixImagePathsMacro,
             FxMacro,
             NotesMacro,
         ]
-        self.num_slides = 0
-        self.__toc = []
+        for macro in default_macros:
+            self.register_macro(macro)
 
         if logger:
             if callable(logger):
@@ -289,6 +294,15 @@ class Generator:
                 self.log(u"%s processing failed in %s: %s"
                          % (macro, source, e))
         return content, classes
+    
+    def register_macro(self, macro_class):
+        """Registers a new macro"""
+        import inspect
+        if (not inspect.isclass(macro_class) 
+            or not Macro in macro_class.__bases__):
+            raise TypeError("A macro must inherit from landslide.macro.Macro")
+        else:
+            self.macros.append(macro_class)
 
     def render(self):
         """Returns generated html code"""
