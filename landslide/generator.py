@@ -45,7 +45,7 @@ class Generator(object):
         self.logger = None
         self.num_slides = 0
         self.__toc = []
-        
+
         # macros registering
         self.macros = []
         default_macros = [
@@ -294,11 +294,11 @@ class Generator(object):
                 self.log(u"%s processing failed in %s: %s"
                          % (macro, source, e))
         return content, classes
-    
+
     def register_macro(self, macro_class):
         """Registers a new macro"""
         import inspect
-        if (not inspect.isclass(macro_class) 
+        if (not inspect.isclass(macro_class)
             or not Macro in macro_class.__bases__):
             raise TypeError("A macro must inherit from landslide.macro.Macro")
         else:

@@ -25,7 +25,7 @@ Version 0.6.0 is tagged and pushed to [pypi](http://pypi.python.org/pypi/landsli
 
 - Press `t` to toggle a table of contents for your presentation
 - Press `n` to toggle slide number visibility
-- Press '2' to toggle notes in your slides (specify with the .notes macro)
+- Press `2` to toggle notes in your slides (specify with the .notes macro)
 - ReST (Restructured Text) support. It's kind of experimental!
 - Theme support. Develop your own themes!
 - Macros. Easily add functionality to landslide slideshows!
@@ -160,13 +160,25 @@ so macros are used to transform the HTML contents of your slide.
 You can register your own macros by creating `landslide.macro.Macro` derived classes, implementing a `process(content, source=None)` method and returning a tuple containing the modified contents and some css classes you may be wanting to add to your slide `<div>` element. For example:
 
     !python
+    import landslide
     class MyMacro(Macro):
       def process(self, content, source=None):
         return content + '<p>plop</p>', ['plopped_slide']
     
-    g = Generator(source='toto.md')
+    g = generator.Generator(source='toto.md')
     g.register_macro(MyMacro)
     print g.render()
+
+This will render any slide as below:
+
+    !html
+    <div class="plopped_slide">
+      <header><h2>foo</h2></header>
+      <section>
+        <p>my slide contents</p>
+        <p>plop></p>
+      </section>
+    </div>
 
 ---
 

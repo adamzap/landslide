@@ -22,7 +22,7 @@ SUPPORTED_FORMATS = {
 }
 
 
-class Parser():
+class Parser(object):
     def __init__(self, extension, encoding='utf8'):
         """Configures this parser"""
         self.encoding = encoding

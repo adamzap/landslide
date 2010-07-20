@@ -93,12 +93,16 @@ class GeneratorTest(BaseTestCase):
 
     def test_register_macro(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
+
         class SampleMacro(Macro):
             pass
+
         g.register_macro(SampleMacro)
         self.assertTrue(SampleMacro in g.macros)
+
         def plop(foo):
             pass
+
         self.assertRaises(TypeError, g.register_macro, plop)
 
 
