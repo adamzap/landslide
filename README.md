@@ -23,9 +23,11 @@ News
 
 Version 0.6.0 is tagged and pushed to [pypi](http://pypi.python.org/pypi/landslide/0.6.0). New features:
 
+- Navigate your slideshow using arrow keys or the space bar
 - Press `t` to toggle a table of contents for your presentation
-- Press `n` to toggle slide number visibility
+- Press `n` to toggle slide number/source file visibility
 - Press `2` to toggle notes in your slides (specify with the .notes macro)
+- Press `3` to switch to 3D display (using latest WebKit versions)
 - ReST (Restructured Text) support. It's kind of experimental!
 - Theme support. Develop your own themes!
 - Macros. Easily add functionality to landslide slideshows!
@@ -109,6 +111,37 @@ Viewing
 
 ---
 
+Commandline Options
+===================
+
+Several options are available using the command line:
+
+    $ landslide/landslide 
+    Usage: landslide [options] input.md ...
+
+    Generates fancy HTML5 or PDF slideshows from Markdown sources
+
+    Options:
+      -h, --help            show this help message and exit
+      -b, --debug           Will display any exception trace to stdin
+      -d FILE, --destination=FILE
+                            The path to the to the destination file: .html or .pdf
+                            extensions allowed (default: presentation.html)
+      -e ENCODING, --encoding=ENCODING
+                            The encoding of your files (defaults to utf8)
+      -i, --embed           Embed base64-encoded images in presentation
+      -t THEME, --theme=THEME
+                            A theme name, or path to a landlside theme directory
+      -o, --direct-ouput    Prints the generated HTML code to stdin; won't work
+                            with PDF export
+      -q, --quiet           Won't write anything to stdin (silent mode)
+      -v, --verbose         Write informational messages to stdin (enabled by
+                            default)
+
+    Note: PDF export requires the `prince` program: http://princexml.com/
+
+---
+
 Presentation Configuration
 ==========================
 
@@ -172,44 +205,13 @@ You can register your own macros by creating `landslide.macro.Macro` derived cla
 This will render any slide as below:
 
     !html
-    <div class="plopped_slide">
+    <div class="slide plopped_slide">
       <header><h2>foo</h2></header>
       <section>
         <p>my slide contents</p>
         <p>plop></p>
       </section>
     </div>
-
----
-
-Options
-=======
-
-Several options are available using the command line:
-
-    $ landslide/landslide 
-    Usage: landslide [options] input.md ...
-
-    Generates fancy HTML5 or PDF slideshows from Markdown sources
-
-    Options:
-      -h, --help            show this help message and exit
-      -b, --debug           Will display any exception trace to stdin
-      -d FILE, --destination=FILE
-                            The path to the to the destination file: .html or .pdf
-                            extensions allowed (default: presentation.html)
-      -e ENCODING, --encoding=ENCODING
-                            The encoding of your files (defaults to utf8)
-      -i, --embed           Embed base64-encoded images in presentation
-      -t THEME, --theme=THEME
-                            A theme name, or path to a landlside theme directory
-      -o, --direct-ouput    Prints the generated HTML code to stdin; won't work
-                            with PDF export
-      -q, --quiet           Won't write anything to stdin (silent mode)
-      -v, --verbose         Write informational messages to stdin (enabled by
-                            default)
-
-    Note: PDF export requires the `prince` program: http://princexml.com/
 
 ---
 
