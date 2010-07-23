@@ -29,7 +29,7 @@ if (not os.path.exists(SAMPLES_DIR)):
 
 
 class BaseTestCase(unittest.TestCase):
-    def logtest(self, message, type):
+    def logtest(self, message, type='notice'):
         if type == 'warning':
             raise WarningMessage(message)
         elif type == 'error':
@@ -60,46 +60,50 @@ class GeneratorTest(BaseTestCase):
         self.assertEqual(toc[2]['title'], 'Section 3')
         self.assertEqual(len(toc[2]['sub']), 0)
 
-    def test_embed_images(self):
-        base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
-        g = Generator(base_dir, logger=self.logtest)
-        self.assertRaises(WarningMessage, g.embed_images,
-                          '<img src="toto.jpg"/>', '.')
-        content = g.embed_images('<img src="monkey.jpg"/>', base_dir)
-        self.assertTrue(re.match('<img src="data:image/jpeg;base64,(.+?)"/>',
-                        content))
-
     def test_get_slide_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
-        vars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n<p>bar</p>\n")
-        self.assertEqual(vars['header'], '<h1>heading</h1>')
-        self.assertEqual(vars['content'], '<p>foo</p>\n<p>bar</p>')
+        svars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n<p>bar</p>\n")
+        self.assertEqual(svars['title'], 'heading')
+        self.assertEqual(svars['level'], 1)
+        self.assertEqual(svars['header'], '<h1>heading</h1>')
+        self.assertEqual(svars['content'], '<p>foo</p>\n<p>bar</p>')
+        self.assertEqual(svars['source'], {})
+        self.assertEqual(svars['classes'], [])
 
     def test_get_template_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
-        vars = g.get_template_vars(["<h1>slide1</h1>\n<p>content1</p>",
-                                    "<h1>slide2</h1>\n<p>content2</p>",
-                                    "<p>no heading here</p>"])
-        self.assertEqual(vars['head_title'], 'slide1')
-        slides = vars['slides']
-        self.assertEqual(slides[0]['header'], '<h1>slide1</h1>')
-        self.assertEqual(slides[0]['content'], '<p>content1</p>')
-        self.assertEqual(slides[1]['header'], '<h1>slide2</h1>')
-        self.assertEqual(slides[1]['content'], '<p>content2</p>')
-        self.assertEqual(slides[2]['header'], None)
-        self.assertEqual(slides[2]['content'], '<p>no heading here</p>')
+        svars = g.get_template_vars([{'title': "slide1", 'level': 1},
+                                     {'title': "slide2", 'level': 1},
+                                     {'title': None, 'level': 1},
+                                    ])
+        self.assertEqual(svars['head_title'], 'slide1')
 
     def test_process_macros(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
         # Notes
         r = g.process_macros('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
         self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
-        self.assertTrue(not r[1])
+        self.assertEqual(r[1], [u'has_notes'])
         # FXs
         content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
         r = g.process_macros(content)
         self.assertEqual(r[0], '<p>foo</p>\n<p>baz</p>')
-        self.assertEqual(r[1], 'blah blob')
+        self.assertEqual(r[1][0], 'blah')
+        self.assertEqual(r[1][1], 'blob')
+
+    def test_register_macro(self):
+        g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
+
+        class SampleMacro(Macro):
+            pass
+
+        g.register_macro(SampleMacro)
+        self.assertTrue(SampleMacro in g.macros)
+
+        def plop(foo):
+            pass
+
+        self.assertRaises(TypeError, g.register_macro, plop)
 
 
 class CodeHighlightingMacroTest(BaseTestCase):
@@ -115,11 +119,31 @@ class CodeHighlightingMacroTest(BaseTestCase):
     def test_process(self):
         m = CodeHighlightingMacro(self.logtest)
         hl = m.process("<pre><code>!php\n$foo;</code></pre>")
-        self.assertTrue(hl[0].startswith('<pre><div class="highlight">'))
+        self.assertTrue(hl[0].startswith('<div class="highlight"><pre'))
         self.assertTrue(hl[1], 'code')
         input = "<p>Nothing to declare</p>"
         self.assertEqual(m.process(input)[0], input)
-        self.assertEqual(m.process(input)[1], '')
+        self.assertEqual(m.process(input)[1], [])
+
+
+class EmbedImagesMacroTest(BaseTestCase):
+    def test_process(self):
+        base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
+        m = EmbedImagesMacro(self.logtest, True)
+        self.assertRaises(WarningMessage, m.process,
+                          '<img src="toto.jpg"/>', '.')
+        content, classes = m.process('<img src="monkey.jpg"/>', base_dir)
+        self.assertTrue(re.match(r'<img src="data:image/jpeg;base64,(.+?)"/>',
+                        content))
+
+
+class FixImagePathsMacroTest(BaseTestCase):
+    def test_process(self):
+        base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
+        m = FixImagePathsMacro(self.logtest, False)
+        content, classes = m.process('<img src="monkey.jpg"/>', base_dir)
+        self.assertTrue(re.match(r'<img src="file://.*?/monkey.jpg" />',
+                                 content))
 
 
 class FxMacroTest(BaseTestCase):
@@ -128,7 +152,8 @@ class FxMacroTest(BaseTestCase):
         content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
         r = m.process(content)
         self.assertEqual(r[0], '<p>foo</p>\n<p>baz</p>')
-        self.assertEqual(r[1], 'blah blob')
+        self.assertEqual(r[1][0], 'blah')
+        self.assertEqual(r[1][1], 'blob')
 
 
 class NotesMacroTest(BaseTestCase):
@@ -136,7 +161,7 @@ class NotesMacroTest(BaseTestCase):
         m = NotesMacro(self.logtest)
         r = m.process('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
         self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
-        self.assertTrue(not r[1])
+        self.assertEqual(r[1], [u'has_notes'])
 
 
 class ParserTest(BaseTestCase):

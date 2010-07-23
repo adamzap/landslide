@@ -219,6 +219,8 @@ li {
 #toc th {
   text-align: left;
   font-weight: normal;
+  max-width: 300px;
+  overflow: hidden;
 }
   #toc tr.sub th {
     text-indent: 20px;
@@ -240,16 +242,21 @@ li {
   background: #ff0;
 }
 
-.page_number {
-  position: absolute;
-  bottom: 6px;
-  right: 10px;
-  text-indent: 10px;
-}
-
 aside {
   display: none;
 }
+  aside.source {
+    position: absolute;
+    bottom: 6px;
+    left: 10px;
+    text-indent: 10px;
+  }
+  aside.page_number {
+    position: absolute;
+    bottom: 6px;
+    right: 10px;
+    text-indent: 10px;
+  }
 
 .notes {
   display: none;

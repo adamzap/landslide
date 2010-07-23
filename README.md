@@ -23,9 +23,11 @@ News
 
 Version 0.6.0 is tagged and pushed to [pypi](http://pypi.python.org/pypi/landslide/0.6.0). New features:
 
+- Navigate your slideshow using arrow keys or the space bar
 - Press `t` to toggle a table of contents for your presentation
-- Press `n` to toggle slide number visibility
-- Press '2' to toggle notes in your slides (specify with the .notes macro)
+- Press `n` to toggle slide number/source file visibility
+- Press `2` to toggle notes in your slides (specify with the .notes macro)
+- Press `3` to switch to 3D display (using latest WebKit versions)
 - ReST (Restructured Text) support. It's kind of experimental!
 - Theme support. Develop your own themes!
 - Macros. Easily add functionality to landslide slideshows!
@@ -109,28 +111,8 @@ Viewing
 
 ---
 
-Macros
-======
-
-You can use macros to enhance your presentation:
-
-Notes
------
-
-Add notes to your slides using the `.notes:` keyword, eg.:
-
-    # My Slide Title
-
-    .notes: These are my notes, hidden by default
-
-    My visible content goes here
-
-You can toggle display of notes by pressing the `2` key.
-
----
-
-Options
-=======
+Commandline Options
+===================
 
 Several options are available using the command line:
 
@@ -157,6 +139,79 @@ Several options are available using the command line:
                             default)
 
     Note: PDF export requires the `prince` program: http://princexml.com/
+
+---
+
+Presentation Configuration
+==========================
+
+Landslide allows to configure your presentation using a `cfg` configuration file, therefore easing the aggregation of source directories and the reuse of them accross presentations. Landslide configuration files use the `cfg` syntax. If you know `ini` files, you get the picture. Below is a sample configuration file:
+
+    [landslide]
+    theme  = /path/to/my/beautiful/theme
+    source = 0_my_first_slides.md
+             a_directory
+             another_directory
+             now_a_slide.markdown
+             another_one.rst
+    destination = myWonderfulPresentation.html
+
+Please just don't forget to declare the `[landslide]` section. To generate the presentation as configured, just run:
+
+    $ cd /path/to/my/presentation/sources
+    $ landslide config.cfg
+
+---
+
+Macros
+======
+
+You can use macros to enhance your presentation:
+
+Notes
+-----
+
+Add notes to your slides using the `.notes:` keyword, eg.:
+
+    # My Slide Title
+
+    .notes: These are my notes, hidden by default
+
+    My visible content goes here
+
+You can toggle display of notes by pressing the `2` key.
+
+Some other macros are also available by default: `.fx: foo bar` will add the `foo` and `bar` classes to the corresponding slide `<div>` element, easing styling of your presentation using CSS.
+
+---
+
+Registering Macros
+==================
+
+so macros are used to transform the HTML contents of your slide.
+
+You can register your own macros by creating `landslide.macro.Macro` derived classes, implementing a `process(content, source=None)` method and returning a tuple containing the modified contents and some css classes you may be wanting to add to your slide `<div>` element. For example:
+
+    !python
+    import landslide
+    class MyMacro(Macro):
+      def process(self, content, source=None):
+        return content + '<p>plop</p>', ['plopped_slide']
+    
+    g = generator.Generator(source='toto.md')
+    g.register_macro(MyMacro)
+    print g.render()
+
+This will render any slide as below:
+
+    !html
+    <div class="slide plopped_slide">
+      <header><h2>foo</h2></header>
+      <section>
+        <p>my slide contents</p>
+        <p>plop></p>
+      </section>
+    </div>
 
 ---
 

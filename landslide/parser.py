@@ -22,7 +22,7 @@ SUPPORTED_FORMATS = {
 }
 
 
-class Parser():
+class Parser(object):
     def __init__(self, extension, encoding='utf8'):
         """Configures this parser"""
         self.encoding = encoding
@@ -50,10 +50,12 @@ class Parser():
                 raise RuntimeError(u"Looks like docutils are not installed")
 
             html = html_body(text, input_encoding=self.encoding,
-                             output_encoding=self.encoding)
-
-            classless_html = re.sub(' class=".+"', '', html)
-
-            return classless_html.replace('<div>', '').replace('</div>', '')
+                                   output_encoding=self.encoding)
+            html = re.sub(r'<div.*?>\n', r'', html, re.DOTALL | re.UNICODE)
+            html = re.sub(r'</div>\n', r'', html, re.DOTALL | re.UNICODE)
+            html = re.sub(r'<hr class=".*?" />\n', r'<hr />\n', html,
+                          re.DOTALL | re.UNICODE)
+            return html
         else:
-            raise NotImplementedError(u"Unsupported format, cannot parse")
+            raise NotImplementedError(u"Unsupported format %s, cannot parse"
+                                      % self.format)

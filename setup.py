@@ -19,8 +19,7 @@ setup(
         'slideshow',
         'presentation',
         'rst',
-        'restructuredtext'
-    ],
+        'restructuredtext'],
     requires=['Jinja2', 'Markdown', 'Pygments', 'docutils'],
     scripts=['landslide/landslide'],
     classifiers=[
@@ -31,8 +30,7 @@ setup(
         'Operating System :: OS Independent',
         'License :: OSI Approved :: Apache Software License',
         'Topic :: Multimedia :: Graphics :: Presentation',
-        'Topic :: Text Processing :: Markup'
-    ],
+        'Topic :: Text Processing :: Markup'],
     long_description="""\
 Landslide takes your Markdown or RST file(s) and generates a slideshow like
 `this <http://adamzap.com/random/landslide.html>`_.

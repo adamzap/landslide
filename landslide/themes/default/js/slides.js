@@ -168,7 +168,7 @@ function main() {
         prevSlide();
         break;
       case 39: // right arrow
-      // case 32: // space
+      case 32: // space
         nextSlide();
         break;
       case 50: // 2
@@ -184,6 +184,23 @@ function main() {
         showToc();
         break;
     }
+  };
+
+  var handleWheel = function(event) { 
+    var delta = 0; 
+    if (!event) event = window.event; 
+
+    if (event.wheelDelta) { 
+      delta = event.wheelDelta/120; 
+      if (window.opera) delta = -delta; 
+    } else if (event.detail) { 
+      delta = -event.detail/3; 
+    } 
+
+    if (delta && delta <0) 
+      nextSlide();
+    else if (delta)
+      prevSlide();
   };
 
   var addTouchListeners = function() {
@@ -223,6 +240,8 @@ function main() {
     }
 
     document.addEventListener('keydown', handleBodyKeyDown, false);
+    document.addEventListener('DOMMouseScroll', handleWheel, false);
+    window.onmousewheel = document.onmousewheel = handleWheel
 
     var els = slides;
     for (var i = 0, el; el = els[i]; i++) {

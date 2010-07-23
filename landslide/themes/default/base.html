@@ -23,7 +23,7 @@
 -->
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>{{ head_title }}</title>
     <!-- Styles -->
@@ -53,7 +53,8 @@
   <div class="presentation">
     <div class="slides">
       {% for slide in slides %}
-      <div class="slide{% if slide.classes %} {{ slide.classes }}{% endif %}">
+      <!-- slide source: {% if slide.source %}{{ slide.source.rel_path }}{% endif %} -->
+      <div class="slide{% if slide.classes %}{% for class in slide.classes %} {{ class }}{% endfor %}{% endif %}">
         <div class="inner">
           {% if slide.header %}
           <header>{{ slide.header }}</header>
@@ -62,9 +63,16 @@
           <section>{{ slide.content }}</section>
           {% endif %}
         </div>
-        <aside>
-          <span class="page_number">{{ slide.number }}/{{ num_slides }}</span>
-        </aside>
+        <footer>
+          {% if slide.source %}
+          <aside class="source">
+            Source: <a href="file://{{ slide.source.abs_path }}">{{ slide.source.rel_path }}</a>
+          </aside>
+          {% endif %}
+          <aside class="page_number">
+            {{ slide.number }}/{{ num_slides }}
+          </aside>
+        </footer>
       </div>
       {% endfor %}
     </div>
