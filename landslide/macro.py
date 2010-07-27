@@ -145,7 +145,10 @@ class FixImagePathsMacro(Macro):
 
         base_url = os.path.split(utils.get_abs_path_url(source))[0]
         fn = lambda p: r'<img src="%s" />' % os.path.join(base_url, p.group(1))
-        content = re.sub(r'<img.*?src="(.*?)".*/?>', fn, content, re.UNICODE)
+
+        sub_regex = r'<img.*?src="(?!http://)(.*?)".*/?>'
+
+        content = re.sub(sub_regex, fn, content, re.UNICODE)
 
         return content, classes
 
