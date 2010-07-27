@@ -1,4 +1,5 @@
 *.pyc
+landslide/.idea
 presentation.html
 *.pdf
 samples/.DS_Store

@@ -9,6 +9,7 @@ function main() {
   var slides = document.getElementsByClassName('slide');
   var touchStartX = 0;
   var spaces = /\s+/, a1 = [""];
+  var tocOpened = false;
 
   var str2array = function(s) {
     if (typeof s == "string" || s instanceof String) {
@@ -149,6 +150,7 @@ function main() {
     var toc = document.getElementById('toc');
     var hidden = toc.className != 'visible';
     toc.className = hidden ? 'visible' : 'hidden';
+    tocOpened = !tocOpened;
     return false;
   };
 
@@ -186,21 +188,29 @@ function main() {
     }
   };
 
-  var handleWheel = function(event) { 
-    var delta = 0; 
-    if (!event) event = window.event; 
+  var handleWheel = function(event) {
+    if (tocOpened) {
+      return;
+    }
 
-    if (event.wheelDelta) { 
-      delta = event.wheelDelta/120; 
-      if (window.opera) delta = -delta; 
-    } else if (event.detail) { 
-      delta = -event.detail/3; 
-    } 
+    var delta = 0;
 
-    if (delta && delta <0) 
+    if (!event) {
+      event = window.event;
+    }
+
+    if (event.wheelDelta) {
+      delta = event.wheelDelta/120;
+      if (window.opera) delta = -delta;
+    } else if (event.detail) {
+      delta = -event.detail/3;
+    }
+
+    if (delta && delta <0) {
       nextSlide();
-    else if (delta)
+    } else if (delta) {
       prevSlide();
+    }
   };
 
   var addTouchListeners = function() {
