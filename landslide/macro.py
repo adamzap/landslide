@@ -61,8 +61,7 @@ class CodeHighlightingMacro(Macro):
                 self.logger(u"Unknown pygment lexer \"%s\", skipping"
                             % lang, 'warning')
                 return content, classes
-            formatter = HtmlFormatter(linenos='inline', noclasses=True,
-                                      nobackground=True)
+            formatter = HtmlFormatter(linenos='inline', nobackground=True)
             pretty_code = pygments.highlight(self.descape(code), lexer,
                                              formatter)
             content = content.replace(block, pretty_code, 1)
