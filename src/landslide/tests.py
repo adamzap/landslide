@@ -23,7 +23,7 @@ from macro import *
 from parser import Parser
 
 
-SAMPLES_DIR = os.path.join(os.path.dirname(__file__), '..', 'samples')
+SAMPLES_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'samples')
 if (not os.path.exists(SAMPLES_DIR)):
     raise IOError('Sample source files not found, cannot run tests')
 
