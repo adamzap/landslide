@@ -3,3 +3,6 @@ landslide/.idea
 presentation.html
 *.pdf
 samples/.DS_Store
+*.swp
+src/landslide.egg-info/
+dist/
