@@ -53,8 +53,8 @@ class Parser(object):
                                    output_encoding=self.encoding)
             html = re.sub(r'<div.*?>\n', r'', html, re.DOTALL | re.UNICODE)
             html = re.sub(r'</div>\n', r'', html, re.DOTALL | re.UNICODE)
-            html = re.sub(r'<h1>(.+)</h1>', r'<h2>\1</h2>', html,
-                          re.DOTALL | re.UNICODE)
+            html = re.sub(r'<p class="sys.+\n.+ion\.', r'', html,
+                          re.DOTALL | re.UNICODE) # Pretty hackish
             html = re.sub(r'<h1 class="title">', r'<h1>', html,
                           re.DOTALL | re.UNICODE)
             html = re.sub(r'<hr class=".*?" />\n', r'<hr />\n', html,

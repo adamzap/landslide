@@ -17,6 +17,11 @@ This is bar
 
 ----
 
+Middle Title Slide
+==================
+
+----
+
 Here we Go Again
 ----------------
 
