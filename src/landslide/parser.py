@@ -53,8 +53,13 @@ class Parser(object):
                                    output_encoding=self.encoding)
             html = re.sub(r'<div.*?>\n', r'', html, re.DOTALL | re.UNICODE)
             html = re.sub(r'</div>\n', r'', html, re.DOTALL | re.UNICODE)
+            html = re.sub(r'<h1>(.+)</h1>', r'<h2>\1</h2>', html,
+                          re.DOTALL | re.UNICODE)
+            html = re.sub(r'<h1 class="title">', r'<h1>', html,
+                          re.DOTALL | re.UNICODE)
             html = re.sub(r'<hr class=".*?" />\n', r'<hr />\n', html,
                           re.DOTALL | re.UNICODE)
+
             return html
         else:
             raise NotImplementedError(u"Unsupported format %s, cannot parse"
