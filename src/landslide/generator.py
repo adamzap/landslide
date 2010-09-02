@@ -177,8 +177,7 @@ class Generator(object):
             self.log(u"Adding   %s (%s)" % (source, parser.format))
 
             file_contents = codecs.open(source, encoding=self.encoding).read()
-            inner_slides = re.split(r'<hr.+>', parser.parse(file_contents),
-                                    re.DOTALL | re.UNICODE)
+            inner_slides = re.split(r'<hr.+>', parser.parse(file_contents))
             for inner_slide in inner_slides:
                 slides.append(self.get_slide_vars(inner_slide, source))
 
