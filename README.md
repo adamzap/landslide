@@ -71,14 +71,14 @@ Formatting
 ### Markdown
 
 - To create a title slide, render a single `h1` element (eg. `# My Title`)
-- Separate your slides with a horizontal rule (`---` in markdown)
+- Separate your slides with a horizontal rule (`---` in markdown) except at the end of md files
 - Your other slides should have a heading that renders to an `h1` element
 - To highlight blocks of code, put !`{lang}` where `{lang}` is the pygment supported language identifier as the first indented line
 
 ### ReStructuredText
 
 - Use headings for slide titles
-- Separate your slides using an horizontal rule (`----` in RST)
+- Separate your slides using an horizontal rule (`----` in RST) except at the end of RST files
 
 ---
 
