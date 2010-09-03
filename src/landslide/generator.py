@@ -216,15 +216,19 @@ class Generator(object):
         return css
 
     def get_js(self):
-        """Fetches and returns javascript fiel path or contents, depending if
+        """Fetches and returns javascript file path or contents, depending if
         we want a standalone presentation or not
         """
         js_file = os.path.join(self.theme_dir, 'js', 'slides.js')
-        if (os.path.exists(js_file)):
-            return {'path_url': utils.get_abs_path_url(js_file),
-                    'contents': open(js_file).read()}
-        else:
-            self.log(u"No javascript provided in current theme", 'warning')
+
+        if not os.path.exists(js_file):
+            js_file = os.path.join(THEMES_DIR, 'default', 'js', 'slides.js')
+
+            if not os.path.exists(js_file):
+                raise IOError(u"Cannot find slides.js in default theme")
+
+        return {'path_url': utils.get_abs_path_url(js_file),
+                'contents': open(js_file).read()}
 
     def get_slide_vars(self, slide_src, source=None):
         """Computes a single slide template vars from its html source code.
