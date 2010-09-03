@@ -115,8 +115,12 @@ class Generator(object):
             raise IOError(u"Theme %s not found or invalid" % theme)
 
         if not os.path.exists(os.path.join(self.theme_dir, 'base.html')):
-            raise IOError(u"Cannot find base.html template filein theme %s"
-                          % theme)
+            default_dir = os.path.join(THEMES_DIR, 'default')
+
+            if not os.path.exists(os.path.join(default_dir, 'base.html')):
+                raise IOError(u"Cannot find base.html in default theme")
+            else:
+                self.template_file = os.path.join(default_dir, 'base.html')
         else:
             self.template_file = os.path.join(self.theme_dir, 'base.html')
 
