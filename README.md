@@ -248,7 +248,7 @@ Advanced Usage
 Theming
 =======
 
-A Landlside theme is a directory following this simple structure:
+A Landslide theme is a directory following this simple structure:
 
     mytheme/
     |-- base.html
@@ -257,6 +257,8 @@ A Landlside theme is a directory following this simple structure:
     |   `-- screen.css
     `-- js
         `-- slides.js
+
+If a theme does not provide HTML and JS files, those from the default theme will be used. CSS is not optional.
 
 ---
 
