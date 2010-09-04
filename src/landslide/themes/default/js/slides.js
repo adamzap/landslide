@@ -10,6 +10,7 @@ function main() {
   var touchStartX = 0;
   var spaces = /\s+/, a1 = [""];
   var tocOpened = false;
+  var helpOpened = false;
 
   var str2array = function(s) {
     if (typeof s == "string" || s instanceof String) {
@@ -154,11 +155,23 @@ function main() {
   };
 
   var showToc = function() {
+    if (helpOpened) {
+        showHelp();
+    }
+
     var toc = document.getElementById('toc');
-    var hidden = toc.className != 'visible';
-    toc.className = hidden ? 'visible' : 'hidden';
+
+    toc.style.marginLeft = tocOpened ? '-400px' : '0px';
+
     tocOpened = !tocOpened;
-    return false;
+  };
+
+  var showHelp = function() {
+    var help = document.getElementById('help');
+
+    help.style.marginLeft = helpOpened ? '-400px' : '0px';
+
+    helpOpened = !helpOpened;
   };
 
   var switch3D = function() {
@@ -186,6 +199,9 @@ function main() {
       case 51: // 3
         switch3D();
         break;
+      case 72: // h
+        showHelp();
+        break;
       case 78: // n
         showSlideNumbers();
         break;
@@ -199,7 +215,7 @@ function main() {
   };
 
   var handleWheel = function(event) {
-    if (tocOpened) {
+    if (tocOpened || helpOpened) {
       return;
     }
 
