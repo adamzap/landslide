@@ -198,12 +198,16 @@ class Generator(object):
         css = {}
 
         print_css = os.path.join(self.theme_dir, 'css', 'print.css')
-        if (os.path.exists(print_css)):
-            css['print'] = {'path_url': utils.get_abs_path_url(print_css),
-                            'contents': open(print_css).read()}
-        else:
-            self.log(u"No print stylesheet provided in current theme",
-                      'warning')
+        if not os.path.exists(print_css):
+            # Fall back to default theme
+            print_css = os.path.join(THEMES_DIR, 'default', 'css', 'print.css')
+
+            if not os.path.exists(print_css):
+                raise IOError(u"Cannot find css/print.css in default theme")
+
+        css['print'] = {'path_url': utils.get_abs_path_url(print_css),
+                        'contents': open(print_css).read()}
+
 
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
         if (os.path.exists(screen_css)):
