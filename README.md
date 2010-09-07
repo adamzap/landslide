@@ -18,6 +18,29 @@ A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 News
 ====
 
+09/06/10
+--------
+
+Version 0.8.0 is tagged and pushed to [pypi](http://pypi.python.org/pypi/landslide/0.8.0). New features:
+
+- Added new `light` theme (agonzalezro) (#14)
+- Slide source files are now displayable in presentation (n1k0), press `s` to toggle
+- Press `h` to toggle a help sidebar
+- Greatly improved Restructured Text support
+- Themes will now fall back to the default theme for most missing files
+- Improved project file structure and pypi compatibility (harobed) (#15)
+- Fix for presentations with more than 48 slides (mtrythall and ipmb) (#17)
+- Many small bug fixes and other improvements
+
+Many thanks to n1k0, agonzalezro, harobed, mtrythall, and ipmb for helping to make this release possible.
+
+Also a big thanks to [Lincoln Loop](http://lincolnloop.com/) for supporting and using Landslide!!
+
+---
+
+News
+====
+
 07/15/10
 --------
 
@@ -312,6 +335,15 @@ Contributors
 
 - Vincent Agnano (vincent.agnano@particul.es)
 - Brad Cupit
+- Stéphane Klein (stephane@harobed.org)
+- Peter Baumgartner
+- Michael Trythall (m@mtrythall.com)
+- agonzalezro
+
+---
+
+Authors
+=======
 
 Base Template Authors and Contributors (html5-slides)
 -----------------------------------------------------
