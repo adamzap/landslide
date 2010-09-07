@@ -164,7 +164,7 @@ li {
   margin-bottom:100px;
 }
 
-#toc {
+.sidebar {
   background: -webkit-gradient(linear, top right, bottom right, from(#dde), to(#fff));
   -webkit-transition: margin 0.25s ease-in-out;
   background-color: #eee;
@@ -184,62 +184,52 @@ li {
   -o-transition: margin 0.2s ease-in-out;
 }
 
-#toc.hidden {
-  display: block;
-  margin-left: -400px;
-}
-
-#toc.visible {
-  display: block;
-  margin-left: 0px;
-}
-
-#toc h2 {
+.sidebar h2 {
   text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
   margin: 0 0 16px;
   padding: 0;
 }
 
-#toc table {
+.sidebar table {
   width: 100%;
   margin: 0;
   padding: 0;
   border-collapse: collapse;
 }
 
-#toc table caption {
+.sidebar table caption {
   display: none;
 }
 
-#toc tr {
+.sidebar tr {
   margin: 2px 0;
   border-bottom: 1px solid #ccc;
 }
 
-
-#toc th {
+.sidebar th {
   text-align: left;
   font-weight: normal;
   max-width: 300px;
   overflow: hidden;
 }
-  #toc tr.sub th {
-    text-indent: 20px;
-  }
 
-#toc td {
+.sidebar tr.sub th {
+  text-indent: 20px;
+}
+
+.sidebar td {
   text-align: right;
   min-width: 20px;
 }
 
-#toc a {
+.sidebar a {
   display: block;
   text-decoration: none;
   border-bottom: none;
   padding: 4px 0;
 }
 
-#toc tr.active {
+.sidebar tr.active {
   background: #ff0;
 }
 
