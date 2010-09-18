@@ -115,8 +115,12 @@ class Generator(object):
             raise IOError(u"Theme %s not found or invalid" % theme)
 
         if not os.path.exists(os.path.join(self.theme_dir, 'base.html')):
-            raise IOError(u"Cannot find base.html template filein theme %s"
-                          % theme)
+            default_dir = os.path.join(THEMES_DIR, 'default')
+
+            if not os.path.exists(os.path.join(default_dir, 'base.html')):
+                raise IOError(u"Cannot find base.html in default theme")
+            else:
+                self.template_file = os.path.join(default_dir, 'base.html')
         else:
             self.template_file = os.path.join(self.theme_dir, 'base.html')
 
@@ -177,8 +181,7 @@ class Generator(object):
             self.log(u"Adding   %s (%s)" % (source, parser.format))
 
             file_contents = codecs.open(source, encoding=self.encoding).read()
-            inner_slides = re.split(r'<hr.+>', parser.parse(file_contents),
-                                    re.DOTALL | re.UNICODE)
+            inner_slides = re.split(r'<hr.+>', parser.parse(file_contents))
             for inner_slide in inner_slides:
                 slides.append(self.get_slide_vars(inner_slide, source))
 
@@ -195,12 +198,16 @@ class Generator(object):
         css = {}
 
         print_css = os.path.join(self.theme_dir, 'css', 'print.css')
-        if (os.path.exists(print_css)):
-            css['print'] = {'path_url': utils.get_abs_path_url(print_css),
-                            'contents': open(print_css).read()}
-        else:
-            self.log(u"No print stylesheet provided in current theme",
-                      'warning')
+        if not os.path.exists(print_css):
+            # Fall back to default theme
+            print_css = os.path.join(THEMES_DIR, 'default', 'css', 'print.css')
+
+            if not os.path.exists(print_css):
+                raise IOError(u"Cannot find css/print.css in default theme")
+
+        css['print'] = {'path_url': utils.get_abs_path_url(print_css),
+                        'contents': open(print_css).read()}
+
 
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
         if (os.path.exists(screen_css)):
@@ -213,15 +220,19 @@ class Generator(object):
         return css
 
     def get_js(self):
-        """Fetches and returns javascript fiel path or contents, depending if
+        """Fetches and returns javascript file path or contents, depending if
         we want a standalone presentation or not
         """
         js_file = os.path.join(self.theme_dir, 'js', 'slides.js')
-        if (os.path.exists(js_file)):
-            return {'path_url': utils.get_abs_path_url(js_file),
-                    'contents': open(js_file).read()}
-        else:
-            self.log(u"No javascript provided in current theme", 'warning')
+
+        if not os.path.exists(js_file):
+            js_file = os.path.join(THEMES_DIR, 'default', 'js', 'slides.js')
+
+            if not os.path.exists(js_file):
+                raise IOError(u"Cannot find slides.js in default theme")
+
+        return {'path_url': utils.get_abs_path_url(js_file),
+                'contents': open(js_file).read()}
 
     def get_slide_vars(self, slide_src, source=None):
         """Computes a single slide template vars from its html source code.
