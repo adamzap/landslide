@@ -18,6 +18,19 @@ A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 News
 ====
 
+09/21/10
+--------
+
+Version 0.8.1 is tagged and pushed to [pypi](http://pypi.python.org/pypi/landslide/0.8.1).
+
+This release fixes an issue in the "light" theme. The help and table of
+contents side bars were toggled on by default, but this has been fixed.
+
+---
+
+News
+====
+
 09/06/10
 --------
 
