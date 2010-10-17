@@ -70,6 +70,10 @@ class GeneratorTest(BaseTestCase):
         self.assertEqual(svars['source'], {})
         self.assertEqual(svars['classes'], [])
 
+    def test_unicode(self):
+        g = Generator(os.path.join(SAMPLES_DIR, 'example3', 'slides.rst'))
+        g.execute()
+
     def test_get_template_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
         svars = g.get_template_vars([{'title': "slide1", 'level': 1},

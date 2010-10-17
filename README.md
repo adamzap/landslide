@@ -352,6 +352,7 @@ Contributors
 - Peter Baumgartner
 - Michael Trythall (m@mtrythall.com)
 - agonzalezro
+- Olivier Verdier
 
 ---
 

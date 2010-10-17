@@ -71,6 +71,4 @@ def html_body(input_string, source_path=None, destination_path=None,
         input_encoding=input_encoding, doctitle=doctitle,
         initial_header_level=initial_header_level)
     fragment = parts['html_body']
-    if output_encoding != 'unicode':
-        fragment = fragment.encode(output_encoding)
     return fragment
