@@ -154,7 +154,7 @@ class Generator(object):
                 raise IOError(u"Direct output mode is not available for PDF "
                                "export")
             else:
-                print self.render().encode(self.encoding)
+                print self.render()
         else:
             self.write()
             self.log(u"Generated file: %s" % self.destination_file)
@@ -339,7 +339,7 @@ class Generator(object):
         """
         try:
             f = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
-            f.write(html.encode(self.encoding, 'xmlcharrefreplace'))
+            f.write(html.encode('utf_8', 'xmlcharrefreplace'))
             f.close()
         except Exception:
             raise IOError(u"Unable to create temporary file, aborting")
