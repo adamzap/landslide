@@ -37,7 +37,7 @@ TOC_MAX_LEVEL = 2
 class Generator(object):
     def __init__(self, source, destination_file='presentation.html',
                  theme='default', direct=False, debug=False, verbose=True,
-                 embed=False, encoding='utf8', logger=None):
+                 embed=False, encoding='utf-8', logger=None):
         """Configures this generator from its properties."""
         self.debug = debug
         self.direct = direct
@@ -285,7 +285,8 @@ class Generator(object):
 
         return {'head_title': head_title, 'num_slides': str(self.num_slides),
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,
-                'css': self.get_css(), 'js': self.get_js()}
+                'css': self.get_css(), 'js': self.get_js(),
+                'encoding': self.encoding}
 
     def log(self, message, type='notice'):
         """Log a message (eventually, override to do something more clever)"""

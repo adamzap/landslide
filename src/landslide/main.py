@@ -55,9 +55,9 @@ def _parse_options():
     parser.add_option(
         "-e", "--encoding",
         dest="encoding",
-        help="The encoding of your files (defaults to utf8)",
+        help="The encoding of your files (defaults to utf-8)",
         metavar="ENCODING",
-        default="utf8"
+        default="utf-8"
     )
 
     parser.add_option(

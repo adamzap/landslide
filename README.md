@@ -164,7 +164,7 @@ Several options are available using the command line:
                             The path to the to the destination file: .html or .pdf
                             extensions allowed (default: presentation.html)
       -e ENCODING, --encoding=ENCODING
-                            The encoding of your files (defaults to utf8)
+                            The encoding of your files (defaults to utf-8)
       -i, --embed           Embed base64-encoded images in presentation
       -t THEME, --theme=THEME
                             A theme name, or path to a landlside theme directory
@@ -314,6 +314,7 @@ The `base.html` must be a [Jinja2 template file](http://jinja.pocoo.org/2/docume
   - `content`: the slide contents
   - `number`: the slide number
 - `embed`: is the current document a standalone one?
+- `encoding`: document character encoding
 - `num_slides`: the number of slides in current presentation
 - `toc`: the Table of Contents, listing sections of the document. Each section has these properties available:
   - `title`: the section title
