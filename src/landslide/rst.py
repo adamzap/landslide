@@ -53,8 +53,7 @@ def html_parts(input_string, source_path=None, destination_path=None,
 
 
 def html_body(input_string, source_path=None, destination_path=None,
-              input_encoding='unicode', output_encoding='unicode',
-              doctitle=1, initial_header_level=1):
+              input_encoding='unicode', doctitle=1, initial_header_level=1):
     """
     Given an input string, returns an HTML fragment as a string.
 
