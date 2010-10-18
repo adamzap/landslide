@@ -330,7 +330,7 @@ class Generator(object):
             self.write_pdf(html)
         else:
             outfile = codecs.open(self.destination_file, 'w',
-                                  encoding=self.encoding)
+                                  encoding='utf_8')
             outfile.write(html)
 
     def write_pdf(self, html):

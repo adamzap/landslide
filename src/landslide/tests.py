@@ -17,6 +17,7 @@
 import os
 import re
 import unittest
+import codecs
 
 from generator import Generator
 from macro import *
@@ -73,6 +74,16 @@ class GeneratorTest(BaseTestCase):
     def test_unicode(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example3', 'slides.rst'))
         g.execute()
+
+    def test_inputencoding(self):
+        g = Generator(os.path.join(SAMPLES_DIR, 'example3', 'slides.koi8_r.rst'), encoding='koi8_r')
+        content = g.render()
+        # check that the string is utf_8
+        self.assertTrue(re.findall(u'русский',content, flags=re.UNICODE))
+        g.execute()
+        file_contents = codecs.open(g.destination_file, encoding='utf_8').read()
+        # check that the file was properly encoded in utf_8
+        self.assertTrue(re.findall(u'русский',file_contents, flags=re.UNICODE))
 
     def test_get_template_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
