@@ -49,8 +49,7 @@ class Parser(object):
             except ImportError:
                 raise RuntimeError(u"Looks like docutils are not installed")
 
-            html = html_body(text, input_encoding=self.encoding,
-                                   output_encoding=self.encoding)
+            html = html_body(text, input_encoding=self.encoding)
             html = re.sub(r'<div.*?>\n', r'', html, re.DOTALL | re.UNICODE)
             html = re.sub(r'</div>\n', r'', html, re.DOTALL | re.UNICODE)
             html = re.sub(r'<p class="sys.+\n.+ion\.', r'', html,
