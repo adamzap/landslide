@@ -18,6 +18,15 @@ A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 News
 ====
 
+10/19/10
+--------
+
+Version 0.8.2 is tagged and pushed to [pypi](http://pypi.python.org/pypi/landslide/0.8.2).
+
+This release fixes some unicode and theme issues.
+
+Thanks to Olivier Verdier, millette, and n1k0 (as always).
+
 09/21/10
 --------
 

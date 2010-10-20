@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='landslide',
-    version='0.8.1',
+    version='0.8.2',
     description='Lightweight markup language-based html5 slideshow generator',
     packages=find_packages('src'),
     package_dir = {'': 'src'},
@@ -25,6 +25,7 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.5',
         'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
         'Development Status :: 4 - Beta',
         'Operating System :: OS Independent',
         'License :: OSI Approved :: Apache Software License',
