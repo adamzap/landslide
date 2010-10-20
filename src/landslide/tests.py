@@ -74,6 +74,9 @@ class GeneratorTest(BaseTestCase):
     def test_unicode(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example3', 'slides.rst'))
         g.execute()
+        # test source code here
+        s = g.render()
+        self.assertTrue(s.find('<div class="highlight">')!=-1)
 
     def test_inputencoding(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example3', 'slides.koi8_r.rst'), encoding='koi8_r')
@@ -92,6 +95,7 @@ class GeneratorTest(BaseTestCase):
                                      {'title': None, 'level': 1},
                                     ])
         self.assertEqual(svars['head_title'], 'slide1')
+    
 
     def test_process_macros(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
