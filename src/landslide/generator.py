@@ -271,7 +271,7 @@ class Generator(object):
         """Computes template vars from slides html source code"""
         try:
             head_title = slides[0]['title']
-        except IndexError:
+        except (IndexError, TypeError):
             head_title = "Untitled Presentation"
 
         for slide_index, slide_vars in enumerate(slides):
