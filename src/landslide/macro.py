@@ -41,6 +41,11 @@ class Macro(object):
 
 
 class CodeHighlightingMacro(Macro):
+    code_blocks_re = re.compile(
+        r'(<pre.+?>(<code>)?\s?!(\w+?)\n(.*?)(</code>)?</pre>)', 
+        re.UNICODE | re.MULTILINE | re.DOTALL
+    )
+    
     def descape(self, string, defs=htmlentitydefs.entitydefs):
         """Decodes html entities from a given string"""
         f = lambda m: defs[m.group(1)] if len(m.groups()) > 0 else m.group(0)
@@ -48,13 +53,12 @@ class CodeHighlightingMacro(Macro):
 
     def process(self, content, source=None):
         """Performs syntax coloration in slide code blocks using Pygments"""
-        code_blocks = re.findall(r'(<pre><code>!(.+?)\n(.+?)</code></pre>)',
-                                 content, re.DOTALL | re.UNICODE)
+        code_blocks = self.code_blocks_re.findall(content)
         if not code_blocks:
             return content, []
 
         classes = []
-        for block, lang, code in code_blocks:
+        for block, void1, lang, code, void2 in code_blocks:
             try:
                 lexer = get_lexer_by_name(lang)
             except Exception:

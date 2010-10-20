@@ -46,3 +46,28 @@ http://docutils.sf.net/
 
 1. one
 2. two
+
+----
+
+Some code now
+-------------
+
+Let me give you this snippet::
+
+    !python
+    def foo():
+        "just a test"
+        print bar
+
+Then this one::
+
+    !python
+    def bar():
+        print baz
+
+
+Then this other one::
+
+    !python
+    def batman():
+        return robin
