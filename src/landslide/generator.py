@@ -179,11 +179,15 @@ class Generator(object):
                 return slides
 
             self.log(u"Adding   %s (%s)" % (source, parser.format))
-
-            file_contents = codecs.open(source, encoding=self.encoding).read()
-            inner_slides = re.split(r'<hr.+>', parser.parse(file_contents))
-            for inner_slide in inner_slides:
-                slides.append(self.get_slide_vars(inner_slide, source))
+            
+            try:
+                file_contents = codecs.open(source, encoding=self.encoding).read()
+            except UnicodeDecodeError:
+                self.log(u"Unable to decode source %s: skipping" % source, 'warning')
+            else:
+                inner_slides = re.split(r'<hr.+>', parser.parse(file_contents))
+                for inner_slide in inner_slides:
+                    slides.append(self.get_slide_vars(inner_slide, source))
 
         if not slides:
             self.log(u"Exiting  %s: no contents found" % source, 'notice')
