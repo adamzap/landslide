@@ -1,4 +1,5 @@
 *.pyc
+build
 landslide/.idea
 presentation.html
 *.pdf
