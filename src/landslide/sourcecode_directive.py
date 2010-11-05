@@ -80,4 +80,5 @@ class Pygments(Directive):
         return [nodes.raw('', parsed, format='html')]
 
 directives.register_directive('sourcecode', Pygments)
+directives.register_directive('code-block', Pygments)
 

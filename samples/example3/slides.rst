@@ -68,9 +68,9 @@ Then this one:
         print baz
 
 
-Then this other one:
+Then this other one with the ``code-block`` directive:
 
-.. sourcecode:: python
+.. code-block:: python
 
     def batman():
         return robin
