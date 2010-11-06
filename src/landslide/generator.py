@@ -103,7 +103,7 @@ class Generator(object):
                            "Please use one of these file extensions in the "
                            "destination")
 
-        self.embed = True if self.file_type is 'pdf' else embed
+        self.embed = True if self.file_type == 'pdf' else embed
 
         self.theme = theme if theme else 'default'
 
@@ -150,7 +150,7 @@ class Generator(object):
     def execute(self):
         """Execute this generator regarding its current configuration"""
         if self.direct:
-            if self.file_type is 'pdf':
+            if self.file_type == 'pdf':
                 raise IOError(u"Direct output mode is not available for PDF "
                                "export")
             else:
@@ -330,7 +330,7 @@ class Generator(object):
         """Writes generated presentation code into the destination file"""
         html = self.render()
 
-        if self.file_type is 'pdf':
+        if self.file_type == 'pdf':
             self.write_pdf(html)
         else:
             outfile = codecs.open(self.destination_file, 'w',

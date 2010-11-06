@@ -59,14 +59,16 @@ Let me give you this snippet::
         "just a test"
         print bar
 
-Then this one, the ReST way::
+Then this one, a more ReSTful way (haha, nerd joke spotted)::
 
 .. sourcecode:: python
-    def bar():
-        print baz
+    def foo():
+        "just a test"
+        print bar
 
-Then this other one::
+Or as an alternative::
 
-    !python
-    def batman():
-        return robin
+.. code-block:: python
+    def foo():
+        "just a test"
+        print bar

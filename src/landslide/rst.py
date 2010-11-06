@@ -18,7 +18,6 @@ from docutils import core, io
 
 import sourcecode_directive
 
-
 def html_parts(input_string, source_path=None, destination_path=None,
                input_encoding='unicode', doctitle=1, initial_header_level=1):
     """
