@@ -13,6 +13,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+
 """
     The Pygments reStructuredText directive
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,6 +72,7 @@ from docutils.parsers.rst import directives, Directive
 
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name, TextLexer
+
 
 class Pygments(Directive):
     """ Source code syntax hightlighting.

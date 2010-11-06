@@ -31,6 +31,7 @@ RE_HTML_ENTITY = re.compile('&(\w+?);')
 
 
 class Macro(object):
+    """Base class for Macros"""
     def __init__(self, logger=sys.stdout, embed=False):
         self.logger = logger
         self.embed = embed
@@ -41,6 +42,9 @@ class Macro(object):
 
 
 class CodeHighlightingMacro(Macro):
+    """This Macro performs syntax coloration in slide code blocks using 
+    Pygments.
+    """
     code_blocks_re = re.compile(
         r'(<pre.+?>(<code>)?\s?!(\w+?)\n(.*?)(</code>)?</pre>)', 
         re.UNICODE | re.MULTILINE | re.DOTALL
@@ -52,7 +56,6 @@ class CodeHighlightingMacro(Macro):
         return RE_HTML_ENTITY.sub(f, string)
 
     def process(self, content, source=None):
-        """Performs syntax coloration in slide code blocks using Pygments"""
         code_blocks = self.code_blocks_re.findall(content)
         if not code_blocks:
             return content, []
@@ -74,8 +77,10 @@ class CodeHighlightingMacro(Macro):
 
 
 class EmbedImagesMacro(Macro):
+    """This Macro extracts images url and embed them using the base64 
+    algorithm.
+    """
     def process(self, content, source=None):
-        """Extracts images url and embed them using the base64 algorithm"""
         classes = []
 
         if not self.embed:
@@ -139,8 +144,10 @@ class EmbedImagesMacro(Macro):
 
 
 class FixImagePathsMacro(Macro):
+    """This Macro replaces html image paths with fully qualified absolute 
+    urls.
+    """
     def process(self, content, source=None):
-        """Replaces html image paths with fully qualified absolute urls"""
         classes = []
 
         if self.embed:
@@ -157,8 +164,10 @@ class FixImagePathsMacro(Macro):
 
 
 class FxMacro(Macro):
+    """This Macro processes fx directives, ie adds specific css classes 
+    named after what the parser found in them.
+    """
     def process(self, content, source=None):
-        """Processes FXs"""
         classes = []
 
         fx_match = re.search(r'(<p>\.fx:\s?(.*?)</p>\n?)', content,
@@ -171,8 +180,8 @@ class FxMacro(Macro):
 
 
 class NotesMacro(Macro):
+    """This Macro processes Notes."""
     def process(self, content, source=None):
-        """Processes Notes"""
         classes = []
 
         new_content = re.sub(r'<p>\.notes:\s?(.*?)</p>',

@@ -23,6 +23,11 @@ SUPPORTED_FORMATS = {
 
 
 class Parser(object):
+    """This class generates the HTML code depending on which syntax is used in 
+    the souce document.
+    
+    The Parser currently supports both Markdown and restructuredText syntaxes.
+    """
     def __init__(self, extension, encoding='utf8'):
         """Configures this parser"""
         self.encoding = encoding
@@ -35,7 +40,7 @@ class Parser(object):
             raise NotImplementedError(u"Unsupported format %s" % extension)
 
     def parse(self, text):
-        """Parses and renders a text as HTML regarding current format"""
+        """Parses and renders a text as HTML regarding current format."""
         if self.format == 'markdown':
             try:
                 import markdown
