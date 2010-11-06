@@ -103,7 +103,7 @@ class Generator(object):
                            "Please use one of these file extensions in the "
                            "destination")
 
-        self.embed = True if self.file_type is 'pdf' else embed
+        self.embed = True if self.file_type == 'pdf' else embed
 
         self.theme = theme if theme else 'default'
 
@@ -150,7 +150,7 @@ class Generator(object):
     def execute(self):
         """Execute this generator regarding its current configuration"""
         if self.direct:
-            if self.file_type is 'pdf':
+            if self.file_type == 'pdf':
                 raise IOError(u"Direct output mode is not available for PDF "
                                "export")
             else:
@@ -180,10 +180,16 @@ class Generator(object):
 
             self.log(u"Adding   %s (%s)" % (source, parser.format))
 
-            file_contents = codecs.open(source, encoding=self.encoding).read()
-            inner_slides = re.split(r'<hr.+>', parser.parse(file_contents))
-            for inner_slide in inner_slides:
-                slides.append(self.get_slide_vars(inner_slide, source))
+            try:
+                file = codecs.open(source, encoding=self.encoding)
+                file_contents = file.read()
+            except UnicodeDecodeError:
+                self.log(u"Unable to decode source %s: skipping" % source,
+                         'warning')
+            else:
+                inner_slides = re.split(r'<hr.+>', parser.parse(file_contents))
+                for inner_slide in inner_slides:
+                    slides.append(self.get_slide_vars(inner_slide, source))
 
         if not slides:
             self.log(u"Exiting  %s: no contents found" % source, 'notice')
@@ -240,7 +246,7 @@ class Generator(object):
         """
         vars = {'header': None, 'content': None}
 
-        find = re.search(r'^\s?(<h(\d?)>(.+?)</h\d>)\s?(.+)?', slide_src,
+        find = re.search(r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
         if not find:
             header = level = title = None
@@ -271,7 +277,7 @@ class Generator(object):
         """Computes template vars from slides html source code"""
         try:
             head_title = slides[0]['title']
-        except IndexError:
+        except (IndexError, TypeError):
             head_title = "Untitled Presentation"
 
         for slide_index, slide_vars in enumerate(slides):
@@ -326,7 +332,7 @@ class Generator(object):
         """Writes generated presentation code into the destination file"""
         html = self.render()
 
-        if self.file_type is 'pdf':
+        if self.file_type == 'pdf':
             self.write_pdf(html)
         else:
             outfile = codecs.open(self.destination_file, 'w',

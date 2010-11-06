@@ -95,7 +95,7 @@ function main() {
     changeSlideElClass(currentSlideNo, 'current');
     changeSlideElClass(currentSlideNo + 1, 'future');
 
-    for (var i=currentSlideNo+2; i<slides.length+1; i++) {
+    for (i=currentSlideNo+2; i<slides.length+1; i++) {
       changeSlideElClass(i, 'far-future');
     }
 
@@ -105,16 +105,20 @@ function main() {
   };
 
   var highlightCurrentTocLink = function() {
-    var tocRows = document.getElementById('toc').getElementsByTagName('tr');
-    for (var i=0; i<tocRows.length; i++) {
-      removeClass(tocRows.item(i), 'active');
-    }
+    var toc = document.getElementById('toc');
 
-    var currentTocRow = document.getElementById('toc-row-' + currentSlideNo);
-    if (currentTocRow) {
-      addClass(currentTocRow, 'active');
+    if (toc) {
+      var tocRows = toc.getElementsByTagName('tr');
+      for (var i=0; i<tocRows.length; i++) {
+        removeClass(tocRows.item(i), 'active');
+      }
+
+      var currentTocRow = document.getElementById('toc-row-' + currentSlideNo);
+      if (currentTocRow) {
+        addClass(currentTocRow, 'active');
+      }
     }
-  }
+  };
 
   var nextSlide = function() {
     if (currentSlideNo < slides.length) {
@@ -160,10 +164,11 @@ function main() {
     }
 
     var toc = document.getElementById('toc');
-
-    toc.style.marginLeft = tocOpened ? '-400px' : '0px';
-
-    tocOpened = !tocOpened;
+    
+    if (toc) {
+      toc.style.marginLeft = tocOpened ? '-400px' : '0px';
+      tocOpened = !tocOpened;
+    }
   };
 
   var showHelp = function() {
@@ -256,13 +261,17 @@ function main() {
   };
 
   var addTocLinksListeners = function() {
-    var tocLinks = document.getElementById('toc').getElementsByTagName('a');
-    for (var i=0; i < tocLinks.length; i++) {
-      tocLinks.item(i).addEventListener('click', function(e) {
-        currentSlideNo = Number(this.attributes['href'].value.replace('#slide', ''));
-        updateSlideClasses();
-        return false;
-      }, true);
+    var toc = document.getElementById('toc');
+
+    if (toc) {
+      var tocLinks = toc.getElementsByTagName('a');
+      for (var i=0; i < tocLinks.length; i++) {
+        tocLinks.item(i).addEventListener('click', function(e) {
+          currentSlideNo = Number(this.attributes['href'].value.replace('#slide', ''));
+          updateSlideClasses();
+          return false;
+        }, true);
+      }
     }
   };
 
@@ -277,7 +286,7 @@ function main() {
 
     document.addEventListener('keydown', handleBodyKeyDown, false);
     document.addEventListener('DOMMouseScroll', handleWheel, false);
-    window.onmousewheel = document.onmousewheel = handleWheel
+    window.onmousewheel = document.onmousewheel = handleWheel;
 
     var els = slides;
     for (var i = 0, el; el = els[i]; i++) {

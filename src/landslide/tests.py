@@ -23,6 +23,8 @@ from generator import Generator
 from macro import *
 from parser import Parser
 
+from pprint import pprint
+
 
 SAMPLES_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'samples')
 if (not os.path.exists(SAMPLES_DIR)):
@@ -74,6 +76,9 @@ class GeneratorTest(BaseTestCase):
     def test_unicode(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example3', 'slides.rst'))
         g.execute()
+        # test source code here
+        s = g.render()
+        self.assertTrue(s.find('<div class="highlight">')!=-1)
 
     def test_inputencoding(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example3', 'slides.koi8_r.rst'), encoding='koi8_r')
@@ -92,6 +97,7 @@ class GeneratorTest(BaseTestCase):
                                      {'title': None, 'level': 1},
                                     ])
         self.assertEqual(svars['head_title'], 'slide1')
+    
 
     def test_process_macros(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
@@ -122,6 +128,41 @@ class GeneratorTest(BaseTestCase):
 
 
 class CodeHighlightingMacroTest(BaseTestCase):
+    def setUp(self):
+        self.sample_html = '''<p>Let me give you this snippet:</p>
+<pre class="literal-block">
+!python
+def foo():
+    &quot;just a test&quot;
+    print bar
+</pre>
+<p>Then this one:</p>
+<pre class="literal-block">
+!php
+<?php
+echo $bar;
+?>
+</pre>
+<p>Then this other one:</p>
+<pre class="literal-block">
+!xml
+<foo>
+    <bar glop="yataa">baz</bar>
+</foo>
+</pre>
+<p>End here.</p>'''
+    
+    def test_parsing_code_blocks(self):
+        m = CodeHighlightingMacro(self.logtest)
+        blocks = m.code_blocks_re.findall(self.sample_html)
+        self.assertEquals(len(blocks), 3)
+        self.assertEquals(blocks[0][2], 'python')
+        self.assertTrue(blocks[0][3].startswith('def foo():'))
+        self.assertEquals(blocks[1][2], 'php')
+        self.assertTrue(blocks[1][3].startswith('<?php'))
+        self.assertEquals(blocks[2][2], 'xml')
+        self.assertTrue(blocks[2][3].startswith('<foo>'))
+
     def test_descape(self):
         m = CodeHighlightingMacro(self.logtest)
         self.assertEqual(m.descape('foo'), 'foo')
@@ -135,10 +176,19 @@ class CodeHighlightingMacroTest(BaseTestCase):
         m = CodeHighlightingMacro(self.logtest)
         hl = m.process("<pre><code>!php\n$foo;</code></pre>")
         self.assertTrue(hl[0].startswith('<div class="highlight"><pre'))
-        self.assertTrue(hl[1], 'code')
+        self.assertEquals(hl[1][0], u'has_code')
         input = "<p>Nothing to declare</p>"
         self.assertEqual(m.process(input)[0], input)
         self.assertEqual(m.process(input)[1], [])
+    
+    def test_process_rst_code_blocks(self):
+        m = CodeHighlightingMacro(self.logtest)
+        hl = m.process(self.sample_html)
+        self.assertTrue(hl[0].startswith('<p>Let me give you this'))
+        self.assertTrue(hl[0].find('<p>Then this one') > 0)
+        self.assertTrue(hl[0].find('<p>Then this other one') > 0)
+        self.assertTrue(hl[0].find('<div class="highlight"><pre') > 0)
+        self.assertEquals(hl[1][0], u'has_code')
 
 
 class EmbedImagesMacroTest(BaseTestCase):
