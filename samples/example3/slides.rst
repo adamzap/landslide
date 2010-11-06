@@ -52,14 +52,7 @@ http://docutils.sf.net/
 Some code now
 -------------
 
-Let me give you this snippet::
-
-    !python
-    def foo():
-        "just a test"
-        print bar
-
-Then this one, a more ReSTful way (haha, nerd joke spotted)::
+Let me give you this snippet:
 
 .. sourcecode:: python
 
@@ -67,10 +60,19 @@ Then this one, a more ReSTful way (haha, nerd joke spotted)::
         "just a test"
         print bar
 
-Or as an alternative::
+Then this one, a more ReSTful way (haha, nerd joke spotted) using the ``sourcecode`` directive:
+
+.. sourcecode:: python
+
+    def bar():
+        """pretty cool"""
+        print baz
+
+
+Then this other one with the ``code-block`` directive:
 
 .. code-block:: python
 
-    def foo():
-        "just a test"
-        print bar
+    def batman():
+        "foobar"
+        return robin
