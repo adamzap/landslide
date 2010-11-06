@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+#
 #  Copyright 2010 Adam Zapletal
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,8 @@
 #  limitations under the License.
 
 from docutils import core, io
+
+import sourcecode_directive
 
 
 def html_parts(input_string, source_path=None, destination_path=None,

@@ -59,12 +59,11 @@ Let me give you this snippet::
         "just a test"
         print bar
 
-Then this one::
+Then this one, the ReST way::
 
-    !python
+.. sourcecode:: python
     def bar():
         print baz
-
 
 Then this other one::
 
