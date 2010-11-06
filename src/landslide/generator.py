@@ -244,7 +244,7 @@ class Generator(object):
         """
         vars = {'header': None, 'content': None}
 
-        find = re.search(r'^\s?(<h(\d?)>(.+?)</h\d>)\s?(.+)?', slide_src,
+        find = re.search(r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
         if not find:
             header = level = title = None
