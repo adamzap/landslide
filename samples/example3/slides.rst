@@ -62,6 +62,7 @@ Let me give you this snippet::
 Then this one, a more ReSTful way (haha, nerd joke spotted)::
 
 .. sourcecode:: python
+
     def foo():
         "just a test"
         print bar
@@ -69,6 +70,7 @@ Then this one, a more ReSTful way (haha, nerd joke spotted)::
 Or as an alternative::
 
 .. code-block:: python
+
     def foo():
         "just a test"
         print bar
