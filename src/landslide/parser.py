@@ -53,16 +53,16 @@ class Parser(object):
                 from rst import html_parts, html_body
             except ImportError:
                 raise RuntimeError(u"Looks like docutils are not installed")
-
             html = html_body(text, input_encoding=self.encoding)
-            html = re.sub(r'<p class="sys.+\n.+ion\.', r'', html,
-                          re.DOTALL | re.UNICODE) # Pretty hackish
-            html = re.sub(r'<h1 class="title">', r'<h1>', html,
+            html = re.sub(r'<div.*?>', r'', html, re.UNICODE)
+            html = re.sub(r'</div>', r'', html, re.UNICODE)
+            html = re.sub(r'<p class="system-message-\w+">.*?</p>', r'', html, re.UNICODE)
+            html = re.sub(r'Document or section may not begin with a transition\.', r'', html, re.UNICODE)
+            html = re.sub(r'<h(\d+?).*?>', r'<h\1>', html,
                           re.DOTALL | re.UNICODE)
-            html = re.sub(r'<hr class=".*?" />\n', r'<hr />\n', html,
+            html = re.sub(r'<hr.*?>\n', r'<hr />\n', html,
                           re.DOTALL | re.UNICODE)
-
-            return html
+            return html.strip()
         else:
             raise NotImplementedError(u"Unsupported format %s, cannot parse"
                                       % self.format)
