@@ -11,6 +11,7 @@ function main() {
   var spaces = /\s+/, a1 = [""];
   var tocOpened = false;
   var helpOpened = false;
+  var isExpose = false;
 
   var str2array = function(s) {
     if (typeof s == "string" || s instanceof String) {

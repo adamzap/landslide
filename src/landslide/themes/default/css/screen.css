@@ -57,6 +57,46 @@ div.slide {
   -webkit-border-bottom-left-radius: 20px;
 }
 
+/* Expose */
+
+body.expose .slides {
+  overflow: auto;
+}
+
+body.expose .slide {
+  position: relative;
+  display: block;
+  float: left;
+  left: 0;
+  top: 0;
+  width: 300px;
+  height: 233px;
+  margin: 10px;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+}
+
+body.expose .slide footer {
+  display: none;
+}
+
+body.expose .slide .inner {
+  -moz-transform: scale(0.33);
+  -webkit-transform: scale(0.33);
+  -o-transform: scale(0.33);
+}
+
+body.expose .slide.far-past,
+body.expose .slide.past,
+body.expose .slide.current,
+body.expose .slide.future,
+body.expose .slide.far-future {
+  margin-left: 0;
+}
+
+/* Slide styles */
+
 div.slide p {
   font-size: 20px;
 }
