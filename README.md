@@ -115,6 +115,7 @@ Formatting
 
 ### Markdown
 
+- Your Markdown source files must be suffixed by `.md`, `.markdn`, `.mdown` or `.markdown`
 - To create a title slide, render a single `h1` element (eg. `# My Title`)
 - Separate your slides with a horizontal rule (`---` in markdown) except at the end of md files
 - Your other slides should have a heading that renders to an `h1` element
@@ -122,6 +123,7 @@ Formatting
 
 ### ReStructuredText
 
+- Your ReST source files must be suffixed by `.rst` or `.rest` (**`.txt` is not supported**)
 - Use headings for slide titles
 - Separate your slides using an horizontal rule (`----` in RST) except at the end of RST files
 
@@ -130,7 +132,6 @@ Formatting
 Rendering
 =========
 
-- Put your markdown or rst content in a file, eg `slides.md` or `slides.rst`
 - Run `landslide slides.md` or `landslide slides.rst`
 - Enjoy your newly generated `presentation.html`
 
@@ -148,10 +149,14 @@ Or get it as a PDF document, at least if PrinceXML is installed and available on
 Viewing
 =======
 
+- Press `t` to toggle display of help
 - Press `left arrow` and `right arrow` to navigate
 - Press `t` to toggle a table of contents for your presentation. Slide titles are links
+- Press `ESC` to display the presentation overview (Exposé)
 - Press `n` to toggle slide number visibility
+- Press `S` to toggle display of link to the source file for each slide
 - Press '2' to toggle notes in your slides (specify with the .notes macro)
+- Press '3' to toggle pseudo-3D display (experimental)
 - Browser zooming is supported
 
 ---
@@ -239,11 +244,12 @@ You can register your own macros by creating `landslide.macro.Macro` derived cla
 
     !python
     import landslide
-    class MyMacro(Macro):
+    
+    class MyMacro(landslide.Macro):
       def process(self, content, source=None):
         return content + '<p>plop</p>', ['plopped_slide']
     
-    g = generator.Generator(source='toto.md')
+    g = landslide.generator.Generator(source='toto.md')
     g.register_macro(MyMacro)
     print g.render()
 
