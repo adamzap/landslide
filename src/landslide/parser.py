@@ -23,9 +23,9 @@ SUPPORTED_FORMATS = {
 
 
 class Parser(object):
-    """This class generates the HTML code depending on which syntax is used in 
+    """This class generates the HTML code depending on which syntax is used in
     the souce document.
-    
+
     The Parser currently supports both Markdown and restructuredText syntaxes.
     """
     def __init__(self, extension, encoding='utf8'):
@@ -62,6 +62,7 @@ class Parser(object):
                           re.DOTALL | re.UNICODE)
             html = re.sub(r'<hr.*?>\n', r'<hr />\n', html,
                           re.DOTALL | re.UNICODE)
+
             return html.strip()
         else:
             raise NotImplementedError(u"Unsupported format %s, cannot parse"
