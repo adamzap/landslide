@@ -83,6 +83,13 @@ body.expose div.slide {
   -webkit-transform-origin: 0 0;
   -o-transform: scale(.33, .33);
   -o-transform-origin: 0 0;
+  cursor: pointer;
+}
+
+body.expose div.slide:hover {
+  background: -webkit-gradient(linear, left bottom, left top, from(#bdd), to(#fff));
+  background-color: #eee;
+  background: -moz-linear-gradient(bottom, #bdd, #fff);
 }
 
 body.expose .slide-wrapper {

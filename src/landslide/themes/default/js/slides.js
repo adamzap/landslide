@@ -289,6 +289,21 @@ function main() {
     }
   };
 
+  var addSlideClickListeners = function() {
+    for (var i=0; i < slides.length; i++) {
+      var slide = slides.item(i);
+      slide.num = i + 1;
+      slide.addEventListener('click', function(e) {
+        if (overviewActive) {
+          currentSlideNo = this.num;
+          toggleOverview();
+          updateSlideClasses();
+        }
+        return false;
+      }, true);
+    }
+  };
+
   var addTouchListeners = function() {
     document.addEventListener('touchstart', function(e) {
       touchStartX = e.touches[0].pageX;
@@ -343,5 +358,7 @@ function main() {
     addTouchListeners();
 
     addTocLinksListeners();
+
+    addSlideClickListeners();
   })();
 };
