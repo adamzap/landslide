@@ -111,11 +111,11 @@ body.expose .slide.current {
   background-color: #eee;
   background: -moz-linear-gradient(bottom, #ddb, #fff);
   border: 16px solid #fff;
-  -moz-transform: scale(.32, .32);
+  -moz-transform: scale(.315, .315);
   -moz-transform-origin: 0 0;
-  -webkit-transform: scale(.32, .32);
+  -webkit-transform: scale(.315, .315);
   -webkit-transform-origin: 0 0;
-  -o-transform: scale(.32, .32);
+  -o-transform: scale(.315, .315);
   -o-transform-origin: 0 0;
 }
 
