@@ -11,7 +11,7 @@ function main() {
   var spaces = /\s+/, a1 = [""];
   var tocOpened = false;
   var helpOpened = false;
-  var isExpose = false;
+  var overviewActive = false;
 
   var str2array = function(s) {
     if (typeof s == "string" || s instanceof String) {
@@ -165,19 +165,26 @@ function main() {
     }
 
     var toc = document.getElementById('toc');
-    
+
     if (toc) {
-      toc.style.marginLeft = tocOpened ? '-400px' : '0px';
+      toc.style.marginLeft = tocOpened ? '-' + toc.clientWidth + 'px' : '0px';
       tocOpened = !tocOpened;
     }
+
+    updateOverview();
   };
 
   var showHelp = function() {
+    if (tocOpened) {
+        showToc();
+    }
+
     var help = document.getElementById('help');
 
-    help.style.marginLeft = helpOpened ? '-400px' : '0px';
-
-    helpOpened = !helpOpened;
+    if (help) {
+      help.style.marginLeft = helpOpened ? '-' + help.clientWidth + 'px' : '0px';
+      helpOpened = !helpOpened;
+    }
   };
 
   var switch3D = function() {
@@ -190,8 +197,45 @@ function main() {
     }
   };
 
+  var toggleOverview = function() {
+    var action = overviewActive ? removeClass : addClass;
+    action(document.body, 'expose');
+    overviewActive = !overviewActive;
+    updateOverview();
+  };
+
+  var updateOverview = function() {
+    try {
+      var presentation = document.getElementsByClassName('presentation')[0];
+    } catch (e) {
+      return;
+    }
+
+    var toc = document.getElementById('toc');
+
+    if (!toc) {
+      return;
+    }
+
+    if (!tocOpened || !overviewActive) {
+      presentation.style.marginLeft = '0px';
+      presentation.style.width = '100%';
+    } else {
+      presentation.style.marginLeft = toc.clientWidth + 'px';
+      presentation.style.width = (presentation.clientWidth - toc.clientWidth) + 'px';
+    }
+  };
+
   var handleBodyKeyDown = function(event) {
     switch (event.keyCode) {
+      case 13: // Enter
+        if (overviewActive) {
+          toggleOverview();
+        }
+        break;
+      case 27: // ESC
+        toggleOverview();
+        break;
       case 37: // left arrow
         prevSlide();
         break;

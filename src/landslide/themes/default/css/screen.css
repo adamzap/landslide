@@ -29,14 +29,15 @@ div.slides {
 }
 
 div.slide {
-  display: none;
+  display: inline;
   position: absolute;
   overflow: hidden;
   width: 900px;
   height: 700px;
+  margin-top: -350px;
+  margin-left: -400px;
   left: 50%;
   top: 50%;
-  margin-top: -350px;
   background: -webkit-gradient(linear, left bottom, left top, from(#bbd), to(#fff));
   background-color: #eee;
   background: -moz-linear-gradient(bottom, #bbd, #fff);
@@ -60,39 +61,62 @@ div.slide {
 /* Expose */
 
 body.expose .slides {
+  float: left;
+  margin: 0;
+  position: relative;
   overflow: auto;
 }
 
-body.expose .slide {
-  position: relative;
+body.expose div.slide {
   display: block;
   float: left;
-  left: 0;
-  top: 0;
-  width: 300px;
-  height: 233px;
-  margin: 10px;
+  position: relative;
+  left: auto !important;
+  top: auto !important;
+  margin: 10px !important;
   -webkit-transition: none;
   -moz-transition: none;
-  -o-transition: none;
+  -o-transition: none;  
+  -moz-transform: scale(.33, .33);
+  -moz-transform-origin: 0 0;
+  -webkit-transform: scale(.33, .33);
+  -webkit-transform-origin: 0 0;
+  -o-transform: scale(.33, .33);
+  -o-transform-origin: 0 0;
+}
+
+body.expose .slide-wrapper {
+  float: left;
+  position: relative;
+  margin: .5%;
+  width: 300px;
+  height: 233px;
 }
 
 body.expose .slide footer {
-  display: none;
 }
 
 body.expose .slide .inner {
-  -moz-transform: scale(0.33);
-  -webkit-transform: scale(0.33);
-  -o-transform: scale(0.33);
 }
 
 body.expose .slide.far-past,
 body.expose .slide.past,
-body.expose .slide.current,
 body.expose .slide.future,
 body.expose .slide.far-future {
   margin-left: 0;
+}
+
+body.expose .slide.current {
+  background: -webkit-gradient(linear, left bottom, left top, from(#ddb), to(#fff));
+  background-color: #eee;
+  background: -moz-linear-gradient(bottom, #ddb, #fff);
+  border: 16px solid #fff;
+  -moz-transform: scale(.32, .32);
+  -moz-transform-origin: 0 0;
+  -webkit-transform: scale(.32, .32);
+  -webkit-transform-origin: 0 0;
+  -o-transform: scale(.32, .32);
+  -o-transform-origin: 0 0;
 }
 
 /* Slide styles */
