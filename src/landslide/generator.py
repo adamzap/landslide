@@ -170,7 +170,9 @@ class Generator(object):
                 slides.extend(self.fetch_contents(entry))
         elif os.path.isdir(source):
             self.log(u"Entering %s" % source)
-            for entry in os.listdir(source):
+            entries = os.listdir(source)
+            entries.sort()
+            for entry in entries:
                 slides.extend(self.fetch_contents(os.path.join(source, entry)))
         else:
             try:
