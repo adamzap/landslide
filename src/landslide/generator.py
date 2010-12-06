@@ -54,6 +54,7 @@ class Generator(object):
             FixImagePathsMacro,
             FxMacro,
             NotesMacro,
+            QRMacro,
         ]
         for macro in default_macros:
             self.register_macro(macro)
