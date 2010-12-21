@@ -216,7 +216,7 @@ function main() {
     if (!toc) {
       return;
     }
-
+    
     if (!tocOpened || !overviewActive) {
       presentation.style.marginLeft = '0px';
       presentation.style.width = '100%';

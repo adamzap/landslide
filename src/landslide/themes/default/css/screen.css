@@ -15,6 +15,10 @@ div.presentation {
   background: inherit;
 }
 
+div.presentation > h1 {
+  display: none;
+}
+
 div.slides {
   width: 100%;
   height: 100%;
@@ -60,11 +64,11 @@ div.slide {
 
 /* Expose */
 
-body.expose .slides {
+body.expose div.slides {
   float: left;
-  margin: 0;
   position: relative;
   overflow: auto;
+  margin-bottom: 10px;
 }
 
 body.expose div.slide {
@@ -235,6 +239,7 @@ li {
 }
 
 .sidebar {
+  clear: both;
   background: -webkit-gradient(linear, top right, bottom right, from(#dde), to(#fff));
   -webkit-transition: margin 0.25s ease-in-out;
   background-color: #eee;
