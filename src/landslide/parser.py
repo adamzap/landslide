@@ -56,8 +56,10 @@ class Parser(object):
             html = html_body(text, input_encoding=self.encoding)
             html = re.sub(r'<div.*?>', r'', html, re.UNICODE)
             html = re.sub(r'</div>', r'', html, re.UNICODE)
-            html = re.sub(r'<p class="system-message-\w+">.*?</p>', r'', html, re.UNICODE)
-            html = re.sub(r'Document or section may not begin with a transition\.', r'', html, re.UNICODE)
+            html = re.sub(r'<p class="system-message-\w+">.*?</p>', r'', html, 
+                          re.UNICODE)
+            html = re.sub(r'Document or section may not begin with a transition\.', 
+                          r'', html, re.UNICODE)
             html = re.sub(r'<h(\d+?).*?>', r'<h\1>', html,
                           re.DOTALL | re.UNICODE)
             html = re.sub(r'<hr.*?>\n', r'<hr />\n', html,
