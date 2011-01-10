@@ -81,6 +81,8 @@ class Generator(object):
                     self.log(u"Using    configured theme %s" % theme)
                 if config.has_option('landslide', 'destination'):
                     destination_file = config.get('landslide', 'destination')
+                if config.has_option('landslide', 'embed'):
+                    embed = config.getboolean('landslide', 'embed')
             else:
                 self.source = source
         else:
