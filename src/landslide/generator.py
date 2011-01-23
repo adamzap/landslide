@@ -24,7 +24,7 @@ import sys
 import utils
 import ConfigParser
 
-from macro import *
+import macro
 from parser import Parser
 from subprocess import *
 
@@ -49,14 +49,10 @@ class Generator(object):
 
         # macros registering
         self.macros = []
-        default_macros = [
-            CodeHighlightingMacro,
-            EmbedImagesMacro,
-            FixImagePathsMacro,
-            FxMacro,
-            NotesMacro,
-            QRMacro,
-        ]
+        default_macros = (
+            getattr(macro, item) for item in dir(macro)
+            if re.match(r'.+Macro$', item)
+        )
         for macro in default_macros:
             self.register_macro(macro)
 
@@ -322,7 +318,7 @@ class Generator(object):
         """Registers a new macro"""
         import inspect
         if (not inspect.isclass(macro_class)
-            or not Macro in macro_class.__bases__):
+            or not macro.Macro in macro_class.__bases__):
             raise TypeError("A macro must inherit from landslide.macro.Macro")
         else:
             self.macros.append(macro_class)
