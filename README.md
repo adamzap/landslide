@@ -124,7 +124,9 @@ Alternatively, you can use `easy_install`:
 If you want to stay on the edge:
 
     $ git clone https://github.com/adamzap/landslide.git
-    $ python landslide/setup.py
+    $ cd landslide
+    $ python setup.py build
+    $ sudo python setup.py install
 
 ---
 
