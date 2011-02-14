@@ -110,6 +110,24 @@ Eventually:
 
 ---
 
+Installation
+============
+
+The easiest way to install Landlside is probably using `pip`:
+
+    $ pip install landslide
+
+Alternatively, you can use `easy_install`:
+
+    $ easy_install landslide
+
+If you want to stay on the edge:
+
+    $ git clone https://github.com/adamzap/landslide.git
+    $ python landslide/setup.py
+
+---
+
 Formatting
 ==========
 
