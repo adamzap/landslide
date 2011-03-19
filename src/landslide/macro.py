@@ -29,8 +29,8 @@ from pygments.formatters import HtmlFormatter
 
 class Macro(object):
     """Base class for Macros. A Macro aims to analyse, process and eventually
-    alter some provided HTML contents and to provide supplementary informations
-    to the slide context.
+       alter some provided HTML contents and to provide supplementary
+       informations to the slide context.
     """
     def __init__(self, logger=sys.stdout, embed=False):
         self.logger = logger
@@ -43,7 +43,7 @@ class Macro(object):
 
 class CodeHighlightingMacro(Macro):
     """This Macro performs syntax coloration in slide code blocks using
-    Pygments.
+       Pygments.
     """
     code_blocks_re = re.compile(
         r'(<pre.+?>(<code>)?\s?!(\w+?)\n(.*?)(</code>)?</pre>)',
@@ -82,7 +82,7 @@ class CodeHighlightingMacro(Macro):
 
 class EmbedImagesMacro(Macro):
     """This Macro extracts images url and embed them using the base64
-    algorithm.
+       algorithm.
     """
     def process(self, content, source=None):
         classes = []
@@ -149,7 +149,7 @@ class EmbedImagesMacro(Macro):
 
 class FixImagePathsMacro(Macro):
     """This Macro replaces html image paths with fully qualified absolute
-    urls.
+       urls.
     """
     def process(self, content, source=None):
         classes = []
@@ -169,7 +169,7 @@ class FixImagePathsMacro(Macro):
 
 class FxMacro(Macro):
     """This Macro processes fx directives, ie adds specific css classes
-    named after what the parser found in them.
+       named after what the parser found in them.
     """
     def process(self, content, source=None):
         classes = []

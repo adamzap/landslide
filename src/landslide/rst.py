@@ -14,7 +14,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from docutils import core, io, nodes
+from docutils import core, nodes
 from docutils.parsers.rst import directives, Directive
 
 from pygments import highlight

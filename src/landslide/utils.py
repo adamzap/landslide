@@ -18,5 +18,5 @@ import os
 
 
 def get_abs_path_url(path):
-    """Returns the absolute url for a given local path"""
+    """Returns the absolute url for a given local path."""
     return "file://%s" % os.path.abspath(path)

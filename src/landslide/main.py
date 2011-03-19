@@ -25,7 +25,7 @@ except ImportError:
 from optparse import OptionParser
 
 def _parse_options():
-    """parses ``landslide`` args options"""
+    """Parses ``landslide`` args options."""
 
     parser = OptionParser(
         usage="%prog [options] input.md ...",

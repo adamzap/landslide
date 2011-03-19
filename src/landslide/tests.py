@@ -97,7 +97,7 @@ class GeneratorTest(BaseTestCase):
                                      {'title': None, 'level': 1},
                                     ])
         self.assertEqual(svars['head_title'], 'slide1')
-    
+
 
     def test_process_macros(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
@@ -151,7 +151,7 @@ echo $bar;
 </foo>
 </pre>
 <p>End here.</p>'''
-    
+
     def test_parsing_code_blocks(self):
         m = CodeHighlightingMacro(self.logtest)
         blocks = m.code_blocks_re.findall(self.sample_html)
@@ -180,7 +180,7 @@ echo $bar;
         input = "<p>Nothing to declare</p>"
         self.assertEqual(m.process(input)[0], input)
         self.assertEqual(m.process(input)[1], [])
-    
+
     def test_process_rst_code_blocks(self):
         m = CodeHighlightingMacro(self.logtest)
         hl = m.process(self.sample_html)
