@@ -52,8 +52,10 @@ class CodeHighlightingMacro(Macro):
 
     html_entity_re = re.compile('&(\w+?);')
 
-    def descape(self, string, defs=htmlentitydefs.entitydefs):
+    def descape(self, string, defs=None):
         """Decodes html entities from a given string"""
+        if defs is None:
+            defs = htmlentitydefs.entitydefs
         f = lambda m: defs[m.group(1)] if len(m.groups()) > 0 else m.group(0)
         return self.html_entity_re.sub(f, string)
 
