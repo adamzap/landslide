@@ -24,6 +24,7 @@ except ImportError:
 
 from optparse import OptionParser
 
+
 def _parse_options():
     """Parses ``landslide`` args options."""
 

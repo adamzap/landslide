@@ -220,7 +220,6 @@ class Generator(object):
         css['print'] = {'path_url': utils.get_abs_path_url(print_css),
                         'contents': open(print_css).read()}
 
-
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
         if (os.path.exists(screen_css)):
             css['screen'] = {'path_url': utils.get_abs_path_url(screen_css),
@@ -322,8 +321,8 @@ class Generator(object):
             if (inspect.isclass(m) and issubclass(m, macro_module.Macro)):
                 self.macros.append(m)
             else:
-                raise TypeError("Coundn't register macro. A macro must inherit from"
-                                " macro.Macro (%s provided)" % m.__class__)
+                raise TypeError("Coundn't register macro; a macro must inherit"
+                                " from macro.Macro")
 
     def render(self):
         """Returns generated html code."""

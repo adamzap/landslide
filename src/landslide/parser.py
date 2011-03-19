@@ -24,12 +24,24 @@ SUPPORTED_FORMATS = {
 
 class Parser(object):
     """This class generates the HTML code depending on which syntax is used in
-    the souce document.
+       the souce document.
 
-    The Parser currently supports both Markdown and restructuredText syntaxes.
+       The Parser currently supports both Markdown and restructuredText
+       syntaxes.
     """
+    RST_REPLACEMENTS = [
+            (r'<div.*?>', r'', re.UNICODE),
+            (r'</div>', r'', re.UNICODE),
+            (r'<p class="system-message-\w+">.*?</p>', r'', re.UNICODE),
+            (r'Document or section may not begin with a transition\.',
+             r'', re.UNICODE),
+            (r'<h(\d+?).*?>', r'<h\1>', re.DOTALL | re.UNICODE),
+            (r'<hr.*?>\n', r'<hr />\n', re.DOTALL | re.UNICODE),
+    ]
+
     def __init__(self, extension, encoding='utf8'):
-        """Configures this parser"""
+        """Configures this parser.
+        """
         self.encoding = encoding
         self.format = None
         for supp_format, supp_extensions in SUPPORTED_FORMATS.items():
@@ -40,7 +52,8 @@ class Parser(object):
             raise NotImplementedError(u"Unsupported format %s" % extension)
 
     def parse(self, text):
-        """Parses and renders a text as HTML regarding current format."""
+        """Parses and renders a text as HTML regarding current format.
+        """
         if self.format == 'markdown':
             try:
                 import markdown
@@ -50,21 +63,13 @@ class Parser(object):
             return markdown.markdown(text)
         elif self.format == 'restructuredtext':
             try:
-                from rst import html_parts, html_body
+                from rst import html_body
             except ImportError:
                 raise RuntimeError(u"Looks like docutils are not installed")
             html = html_body(text, input_encoding=self.encoding)
-            html = re.sub(r'<div.*?>', r'', html, re.UNICODE)
-            html = re.sub(r'</div>', r'', html, re.UNICODE)
-            html = re.sub(r'<p class="system-message-\w+">.*?</p>', r'', html,
-                          re.UNICODE)
-            html = re.sub(r'Document or section may not begin with a transition\.',
-                          r'', html, re.UNICODE)
-            html = re.sub(r'<h(\d+?).*?>', r'<h\1>', html,
-                          re.DOTALL | re.UNICODE)
-            html = re.sub(r'<hr.*?>\n', r'<hr />\n', html,
-                          re.DOTALL | re.UNICODE)
-
+            # RST generates pretty much markup to be removed in our case
+            for (pattern, replacement, mode) in self.RST_REPLACEMENTS:
+                html = re.sub(pattern, replacement, html, mode)
             return html.strip()
         else:
             raise NotImplementedError(u"Unsupported format %s, cannot parse"
