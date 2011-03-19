@@ -127,7 +127,7 @@ def run(input_file, options):
 
 def main():
     options, input_file = _parse_options()
-    
+
     if (options.debug):
         run(input_file, options)
     else:
