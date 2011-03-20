@@ -47,8 +47,7 @@ class CodeHighlightingMacro(Macro):
     """
     code_blocks_re = re.compile(
         r'(<pre.+?>(<code>)?\s?!(\w+?)\n(.*?)(</code>)?</pre>)',
-        re.UNICODE | re.MULTILINE | re.DOTALL
-    )
+        re.UNICODE | re.MULTILINE | re.DOTALL)
 
     html_entity_re = re.compile('&(\w+?);')
 
@@ -94,7 +93,7 @@ class EmbedImagesMacro(Macro):
                             re.DOTALL | re.UNICODE)
 
         if not images:
-            return content, []
+            return content, classes
 
         for image_url in images:
             if not image_url or image_url.startswith('data:'):

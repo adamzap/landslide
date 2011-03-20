@@ -11,7 +11,7 @@ Landslide requires Python_ v2.5 minimum and these dependencies installed:
 * The Jinja2_ template engine
 * Pygments_ for code syntax highlighting
 
-One of the syntax handlers above    :
+One of the syntax handlers above:
 
 * The Markdown_ python library if you intend to write your slides contents using the Markdown_ syntax
 * or the docutils_ package if you rather prefer using reStructuredText_.

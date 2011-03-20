@@ -33,16 +33,14 @@ def _parse_options():
         description="Generates an HTML5 or PDF "
                     "slideshow from Markdown or other formats",
         epilog="Note: PDF export requires the `prince` program: "
-               "http://princexml.com/"
-        )
+               "http://princexml.com/")
 
     parser.add_option(
         "-b", "--debug",
         action="store_true",
         dest="debug",
         help="Will display any exception trace to stdin",
-        default=False
-    )
+        default=False)
 
     parser.add_option(
         "-d", "--destination",
@@ -50,16 +48,14 @@ def _parse_options():
         help="The path to the to the destination file: .html or "
              ".pdf extensions allowed (default: presentation.html)",
         metavar="FILE",
-        default="presentation.html"
-    )
+        default="presentation.html")
 
     parser.add_option(
         "-e", "--encoding",
         dest="encoding",
         help="The encoding of your files (defaults to utf8)",
         metavar="ENCODING",
-        default="utf8"
-    )
+        default="utf8")
 
     parser.add_option(
         "-i", "--embed",
@@ -68,15 +64,13 @@ def _parse_options():
         help="Embed stylesheet and javascript contents, "
              "base64-encoded images in presentation to make a "
              "standalone document",
-        default=False
-    )
+        default=False)
 
     parser.add_option(
         "-t", "--theme",
         dest="theme",
         help="A theme name, or path to a landlside theme directory",
-        default='default'
-    )
+        default='default')
 
     parser.add_option(
         "-o", "--direct-ouput",
@@ -84,16 +78,14 @@ def _parse_options():
         dest="direct",
         help="Prints the generated HTML code to stdin; won't work "
              "with PDF export",
-        default=False
-    )
+        default=False)
 
     parser.add_option(
         "-q", "--quiet",
         action="store_false",
         dest="verbose",
         help="Won't write anything to stdin (silent mode)",
-        default=False
-    )
+        default=False)
 
     parser.add_option(
         "-v", "--verbose",
@@ -101,8 +93,7 @@ def _parse_options():
         dest="verbose",
         help="Write informational messages to stdin (enabled by "
         "default)",
-        default=True
-    )
+        default=True)
 
     (options, args) = parser.parse_args()
 

@@ -50,7 +50,7 @@ class Generator(object):
     def __init__(self, source, destination_file='presentation.html',
                  theme='default', direct=False, debug=False, verbose=True,
                  embed=False, encoding='utf8', logger=None):
-        """Configures this generator from its properties."""
+        """Configures the generator."""
         self.debug = debug
         self.direct = direct
         self.encoding = encoding
@@ -78,8 +78,8 @@ class Generator(object):
                     config.read(source)
                 except Exception, e:
                     raise RuntimeError(u"Invalid configuration file: %s" % e)
-                self.source = (config.get('landslide', 'source')
-                                     .replace('\r', '').split('\n'))
+                self.source = config.get('landslide', 'source')\
+                    .replace('\r', '').split('\n')
                 if config.has_option('landslide', 'theme'):
                     theme = config.get('landslide', 'theme')
                     self.log(u"Using    configured theme %s" % theme)

@@ -14,16 +14,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import macro
 import os
 import re
 import unittest
 import codecs
 
 from generator import Generator
-from macro import *
 from parser import Parser
-
-from pprint import pprint
 
 
 SAMPLES_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'samples')
@@ -77,18 +75,22 @@ class GeneratorTest(BaseTestCase):
         g = Generator(os.path.join(SAMPLES_DIR, 'example3', 'slides.rst'))
         g.execute()
         s = g.render()
-        self.assertTrue(s.find('<pre>')!=-1)
+        self.assertTrue(s.find('<pre>') != -1)
         self.assertEqual(len(re.findall('<pre><span', s)), 3)
 
     def test_inputencoding(self):
-        g = Generator(os.path.join(SAMPLES_DIR, 'example3', 'slides.koi8_r.rst'), encoding='koi8_r')
+        g = Generator(os.path.join(SAMPLES_DIR, 'example3',
+            'slides.koi8_r.rst'), encoding='koi8_r')
         content = g.render()
         # check that the string is utf_8
-        self.assertTrue(re.findall(u'русский',content, flags=re.UNICODE))
+        self.assertTrue(re.findall(u'русский', content,
+            flags=re.UNICODE))
         g.execute()
-        file_contents = codecs.open(g.destination_file, encoding='utf_8').read()
+        file_contents = codecs.open(g.destination_file, encoding='utf_8')\
+            .read()
         # check that the file was properly encoded in utf_8
-        self.assertTrue(re.findall(u'русский',file_contents, flags=re.UNICODE))
+        self.assertTrue(re.findall(u'русский', file_contents,
+            flags=re.UNICODE))
 
     def test_get_template_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
@@ -97,7 +99,6 @@ class GeneratorTest(BaseTestCase):
                                      {'title': None, 'level': 1},
                                     ])
         self.assertEqual(svars['head_title'], 'slide1')
-
 
     def test_process_macros(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
@@ -115,7 +116,7 @@ class GeneratorTest(BaseTestCase):
     def test_register_macro(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
 
-        class SampleMacro(Macro):
+        class SampleMacro(macro.Macro):
             pass
 
         g.register_macro(SampleMacro)
@@ -153,7 +154,7 @@ echo $bar;
 <p>End here.</p>'''
 
     def test_parsing_code_blocks(self):
-        m = CodeHighlightingMacro(self.logtest)
+        m = macro.CodeHighlightingMacro(self.logtest)
         blocks = m.code_blocks_re.findall(self.sample_html)
         self.assertEquals(len(blocks), 3)
         self.assertEquals(blocks[0][2], 'python')
@@ -164,7 +165,7 @@ echo $bar;
         self.assertTrue(blocks[2][3].startswith('<foo>'))
 
     def test_descape(self):
-        m = CodeHighlightingMacro(self.logtest)
+        m = macro.CodeHighlightingMacro(self.logtest)
         self.assertEqual(m.descape('foo'), 'foo')
         self.assertEqual(m.descape('&gt;'), '>')
         self.assertEqual(m.descape('&lt;'), '<')
@@ -173,7 +174,7 @@ echo $bar;
         self.assertEqual(m.descape('&lt;spam&amp;eggs&gt;'), '<spam&eggs>')
 
     def test_process(self):
-        m = CodeHighlightingMacro(self.logtest)
+        m = macro.CodeHighlightingMacro(self.logtest)
         hl = m.process("<pre><code>!php\n$foo;</code></pre>")
         self.assertTrue(hl[0].startswith('<div class="highlight"><pre'))
         self.assertEquals(hl[1][0], u'has_code')
@@ -182,7 +183,7 @@ echo $bar;
         self.assertEqual(m.process(input)[1], [])
 
     def test_process_rst_code_blocks(self):
-        m = CodeHighlightingMacro(self.logtest)
+        m = macro.CodeHighlightingMacro(self.logtest)
         hl = m.process(self.sample_html)
         self.assertTrue(hl[0].startswith('<p>Let me give you this'))
         self.assertTrue(hl[0].find('<p>Then this one') > 0)
@@ -194,7 +195,7 @@ echo $bar;
 class EmbedImagesMacroTest(BaseTestCase):
     def test_process(self):
         base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
-        m = EmbedImagesMacro(self.logtest, True)
+        m = macro.EmbedImagesMacro(self.logtest, True)
         self.assertRaises(WarningMessage, m.process,
                           '<img src="toto.jpg"/>', '.')
         content, classes = m.process('<img src="monkey.jpg"/>', base_dir)
@@ -205,7 +206,7 @@ class EmbedImagesMacroTest(BaseTestCase):
 class FixImagePathsMacroTest(BaseTestCase):
     def test_process(self):
         base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
-        m = FixImagePathsMacro(self.logtest, False)
+        m = macro.FixImagePathsMacro(self.logtest, False)
         content, classes = m.process('<img src="monkey.jpg"/>', base_dir)
         self.assertTrue(re.match(r'<img src="file://.*?/monkey.jpg" />',
                                  content))
@@ -213,7 +214,7 @@ class FixImagePathsMacroTest(BaseTestCase):
 
 class FxMacroTest(BaseTestCase):
     def test_process(self):
-        m = FxMacro(self.logtest)
+        m = macro.FxMacro(self.logtest)
         content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
         r = m.process(content)
         self.assertEqual(r[0], '<p>foo</p>\n<p>baz</p>')
@@ -223,7 +224,7 @@ class FxMacroTest(BaseTestCase):
 
 class NotesMacroTest(BaseTestCase):
     def test_process(self):
-        m = NotesMacro(self.logtest)
+        m = macro.NotesMacro(self.logtest)
         r = m.process('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
         self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
         self.assertEqual(r[1], [u'has_notes'])
