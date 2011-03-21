@@ -100,7 +100,6 @@ header:not(:only-child) {
   font-weight: normal;
   font-size: 50px;
   letter-spacing: -.05em;
-  color: white;
   color: black;
   text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
   position: absolute;
