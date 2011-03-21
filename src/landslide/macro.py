@@ -138,7 +138,7 @@ class EmbedImagesMacro(Macro):
 
             encoded_url = u"data:%s;base64,%s" % (mime_type, encoded_image)
 
-            content = content.replace(image_url, encoded_url, 1)
+            content = content.replace(u"src=\""+image_url, u"src=\""+encoded_url, 1)
 
             self.logger(u"Embedded image %s" % image_real_path, 'notice')
 
