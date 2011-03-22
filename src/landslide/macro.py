@@ -193,3 +193,18 @@ class NotesMacro(Macro):
             classes.append(u'has_notes')
 
         return new_content, classes
+
+
+class QRMacro(Macro):
+    """This Macro generates a QR Code with Google Chart API."""
+    def process(self, content, source=None):
+        classes = []
+
+        new_content = re.sub(r'<p>\.qr:\s?(\d*?)\|(.*?)</p>',
+                             r'<p class="qr"><img src="http://chart.apis.google.com/chart?chs=\1x\1&cht=qr&chl=\2&chf=bg,s,00000000&choe=UTF-8" alt="QR Code" /></p>',
+                             content)
+
+        if content != new_content:
+            classes.append(u'has_qr')
+
+        return new_content, classes

@@ -3,6 +3,16 @@ Landslide
 
 ---
 
+Download it!
+---
+Download this presentation from:
+
+.qr: 450|http://example.com
+
+http://example.com
+
+---
+
 Landslide
 ---------
 
