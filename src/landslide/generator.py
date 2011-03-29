@@ -78,6 +78,8 @@ class Generator(object):
                     self.log(u"Using    configured theme %s" % theme)
                 if config.has_option('landslide', 'destination'):
                     destination_file = config.get('landslide', 'destination')
+                if config.has_option('landslide', 'embed'):
+                    embed = config.getboolean('landslide', 'embed')
             else:
                 self.source = source
         else:
@@ -167,7 +169,9 @@ class Generator(object):
                 slides.extend(self.fetch_contents(entry))
         elif os.path.isdir(source):
             self.log(u"Entering %s" % source)
-            for entry in os.listdir(source):
+            entries = os.listdir(source)
+            entries.sort()
+            for entry in entries:
                 slides.extend(self.fetch_contents(os.path.join(source, entry)))
         else:
             try:

@@ -1,3 +1,23 @@
+h1, h2, h3, h4, h5, h6, p, ul, li {
+    font-family: sans-serif !important;
+}
+
+p, ul, li {
+    color: #555753 !important;
+    font-size: 120% !important;
+}
+
+header h1, header h2, header h3, header h4, header h5, header h6 {
+    color: #204a87 !important;
+    font-weight: bold !important;
+}
+
+section h1, section h2, section h3, section h4, section h5, section h6 {
+    color: #3465a4 !important;
+}
+
+img { display: block; margin: auto; }
+
 body {
   font: 14px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
   background: #778;
@@ -12,7 +32,9 @@ div.presentation {
   display: table-cell;
   vertical-align: middle;
   height: 100%;
-  background: inherit;
+  background: -webkit-gradient(linear, left bottom, left top, from(#2e3436), to(#555753));
+  background-color: #555753;
+  background: -moz-linear-gradient(bottom, #555753, #2e3436);
 }
 
 div.slides {
@@ -29,6 +51,7 @@ div.slides {
 }
 
 div.slide {
+  background: url('background.png') bottom center no-repeat;
   display: none;
   position: absolute;
   overflow: hidden;
@@ -37,9 +60,7 @@ div.slide {
   left: 50%;
   top: 50%;
   margin-top: -350px;
-  background: -webkit-gradient(linear, left bottom, left top, from(#bbd), to(#fff));
-  background-color: #eee;
-  background: -moz-linear-gradient(bottom, #bbd, #fff);
+  background-color: #fff;
   -webkit-transition: margin 0.25s ease-in-out;
   -moz-transition: margin 0.25s ease-in-out;
   -o-transition: margin 0.25s ease-in-out;
@@ -100,6 +121,7 @@ header:not(:only-child) {
   font-weight: normal;
   font-size: 50px;
   letter-spacing: -.05em;
+  color: white;
   color: black;
   text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
   position: absolute;
