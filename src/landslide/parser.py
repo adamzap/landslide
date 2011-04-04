@@ -28,7 +28,7 @@ class Parser(object):
     
     The Parser currently supports both Markdown and restructuredText syntaxes.
     """
-    def __init__(self, extension, encoding='utf8'):
+    def __init__(self, extension, encoding='utf8', extensions=''):
         """Configures this parser"""
         self.encoding = encoding
         self.format = None
@@ -39,6 +39,8 @@ class Parser(object):
         if not self.format:
             raise NotImplementedError(u"Unsupported format %s" % extension)
 
+        self.extensions = filter(None, (value.strip() for value in extensions.split(',')))
+
     def parse(self, text):
         """Parses and renders a text as HTML regarding current format."""
         if self.format == 'markdown':
@@ -47,7 +49,7 @@ class Parser(object):
             except ImportError:
                 raise RuntimeError(u"Looks like markdown is not installed")
 
-            return markdown.markdown(text)
+            return markdown.markdown(text, self.extensions)
         elif self.format == 'restructuredtext':
             try:
                 from rst import html_parts, html_body

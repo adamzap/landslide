@@ -37,13 +37,14 @@ TOC_MAX_LEVEL = 2
 class Generator(object):
     def __init__(self, source, destination_file='presentation.html',
                  theme='default', direct=False, debug=False, verbose=True,
-                 embed=False, encoding='utf8', logger=None):
+                 embed=False, encoding='utf8', logger=None, extensions=''):
         """Configures this generator from its properties."""
         self.debug = debug
         self.direct = direct
         self.encoding = encoding
         self.logger = None
         self.num_slides = 0
+        self.extensions = extensions
         self.__toc = []
 
         # macros registering
@@ -179,7 +180,7 @@ class Generator(object):
                 slides.extend(self.fetch_contents(os.path.join(source, entry)))
         else:
             try:
-                parser = Parser(os.path.splitext(source)[1], self.encoding)
+                parser = Parser(os.path.splitext(source)[1], self.encoding, self.extensions)
             except NotImplementedError:
                 return slides
 
