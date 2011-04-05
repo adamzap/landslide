@@ -39,7 +39,7 @@ class Parser(object):
             (r'<hr.*?>\n', r'<hr />\n', re.DOTALL | re.UNICODE),
     ]
 
-    def __init__(self, extension, encoding='utf8'):
+    def __init__(self, extension, encoding='utf8', md_extensions=''):
         """Configures this parser.
         """
         self.encoding = encoding
@@ -51,7 +51,7 @@ class Parser(object):
         if not self.format:
             raise NotImplementedError(u"Unsupported format %s" % extension)
 
-        self.extensions = filter(None, (value.strip() for value in extensions.split(',')))
+        self.md_extensions = filter(None, (value.strip() for value in md_extensions.split(',')))
 
     def parse(self, text):
         """Parses and renders a text as HTML regarding current format.
@@ -62,7 +62,7 @@ class Parser(object):
             except ImportError:
                 raise RuntimeError(u"Looks like markdown is not installed")
 
-            return markdown.markdown(text, self.extensions)
+            return markdown.markdown(text, self.md_extensions)
         elif self.format == 'restructuredtext':
             try:
                 from rst import html_body
