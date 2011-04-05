@@ -16,17 +16,17 @@
 
 import os
 import re
-import glob
 import codecs
+import inspect
 import jinja2
 import tempfile
-import sys
 import utils
 import ConfigParser
 
-import macros
+from subprocess import Popen
+
+import macro as macro_module
 from parser import Parser
-from subprocess import *
 
 
 BASE_DIR = os.path.dirname(__file__)
@@ -35,10 +35,22 @@ TOC_MAX_LEVEL = 2
 
 
 class Generator(object):
+    """The Generator class takes and processes presentation source as a file, a
+       folder or a configuration file and provides methods to render them as a
+       presentation.
+    """
+    default_macros = [
+        macro_module.CodeHighlightingMacro,
+        macro_module.EmbedImagesMacro,
+        macro_module.FixImagePathsMacro,
+        macro_module.FxMacro,
+        macro_module.NotesMacro,
+    ]
+
     def __init__(self, source, destination_file='presentation.html',
                  theme='default', direct=False, debug=False, verbose=True,
                  embed=False, encoding='utf8', logger=None, extensions=''):
-        """Configures this generator from its properties."""
+        """Configures the generator."""
         self.debug = debug
         self.direct = direct
         self.encoding = encoding
@@ -49,12 +61,7 @@ class Generator(object):
 
         # macros registering
         self.macros = []
-        default_macros = (
-            getattr(macros, item) for item in dir(macros)
-            if re.match(r'.+Macro$', item)
-        )
-        for macro in default_macros:
-            self.register_macro(macro)
+        self.register_macro(*self.default_macros)
 
         if logger:
             if callable(logger):
@@ -72,8 +79,8 @@ class Generator(object):
                     config.read(source)
                 except Exception, e:
                     raise RuntimeError(u"Invalid configuration file: %s" % e)
-                self.source = (config.get('landslide', 'source')
-                                     .replace('\r', '').split('\n'))
+                self.source = config.get('landslide', 'source')\
+                    .replace('\r', '').split('\n')
                 if config.has_option('landslide', 'theme'):
                     theme = config.get('landslide', 'theme')
                     self.log(u"Using    configured theme %s" % theme)
@@ -125,12 +132,12 @@ class Generator(object):
             self.template_file = os.path.join(self.theme_dir, 'base.html')
 
     def add_toc_entry(self, title, level, slide_number):
-        """Adds a new entry to current presentation Table of Contents"""
+        """Adds a new entry to current presentation Table of Contents."""
         self.__toc.append({'title': title, 'number': slide_number,
                            'level': level})
 
     def get_toc(self):
-        """Smart getter for Table of Content list"""
+        """Smart getter for Table of Content list."""
         toc = []
         stack = [toc]
         for entry in self.__toc:
@@ -148,7 +155,7 @@ class Generator(object):
     toc = property(get_toc, set_toc)
 
     def execute(self):
-        """Execute this generator regarding its current configuration"""
+        """Execute this generator regarding its current configuration."""
         if self.direct:
             if self.file_type == 'pdf':
                 raise IOError(u"Direct output mode is not available for PDF "
@@ -161,7 +168,7 @@ class Generator(object):
 
     def fetch_contents(self, source):
         """Recursively fetches Markdown contents from a single file or
-        directory containing itself Markdown files
+           directory containing itself Markdown files.
         """
         slides = []
 
@@ -200,8 +207,8 @@ class Generator(object):
 
     def get_css(self):
         """Fetches and returns stylesheet file path or contents, for both print
-        and screen contexts, depending if we want a standalone presentation or
-        not
+           and screen contexts, depending if we want a standalone presentation
+           or not.
         """
         css = {}
 
@@ -216,7 +223,6 @@ class Generator(object):
         css['print'] = {'path_url': utils.get_abs_path_url(print_css),
                         'contents': open(print_css).read()}
 
-
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
         if (os.path.exists(screen_css)):
             css['screen'] = {'path_url': utils.get_abs_path_url(screen_css),
@@ -229,7 +235,7 @@ class Generator(object):
 
     def get_js(self):
         """Fetches and returns javascript file path or contents, depending if
-        we want a standalone presentation or not
+           we want a standalone presentation or not.
         """
         js_file = os.path.join(self.theme_dir, 'js', 'slides.js')
 
@@ -246,8 +252,6 @@ class Generator(object):
         """Computes a single slide template vars from its html source code.
            Also extracts slide informations for the table of contents.
         """
-        vars = {'header': None, 'content': None}
-
         find = re.search(r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
         if not find:
@@ -276,7 +280,7 @@ class Generator(object):
                     'source': source_dict}
 
     def get_template_vars(self, slides):
-        """Computes template vars from slides html source code"""
+        """Computes template vars from slides html source code."""
         try:
             head_title = slides[0]['title']
         except (IndexError, TypeError):
@@ -296,12 +300,12 @@ class Generator(object):
                 'css': self.get_css(), 'js': self.get_js()}
 
     def log(self, message, type='notice'):
-        """Log a message (eventually, override to do something more clever)"""
+        """Log a message (eventually, override to do something more clever)."""
         if self.verbose and self.logger:
             self.logger(message, type)
 
     def process_macros(self, content, source=None):
-        """Processed all macros"""
+        """Processed all macros."""
         classes = []
         for macro_class in self.macros:
             try:
@@ -314,24 +318,24 @@ class Generator(object):
                          % (macro, source, e))
         return content, classes
 
-    def register_macro(self, macro_class):
-        """Registers a new macro"""
-        import inspect
-        if (not inspect.isclass(macro_class)
-            or not macros.Macro in macro_class.__bases__):
-            raise TypeError("A macro must inherit from landslide.macro.Macro")
-        else:
-            self.macros.append(macro_class)
+    def register_macro(self, *macros):
+        """Registers macro classes passed a method arguments."""
+        for m in macros:
+            if (inspect.isclass(m) and issubclass(m, macro_module.Macro)):
+                self.macros.append(m)
+            else:
+                raise TypeError("Coundn't register macro; a macro must inherit"
+                                " from macro.Macro")
 
     def render(self):
-        """Returns generated html code"""
+        """Returns generated html code."""
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
         slides = self.fetch_contents(self.source)
         return template.render(self.get_template_vars(slides))
 
     def write(self):
-        """Writes generated presentation code into the destination file"""
+        """Writes generated presentation code into the destination file."""
         html = self.render()
 
         if self.file_type == 'pdf':
@@ -343,7 +347,7 @@ class Generator(object):
 
     def write_pdf(self, html):
         """Tries to write a PDF export from the command line using PrinceXML if
-        available
+           available.
         """
         try:
             f = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
@@ -357,7 +361,7 @@ class Generator(object):
         try:
             command = ["prince", f.name, self.destination_file]
 
-            process = Popen(command, stderr=dummy_fh).communicate()
+            Popen(command, stderr=dummy_fh).communicate()
         except Exception:
             raise EnvironmentError(u"Unable to generate PDF file using "
                                     "prince. Is it installed and available?")

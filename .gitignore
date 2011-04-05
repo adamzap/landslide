@@ -9,3 +9,5 @@ src/landslide.egg-info/
 dist/
 *.komodoproject
 .komodotools
+landslide.sublime-project
+docs/_build

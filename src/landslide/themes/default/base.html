@@ -54,25 +54,27 @@
     <div class="slides">
       {% for slide in slides %}
       <!-- slide source: {% if slide.source %}{{ slide.source.rel_path }}{% endif %} -->
-      <div class="slide{% if slide.classes %}{% for class in slide.classes %} {{ class }}{% endfor %}{% endif %}">
-        <div class="inner">
-          {% if slide.header %}
-          <header>{{ slide.header }}</header>
-          {% endif %}
-          {% if slide.content %}
-          <section>{{ slide.content }}</section>
-          {% endif %}
+      <div class="slide-wrapper">
+        <div class="slide{% if slide.classes %}{% for class in slide.classes %} {{ class }}{% endfor %}{% endif %}">
+          <div class="inner">
+            {% if slide.header %}
+            <header>{{ slide.header }}</header>
+            {% endif %}
+            {% if slide.content %}
+            <section>{{ slide.content }}</section>
+            {% endif %}
+          </div>
+          <footer>
+            {% if slide.source %}
+            <aside class="source">
+              Source: <a href="file://{{ slide.source.abs_path }}">{{ slide.source.rel_path }}</a>
+            </aside>
+            {% endif %}
+            <aside class="page_number">
+              {{ slide.number }}/{{ num_slides }}
+            </aside>
+          </footer>
         </div>
-        <footer>
-          {% if slide.source %}
-          <aside class="source">
-            Source: <a href="file://{{ slide.source.abs_path }}">{{ slide.source.rel_path }}</a>
-          </aside>
-          {% endif %}
-          <aside class="page_number">
-            {{ slide.number }}/{{ num_slides }}
-          </aside>
-        </footer>
       </div>
       {% endfor %}
     </div>
@@ -106,6 +108,10 @@
       <tr>
         <th>Table of Contents</th>
         <td>t</td>
+      </tr>
+      <tr>
+        <th>Exposé</th>
+        <td>ESC</td>
       </tr>
       <tr>
         <th>Source Files</th>

@@ -14,7 +14,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from docutils import core, io, nodes
+from docutils import core, nodes
 from docutils.parsers.rst import directives, Directive
 
 from pygments import highlight
@@ -42,7 +42,8 @@ class Pygments(Directive):
             # no lexer found - use the text one instead of an exception
             lexer = TextLexer()
         # take an arbitrary option if more than one is given
-        formatter = self.options and VARIANTS[self.options.keys()[0]] or DEFAULT
+        formatter = (self.options and VARIANTS[self.options.keys()[0]]
+                     or DEFAULT)
         parsed = highlight(u'\n'.join(self.content), lexer, formatter)
         return [nodes.raw('', parsed, format='html')]
 

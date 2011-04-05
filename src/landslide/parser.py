@@ -23,13 +23,25 @@ SUPPORTED_FORMATS = {
 
 
 class Parser(object):
-    """This class generates the HTML code depending on which syntax is used in 
-    the souce document.
-    
-    The Parser currently supports both Markdown and restructuredText syntaxes.
+    """This class generates the HTML code depending on which syntax is used in
+       the souce document.
+
+       The Parser currently supports both Markdown and restructuredText
+       syntaxes.
     """
-    def __init__(self, extension, encoding='utf8', extensions=''):
-        """Configures this parser"""
+    RST_REPLACEMENTS = [
+            (r'<div.*?>', r'', re.UNICODE),
+            (r'</div>', r'', re.UNICODE),
+            (r'<p class="system-message-\w+">.*?</p>', r'', re.UNICODE),
+            (r'Document or section may not begin with a transition\.',
+             r'', re.UNICODE),
+            (r'<h(\d+?).*?>', r'<h\1>', re.DOTALL | re.UNICODE),
+            (r'<hr.*?>\n', r'<hr />\n', re.DOTALL | re.UNICODE),
+    ]
+
+    def __init__(self, extension, encoding='utf8'):
+        """Configures this parser.
+        """
         self.encoding = encoding
         self.format = None
         for supp_format, supp_extensions in SUPPORTED_FORMATS.items():
@@ -42,7 +54,8 @@ class Parser(object):
         self.extensions = filter(None, (value.strip() for value in extensions.split(',')))
 
     def parse(self, text):
-        """Parses and renders a text as HTML regarding current format."""
+        """Parses and renders a text as HTML regarding current format.
+        """
         if self.format == 'markdown':
             try:
                 import markdown
@@ -52,19 +65,14 @@ class Parser(object):
             return markdown.markdown(text, self.extensions)
         elif self.format == 'restructuredtext':
             try:
-                from rst import html_parts, html_body
+                from rst import html_body
             except ImportError:
                 raise RuntimeError(u"Looks like docutils are not installed")
-
             html = html_body(text, input_encoding=self.encoding)
-            html = re.sub(r'<p class="sys.+\n.+ion\.', r'', html,
-                          re.DOTALL | re.UNICODE) # Pretty hackish
-            html = re.sub(r'<h1 class="title">', r'<h1>', html,
-                          re.DOTALL | re.UNICODE)
-            html = re.sub(r'<hr class=".*?" />\n', r'<hr />\n', html,
-                          re.DOTALL | re.UNICODE)
-
-            return html
+            # RST generates pretty much markup to be removed in our case
+            for (pattern, replacement, mode) in self.RST_REPLACEMENTS:
+                html = re.sub(pattern, replacement, html, mode)
+            return html.strip()
         else:
             raise NotImplementedError(u"Unsupported format %s, cannot parse"
                                       % self.format)

@@ -29,8 +29,8 @@ from pygments.formatters import HtmlFormatter
 
 class Macro(object):
     """Base class for Macros. A Macro aims to analyse, process and eventually
-    alter some provided HTML contents and to provide supplementary informations
-    to the slide context.
+       alter some provided HTML contents and to provide supplementary
+       informations to the slide context.
     """
     def __init__(self, logger=sys.stdout, embed=False):
         self.logger = logger
@@ -43,17 +43,18 @@ class Macro(object):
 
 class CodeHighlightingMacro(Macro):
     """This Macro performs syntax coloration in slide code blocks using
-    Pygments.
+       Pygments.
     """
     code_blocks_re = re.compile(
         r'(<pre.+?>(<code>)?\s?!(\w+?)\n(.*?)(</code>)?</pre>)',
-        re.UNICODE | re.MULTILINE | re.DOTALL
-    )
+        re.UNICODE | re.MULTILINE | re.DOTALL)
 
     html_entity_re = re.compile('&(\w+?);')
 
-    def descape(self, string, defs=htmlentitydefs.entitydefs):
+    def descape(self, string, defs=None):
         """Decodes html entities from a given string"""
+        if defs is None:
+            defs = htmlentitydefs.entitydefs
         f = lambda m: defs[m.group(1)] if len(m.groups()) > 0 else m.group(0)
         return self.html_entity_re.sub(f, string)
 
@@ -80,7 +81,7 @@ class CodeHighlightingMacro(Macro):
 
 class EmbedImagesMacro(Macro):
     """This Macro extracts images url and embed them using the base64
-    algorithm.
+       algorithm.
     """
     def process(self, content, source=None):
         classes = []
@@ -92,7 +93,7 @@ class EmbedImagesMacro(Macro):
                             re.DOTALL | re.UNICODE)
 
         if not images:
-            return content, []
+            return content, classes
 
         for image_url in images:
             if not image_url or image_url.startswith('data:'):
@@ -147,7 +148,7 @@ class EmbedImagesMacro(Macro):
 
 class FixImagePathsMacro(Macro):
     """This Macro replaces html image paths with fully qualified absolute
-    urls.
+       urls.
     """
     def process(self, content, source=None):
         classes = []
@@ -167,7 +168,7 @@ class FixImagePathsMacro(Macro):
 
 class FxMacro(Macro):
     """This Macro processes fx directives, ie adds specific css classes
-    named after what the parser found in them.
+       named after what the parser found in them.
     """
     def process(self, content, source=None):
         classes = []
