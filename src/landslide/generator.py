@@ -45,6 +45,7 @@ class Generator(object):
         macro_module.FixImagePathsMacro,
         macro_module.FxMacro,
         macro_module.NotesMacro,
+        macro_module.QRMacro,
     ]
 
     def __init__(self, source, destination_file='presentation.html',

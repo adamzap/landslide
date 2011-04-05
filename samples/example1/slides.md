@@ -3,16 +3,6 @@ Landslide
 
 ---
 
-Download it!
----
-Download this presentation from:
-
-.qr: 450|http://example.com
-
-http://example.com
-
----
-
 Landslide
 ---------
 
@@ -140,6 +130,15 @@ Slide #6
 An image:
 
 ![monkey](monkey.jpg)
+
+---
+
+Slide #7
+========
+
+Landslide can generate QR codes:
+
+.qr: 450|http://github.com/adamzap/landslide
 
 ---
 
