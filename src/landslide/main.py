@@ -103,6 +103,13 @@ def _parse_options():
         default=True
     )
 
+    parser.add_option(
+        "-x", "--extensions",
+        dest="extensions",
+        help="Comma-separated list of extensions for Markdown",
+        default=''
+    )
+
     (options, args) = parser.parse_args()
 
     if not args:
@@ -121,7 +128,7 @@ def run(input_file, options):
                           options.theme, direct=options.direct,
                           debug=options.debug, verbose=options.verbose,
                           embed=options.embed, encoding=options.encoding,
-                          logger=log)
+                          logger=log, extensions=options.extensions)
     generator.execute()
 
 
