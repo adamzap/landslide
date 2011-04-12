@@ -51,7 +51,18 @@ class Generator(object):
     def __init__(self, source, destination_file='presentation.html',
                  theme='default', direct=False, debug=False, verbose=True,
                  embed=False, encoding='utf8', logger=None, extensions=''):
-        """Configures the generator."""
+        """ Configures the generator. Available parameters are:
+            - ``source``: source file or directory
+            - ``destination_file``: path to html or PDF destination file
+            - ``theme``: path to the them to use for this presentation
+            - ``direct``: enables direct rendering presentation to stdout
+            - ``debug``: enables debug mode
+            - ``verbose``: enables verbose output
+            - ``embed``: generates a standalone document, with embedded assets
+            - ``encoding``: the encoding to use for this presentation
+            - ``logger``: a logger lambda to use for logging
+            - ``extensions``: ???
+        """
         self.debug = debug
         self.direct = direct
         self.encoding = encoding
@@ -133,12 +144,14 @@ class Generator(object):
             self.template_file = os.path.join(self.theme_dir, 'base.html')
 
     def add_toc_entry(self, title, level, slide_number):
-        """Adds a new entry to current presentation Table of Contents."""
+        """ Adds a new entry to current presentation Table of Contents.
+        """
         self.__toc.append({'title': title, 'number': slide_number,
                            'level': level})
 
     def get_toc(self):
-        """Smart getter for Table of Content list."""
+        """ Smart getter for Table of Content list.
+        """
         toc = []
         stack = [toc]
         for entry in self.__toc:
@@ -156,7 +169,8 @@ class Generator(object):
     toc = property(get_toc, set_toc)
 
     def execute(self):
-        """Execute this generator regarding its current configuration."""
+        """ Execute this generator regarding its current configuration.
+        """
         if self.direct:
             if self.file_type == 'pdf':
                 raise IOError(u"Direct output mode is not available for PDF "
@@ -168,8 +182,8 @@ class Generator(object):
             self.log(u"Generated file: %s" % self.destination_file)
 
     def fetch_contents(self, source):
-        """Recursively fetches Markdown contents from a single file or
-           directory containing itself Markdown files.
+        """ Recursively fetches Markdown contents from a single file or
+            directory containing itself Markdown files.
         """
         slides = []
 
@@ -184,7 +198,8 @@ class Generator(object):
                 slides.extend(self.fetch_contents(os.path.join(source, entry)))
         else:
             try:
-                parser = Parser(os.path.splitext(source)[1], self.encoding, self.extensions)
+                parser = Parser(os.path.splitext(source)[1], self.encoding,
+                    self.extensions)
             except NotImplementedError:
                 return slides
 
@@ -207,9 +222,9 @@ class Generator(object):
         return slides
 
     def get_css(self):
-        """Fetches and returns stylesheet file path or contents, for both print
-           and screen contexts, depending if we want a standalone presentation
-           or not.
+        """ Fetches and returns stylesheet file path or contents, for both
+            print and screen contexts, depending if we want a standalone
+            presentation or not.
         """
         css = {}
 
@@ -235,8 +250,8 @@ class Generator(object):
         return css
 
     def get_js(self):
-        """Fetches and returns javascript file path or contents, depending if
-           we want a standalone presentation or not.
+        """ Fetches and returns javascript file path or contents, depending if
+            we want a standalone presentation or not.
         """
         js_file = os.path.join(self.theme_dir, 'js', 'slides.js')
 
@@ -250,8 +265,8 @@ class Generator(object):
                 'contents': open(js_file).read()}
 
     def get_slide_vars(self, slide_src, source=None):
-        """Computes a single slide template vars from its html source code.
-           Also extracts slide informations for the table of contents.
+        """ Computes a single slide template vars from its html source code.
+            Also extracts slide informations for the table of contents.
         """
         find = re.search(r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
@@ -281,7 +296,8 @@ class Generator(object):
                     'source': source_dict}
 
     def get_template_vars(self, slides):
-        """Computes template vars from slides html source code."""
+        """ Computes template vars from slides html source code.
+        """
         try:
             head_title = slides[0]['title']
         except (IndexError, TypeError):
@@ -301,12 +317,14 @@ class Generator(object):
                 'css': self.get_css(), 'js': self.get_js()}
 
     def log(self, message, type='notice'):
-        """Log a message (eventually, override to do something more clever)."""
+        """ Logs a message (eventually, override to do something more clever).
+        """
         if self.verbose and self.logger:
             self.logger(message, type)
 
     def process_macros(self, content, source=None):
-        """Processed all macros."""
+        """ Processed all macros.
+        """
         classes = []
         for macro_class in self.macros:
             try:
@@ -320,7 +338,8 @@ class Generator(object):
         return content, classes
 
     def register_macro(self, *macros):
-        """Registers macro classes passed a method arguments."""
+        """ Registers macro classes passed a method arguments.
+        """
         for m in macros:
             if (inspect.isclass(m) and issubclass(m, macro_module.Macro)):
                 self.macros.append(m)
@@ -329,14 +348,16 @@ class Generator(object):
                                 " from macro.Macro")
 
     def render(self):
-        """Returns generated html code."""
+        """ Returns generated html code.
+        """
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
         slides = self.fetch_contents(self.source)
         return template.render(self.get_template_vars(slides))
 
     def write(self):
-        """Writes generated presentation code into the destination file."""
+        """ Writes generated presentation code into the destination file.
+        """
         html = self.render()
 
         if self.file_type == 'pdf':
@@ -347,8 +368,8 @@ class Generator(object):
             outfile.write(html)
 
     def write_pdf(self, html):
-        """Tries to write a PDF export from the command line using PrinceXML if
-           available.
+        """ Tries to write a PDF export from the command line using PrinceXML
+            if available.
         """
         try:
             f = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
