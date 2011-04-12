@@ -186,7 +186,7 @@ Commandline Options
 
 Several options are available using the command line:
 
-    $ landslide/landslide 
+    $ landslide/landslide
     Usage: landslide [options] input.md ...
 
     Generates fancy HTML5 or PDF slideshows from Markdown sources
@@ -225,6 +225,10 @@ Landslide allows to configure your presentation using a `cfg` configuration file
              now_a_slide.markdown
              another_one.rst
     destination = myWonderfulPresentation.html
+    css =    my_first_stylesheet.css
+             my_other_stylesheet.css
+    js =     jquery.js
+             my_fancy_javascript.js
 
 Please just don't forget to declare the `[landslide]` section. To generate the presentation as configured, just run:
 
@@ -264,11 +268,11 @@ You can register your own macros by creating `landslide.macro.Macro` derived cla
 
     !python
     import landslide
-    
+
     class MyMacro(landslide.Macro):
       def process(self, content, source=None):
         return content + '<p>plop</p>', ['plopped_slide']
-    
+
     g = landslide.generator.Generator(source='toto.md')
     g.register_macro(MyMacro)
     print g.render()
@@ -339,10 +343,10 @@ Theme Variables
 The `base.html` must be a [Jinja2 template file](http://jinja.pocoo.org/2/documentation/templates) where you can harness the following template variables:
 
 - `css`: the stylesheet contents, available via two keys, `print` and `screen`, both having:
-  - a `path_url` key storing the url to the asset file path 
+  - a `path_url` key storing the url to the asset file path
   - a `contents` key storing the asset contents
 - `js`: the javascript contents, having:
-  - a `path_url` key storing the url to the asset file path 
+  - a `path_url` key storing the url to the asset file path
   - a `contents` key storing the asset contents
 - `slides`: the slides list, each one having these properties:
   - `header`: the slide title

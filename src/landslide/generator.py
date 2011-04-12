@@ -47,6 +47,8 @@ class Generator(object):
         macro_module.NotesMacro,
         macro_module.QRMacro,
     ]
+    user_css = []
+    user_js = []
 
     def __init__(self, source, destination_file='presentation.html',
                  theme='default', direct=False, debug=False, verbose=True,
@@ -82,29 +84,23 @@ class Generator(object):
                 raise ValueError(u"Invalid logger set, must be a callable")
         self.verbose = False if direct else verbose and self.logger
 
-        if source and os.path.exists(source):
-            self.source_base_dir = os.path.split(os.path.abspath(source))[0]
-            if source.endswith('.cfg'):
-                self.log(u"Config   %s" % source)
-                try:
-                    config = ConfigParser.RawConfigParser()
-                    config.read(source)
-                except Exception, e:
-                    raise RuntimeError(u"Invalid configuration file: %s" % e)
-                self.source = config.get('landslide', 'source')\
-                    .replace('\r', '').split('\n')
-                if config.has_option('landslide', 'theme'):
-                    theme = config.get('landslide', 'theme')
-                    self.log(u"Using    configured theme %s" % theme)
-                if config.has_option('landslide', 'destination'):
-                    destination_file = config.get('landslide', 'destination')
-                if config.has_option('landslide', 'embed'):
-                    embed = config.getboolean('landslide', 'embed')
-            else:
-                self.source = source
-        else:
+        if not source or not os.path.exists(source):
             raise IOError(u"Source file/directory %s does not exist"
                           % source)
+
+        self.source_base_dir = os.path.split(os.path.abspath(source))[0]
+        if source.endswith('.cfg'):
+            config = self.parse_config(source)
+            self.source = config.get('source')
+            if not self.source:
+                raise IOError('unable to fetch a valid source from config')
+            theme = config.get('theme', 'default')
+            destination_file = config.get('destination', 'presentation.html')
+            embed = config.get('embed', False)
+            self.add_user_css(config.get('css', []))
+            self.add_user_js(config.get('js', []))
+        else:
+            self.source = source
 
         if (os.path.exists(destination_file)
             and not os.path.isfile(destination_file)):
@@ -142,6 +138,30 @@ class Generator(object):
                 self.template_file = os.path.join(default_dir, 'base.html')
         else:
             self.template_file = os.path.join(self.theme_dir, 'base.html')
+
+    def add_user_css(self, css_list):
+        """ Adds supplementary user css files to the presentation.
+        """
+        for css_path in css_list:
+            if css_path and not css_path in self.user_css:
+                if not os.path.exists(css_path):
+                    raise IOError('%s user css file not found' % (css_path,))
+                self.user_css.append({
+                    'path_url': utils.get_abs_path_url(css_path),
+                    'contents': open(css_path).read(),
+                })
+
+    def add_user_js(self, js_list):
+        """ Adds supplementary user javascript files to the presentation.
+        """
+        for js_path in js_list:
+            if js_path and not js_path in self.user_js:
+                if not os.path.exists(js_path):
+                    raise IOError('%s user js file not found' % (js_path,))
+                self.user_js.append({
+                    'path_url': utils.get_abs_path_url(js_path),
+                    'contents': open(js_path).read(),
+                })
 
     def add_toc_entry(self, title, level, slide_number):
         """ Adds a new entry to current presentation Table of Contents.
@@ -314,13 +334,42 @@ class Generator(object):
 
         return {'head_title': head_title, 'num_slides': str(self.num_slides),
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,
-                'css': self.get_css(), 'js': self.get_js()}
+                'css': self.get_css(), 'js': self.get_js(),
+                'user_css': self.user_css, 'user_js': self.user_js}
 
     def log(self, message, type='notice'):
         """ Logs a message (eventually, override to do something more clever).
         """
         if self.verbose and self.logger:
             self.logger(message, type)
+
+    def parse_config(self, config_source):
+        """ Parses a landslide configuration file and returns a normalized
+            python dict.
+        """
+        self.log(u"Config   %s" % config_source)
+        try:
+            raw_config = ConfigParser.RawConfigParser()
+            raw_config.read(config_source)
+        except Exception, e:
+            raise RuntimeError(u"Invalid configuration file: %s" % e)
+        config = {}
+        config['source'] = raw_config.get('landslide', 'source')\
+            .replace('\r', '').split('\n')
+        if raw_config.has_option('landslide', 'theme'):
+            config['theme'] = raw_config.get('landslide', 'theme')
+            self.log(u"Using    configured theme %s" % config['theme'])
+        if raw_config.has_option('landslide', 'destination'):
+            config['destination'] = raw_config.get('landslide', 'destination')
+        if raw_config.has_option('landslide', 'embed'):
+            config['embed'] = raw_config.getboolean('landslide', 'embed')
+        if raw_config.has_option('landslide', 'css'):
+            config['css'] = raw_config.get('landslide', 'css')\
+                .replace('\r', '').split('\n')
+        if raw_config.has_option('landslide', 'js'):
+            config['js'] = raw_config.get('landslide', 'js')\
+                .replace('\r', '').split('\n')
+        return config
 
     def process_macros(self, content, source=None):
         """ Processed all macros.
