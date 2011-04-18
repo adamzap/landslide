@@ -26,7 +26,8 @@ from optparse import OptionParser
 
 
 def _parse_options():
-    """Parses ``landslide`` args options."""
+    """ Parses ``landslide`` args options.
+    """
 
     parser = OptionParser(
         usage="%prog [options] input.md ...",
@@ -122,16 +123,22 @@ def _parse_options():
 
 
 def log(message, type):
+    """Basic logger, print output directly to stdout and errors to stderr.
+    """
     (sys.stdout if type == 'notice' else sys.stderr).write(message + "\n")
 
 
 def run(input_file, options):
+    """ Runs the Generator using parsed options.
+    """
     options.logger = log
     generator = Generator(input_file, **options.__dict__)
     generator.execute()
 
 
 def main():
+    """ Main program entry point.
+    """
     options, input_file = _parse_options()
 
     if (options.debug):
