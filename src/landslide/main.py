@@ -116,11 +116,8 @@ def log(message, type):
 
 
 def run(input_file, options):
-    generator = Generator(input_file, options.destination_file,
-                          options.theme, direct=options.direct,
-                          debug=options.debug, verbose=options.verbose,
-                          embed=options.embed, encoding=options.encoding,
-                          logger=log, extensions=options.extensions)
+    options.logger = log
+    generator = Generator(input_file, **options.__dict__)
     generator.execute()
 
 

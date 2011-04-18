@@ -39,6 +39,7 @@ class Generator(object):
        folder or a configuration file and provides methods to render them as a
        presentation.
     """
+    DEFAULT_DESTINATION = 'presentation.html'
     default_macros = [
         macro_module.CodeHighlightingMacro,
         macro_module.EmbedImagesMacro,
@@ -50,11 +51,10 @@ class Generator(object):
     user_css = []
     user_js = []
 
-    def __init__(self, source, destination_file='presentation.html',
-                 theme='default', direct=False, debug=False, verbose=True,
-                 embed=False, encoding='utf8', logger=None, extensions=''):
-        """ Configures the generator. Available parameters are:
+    def __init__(self, source, **kwargs):
+        """ Configures the generator. Available ``args`` are:
             - ``source``: source file or directory
+            Available ``kwargs`` are:
             - ``destination_file``: path to html or PDF destination file
             - ``theme``: path to the them to use for this presentation
             - ``direct``: enables direct rendering presentation to stdout
@@ -63,26 +63,26 @@ class Generator(object):
             - ``embed``: generates a standalone document, with embedded assets
             - ``encoding``: the encoding to use for this presentation
             - ``logger``: a logger lambda to use for logging
-            - ``extensions``: ???
+            - ``extensions``: Comma separated list of markdown extensions
         """
-        self.debug = debug
-        self.direct = direct
-        self.encoding = encoding
-        self.logger = None
+        self.debug = kwargs.get('debug', False)
+        self.destination_file = kwargs.get('direct', 'presentation.html')
+        self.direct = kwargs.get('direct', False)
+        self.embed = kwargs.get('embed', False)
+        self.encoding = kwargs.get('encoding', 'utf8')
+        self.extensions = kwargs.get('extensions', None)
+        self.logger = kwargs.get('logger', None)
+        self.theme = kwargs.get('theme', 'default')
+        self.verbose = kwargs.get('verbose', False)
         self.num_slides = 0
-        self.extensions = extensions
         self.__toc = []
 
         # macros registering
         self.macros = []
         self.register_macro(*self.default_macros)
 
-        if logger:
-            if callable(logger):
-                self.logger = logger
-            else:
-                raise ValueError(u"Invalid logger set, must be a callable")
-        self.verbose = False if direct else verbose and self.logger
+        if self.direct:
+            self.verbose = True
 
         if not source or not os.path.exists(source):
             raise IOError(u"Source file/directory %s does not exist"
@@ -94,50 +94,32 @@ class Generator(object):
             self.source = config.get('source')
             if not self.source:
                 raise IOError('unable to fetch a valid source from config')
-            theme = config.get('theme', 'default')
-            destination_file = config.get('destination', 'presentation.html')
-            embed = config.get('embed', False)
+            self.theme = config.get('theme', 'default')
+            self.destination_file = config.get('destination',
+                self.DEFAULT_DESTINATION)
+            self.embed = config.get('embed', False)
             self.add_user_css(config.get('css', []))
             self.add_user_js(config.get('js', []))
         else:
             self.source = source
 
-        if (os.path.exists(destination_file)
-            and not os.path.isfile(destination_file)):
+        if (os.path.exists(self.destination_file)
+            and not os.path.isfile(self.destination_file)):
             raise IOError(u"Destination %s exists and is not a file"
-                          % destination_file)
-        else:
-            self.destination_file = destination_file
+                          % self.destination_file)
 
         if self.destination_file.endswith('.html'):
             self.file_type = 'html'
         elif self.destination_file.endswith('.pdf'):
             self.file_type = 'pdf'
+            self.embed = True
         else:
             raise IOError(u"This program can only write html or pdf files. "
                            "Please use one of these file extensions in the "
                            "destination")
 
-        self.embed = True if self.file_type == 'pdf' else embed
-
-        self.theme = theme if theme else 'default'
-
-        if os.path.exists(theme):
-            self.theme_dir = theme
-        elif os.path.exists(os.path.join(THEMES_DIR, theme)):
-            self.theme_dir = os.path.join(THEMES_DIR, theme)
-        else:
-            raise IOError(u"Theme %s not found or invalid" % theme)
-
-        if not os.path.exists(os.path.join(self.theme_dir, 'base.html')):
-            default_dir = os.path.join(THEMES_DIR, 'default')
-
-            if not os.path.exists(os.path.join(default_dir, 'base.html')):
-                raise IOError(u"Cannot find base.html in default theme")
-            else:
-                self.template_file = os.path.join(default_dir, 'base.html')
-        else:
-            self.template_file = os.path.join(self.theme_dir, 'base.html')
+        self.theme_dir = self.find_theme_dir(self.theme)
+        self.template_file = self.get_template_file()
 
     def add_user_css(self, css_list):
         """ Adds supplementary user css files to the presentation.
@@ -201,6 +183,16 @@ class Generator(object):
             self.write()
             self.log(u"Generated file: %s" % self.destination_file)
 
+    def get_template_file(self):
+        """ Retrieves Jinja2 template file path.
+        """
+        if os.path.exists(os.path.join(self.theme_dir, 'base.html')):
+            return os.path.join(self.theme_dir, 'base.html')
+        default_dir = os.path.join(THEMES_DIR, 'default')
+        if not os.path.exists(os.path.join(default_dir, 'base.html')):
+            raise IOError(u"Cannot find base.html in default theme")
+        return os.path.join(default_dir, 'base.html')
+
     def fetch_contents(self, source):
         """ Recursively fetches Markdown contents from a single file or
             directory containing itself Markdown files.
@@ -240,6 +232,17 @@ class Generator(object):
             self.log(u"Exiting  %s: no contents found" % source, 'notice')
 
         return slides
+
+    def find_theme_dir(self, theme):
+        """ Finds them dir path from its name.
+        """
+        if os.path.exists(theme):
+            self.theme_dir = theme
+        elif os.path.exists(os.path.join(THEMES_DIR, theme)):
+            self.theme_dir = os.path.join(THEMES_DIR, theme)
+        else:
+            raise IOError(u"Theme %s not found or invalid" % theme)
+        return self.theme_dir
 
     def get_css(self):
         """ Fetches and returns stylesheet file path or contents, for both
@@ -340,6 +343,8 @@ class Generator(object):
     def log(self, message, type='notice'):
         """ Logs a message (eventually, override to do something more clever).
         """
+        if self.logger and not callable(self.logger):
+            raise ValueError(u"Invalid logger set, must be a callable")
         if self.verbose and self.logger:
             self.logger(message, type)
 
