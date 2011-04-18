@@ -27,7 +27,7 @@ def get_path_url(abs_path, relative=False):
     """ Returns an absolute or relative path url from an absolute path.
     """
     if relative:
-        return get_rel_path_url(abs_path, relative)
+        return get_rel_path_url(abs_path)
     else:
         return get_abs_path_url(abs_path)
 
