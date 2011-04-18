@@ -187,28 +187,35 @@ Commandline Options
 Several options are available using the command line:
 
     $ landslide/landslide
-    Usage: landslide [options] input.md ...
+    Usage: main.py [options] input.md ...
 
-    Generates fancy HTML5 or PDF slideshows from Markdown sources
+    Generates an HTML5 or PDF slideshow from Markdown or other formats
 
     Options:
       -h, --help            show this help message and exit
+      -c, --copy-theme      Copy theme directory into current presentation source
+                            directory
       -b, --debug           Will display any exception trace to stdin
       -d FILE, --destination=FILE
                             The path to the to the destination file: .html or .pdf
                             extensions allowed (default: presentation.html)
       -e ENCODING, --encoding=ENCODING
                             The encoding of your files (defaults to utf8)
-      -i, --embed           Embed base64-encoded images in presentation
-      -t THEME, --theme=THEME
-                            A theme name, or path to a landlside theme directory
+      -i, --embed           Embed stylesheet and javascript contents,
+                            base64-encoded images in presentation to make a
+                            standalone document
       -o, --direct-ouput    Prints the generated HTML code to stdin; won't work
                             with PDF export
       -q, --quiet           Won't write anything to stdin (silent mode)
+      -r, --relative        Make your presentation asset links relative to current
+                            pwd; This may be useful if you intend to publish your
+                            html presentation online.
+      -t THEME, --theme=THEME
+                            A theme name, or path to a landlside theme directory
       -v, --verbose         Write informational messages to stdin (enabled by
                             default)
-
-    Note: PDF export requires the `prince` program: http://princexml.com/
+      -x EXTENSIONS, --extensions=EXTENSIONS
+                            Comma-separated list of extensions for Markdown
 
 ---
 
@@ -229,6 +236,7 @@ Landslide allows to configure your presentation using a `cfg` configuration file
              my_other_stylesheet.css
     js =     jquery.js
              my_fancy_javascript.js
+    relative = True
 
 Please just don't forget to declare the `[landslide]` section. To generate the presentation as configured, just run:
 
@@ -334,6 +342,21 @@ A Landslide theme is a directory following this simple structure:
         `-- slides.js
 
 If a theme does not provide HTML and JS files, those from the default theme will be used. CSS is not optional.
+
+Last, you can also copy the whole theme directory to your presentation one by passing the `--copy-theme` option to the `landslide` command:
+
+    $ landslide slides.md -t /path/to/some/theme --copy-theme
+
+---
+
+Publishing your Presentation Online
+===================================
+
+If you intend to publish your HTML presentation online, you'll have to use the `--relative` option, as well as the `--copy-theme` one to have all asset links relative to the root of your presentation;
+
+    $ landslide slides.md --relative --copy-theme
+
+That way, you'll just have to host the whole presentation directory to a webserver. Of course, no Python nor PHP nor anything else than a HTTP webserver (like Apache) is required to host a landslide presentation.
 
 ---
 
