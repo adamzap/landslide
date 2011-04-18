@@ -67,12 +67,6 @@ def _parse_options():
         default=False)
 
     parser.add_option(
-        "-t", "--theme",
-        dest="theme",
-        help="A theme name, or path to a landlside theme directory",
-        default='default')
-
-    parser.add_option(
         "-o", "--direct-ouput",
         action="store_true",
         dest="direct",
@@ -88,6 +82,22 @@ def _parse_options():
         default=False)
 
     parser.add_option(
+        "-r", "--relative",
+        action="store_true",
+        dest="relative",
+        help="Make your presentation asset links relative to current pwd; "
+             "This may be useful if you intend to publish your html "
+             "presentation online.",
+        default=False
+    )
+
+    parser.add_option(
+        "-t", "--theme",
+        dest="theme",
+        help="A theme name, or path to a landlside theme directory",
+        default='default')
+
+    parser.add_option(
         "-v", "--verbose",
         action="store_true",
         dest="verbose",
@@ -100,16 +110,6 @@ def _parse_options():
         dest="extensions",
         help="Comma-separated list of extensions for Markdown",
         default=''
-    )
-
-    parser.add_option(
-        "-r", "--relative",
-        action="store_true",
-        dest="relative",
-        help="Make your presentation asset links relative to current pwd; "
-             "This may be useful if you intend to publish your html "
-             "presentation online.",
-        default=False
     )
 
     (options, args) = parser.parse_args()
