@@ -122,8 +122,12 @@ class Generator(object):
         self.template_file = self.get_template_file()
 
     def add_user_css(self, css_list):
-        """ Adds supplementary user css files to the presentation.
+        """ Adds supplementary user css files to the presentation. The
+            ``css_list`` arg can be either a ``list`` or a ``basestring``
+            instance.
         """
+        if isinstance(css_list, basestring):
+            css_list = [css_list]
         for css_path in css_list:
             if css_path and not css_path in self.user_css:
                 if not os.path.exists(css_path):
@@ -134,8 +138,12 @@ class Generator(object):
                 })
 
     def add_user_js(self, js_list):
-        """ Adds supplementary user javascript files to the presentation.
+        """ Adds supplementary user javascript files to the presentation. The
+            ``js_list`` arg can be either a ``list`` or a ``basestring``
+            instance.
         """
+        if isinstance(js_list, basestring):
+            js_list = [js_list]
         for js_path in js_list:
             if js_path and not js_path in self.user_js:
                 if not os.path.exists(js_path):
@@ -407,7 +415,11 @@ class Generator(object):
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
         slides = self.fetch_contents(self.source)
-        return template.render(self.get_template_vars(slides))
+        context = self.get_template_vars(slides)
+        for k, v in context.iteritems():
+            if isinstance(v, basestring):
+                context.update({k: unicode(v)})
+        return template.render(context)
 
     def write(self):
         """ Writes generated presentation code into the destination file.
