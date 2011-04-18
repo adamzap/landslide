@@ -102,6 +102,16 @@ def _parse_options():
         default=''
     )
 
+    parser.add_option(
+        "-r", "--relative",
+        action="store_true",
+        dest="relative",
+        help="Make your presentation asset links relative to current pwd; "
+             "This may be useful if you intend to publish your html "
+             "presentation online.",
+        default=False
+    )
+
     (options, args) = parser.parse_args()
 
     if not args:
