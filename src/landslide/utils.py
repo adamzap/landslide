@@ -36,6 +36,9 @@ def get_rel_path_url(path):
     """ Returns a relative path. Silently returns provided path on failure.
     """
     try:
-        return path.split(os.environ.get('PWD'))[1]
+        path_url = path.split(os.environ.get('PWD'))[1]
+        if path_url.startswith('/'):
+            return path_url[1:]
+
     except (IndexError, TypeError):
         return path
