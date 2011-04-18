@@ -19,6 +19,7 @@ import re
 import codecs
 import inspect
 import jinja2
+import shutil
 import tempfile
 import utils
 import ConfigParser
@@ -52,19 +53,23 @@ class Generator(object):
     user_js = []
 
     def __init__(self, source, **kwargs):
-        """ Configures the generator. Available ``args`` are:
-            - ``source``: source file or directory
+        """ Configures this generator. Available ``args`` are:
+            - ``source``: source file or directory path
             Available ``kwargs`` are:
+            - ``copy_theme``: copy theme directory and files into presentation
+                              one
             - ``destination_file``: path to html or PDF destination file
-            - ``theme``: path to the them to use for this presentation
             - ``direct``: enables direct rendering presentation to stdout
             - ``debug``: enables debug mode
-            - ``verbose``: enables verbose output
             - ``embed``: generates a standalone document, with embedded assets
             - ``encoding``: the encoding to use for this presentation
-            - ``logger``: a logger lambda to use for logging
             - ``extensions``: Comma separated list of markdown extensions
+            - ``logger``: a logger lambda to use for logging
+            - ``relative``: enable relative asset urls
+            - ``theme``: path to the them to use for this presentation
+            - ``verbose``: enables verbose output
         """
+        self.copy_theme = kwargs.get('copy_theme', False)
         self.debug = kwargs.get('debug', False)
         self.destination_file = kwargs.get('direct', 'presentation.html')
         self.direct = kwargs.get('direct', False)
@@ -72,6 +77,7 @@ class Generator(object):
         self.encoding = kwargs.get('encoding', 'utf8')
         self.extensions = kwargs.get('extensions', None)
         self.logger = kwargs.get('logger', None)
+        self.relative = kwargs.get('relative', False)
         self.theme = kwargs.get('theme', 'default')
         self.verbose = kwargs.get('verbose', False)
         self.num_slides = 0
@@ -94,10 +100,11 @@ class Generator(object):
             self.source = config.get('source')
             if not self.source:
                 raise IOError('unable to fetch a valid source from config')
-            self.theme = config.get('theme', 'default')
             self.destination_file = config.get('destination',
                 self.DEFAULT_DESTINATION)
             self.embed = config.get('embed', False)
+            self.relative = config.get('relative', False)
+            self.theme = config.get('theme', 'default')
             self.add_user_css(config.get('css', []))
             self.add_user_js(config.get('js', []))
         else:
@@ -118,7 +125,7 @@ class Generator(object):
                            "Please use one of these file extensions in the "
                            "destination")
 
-        self.theme_dir = self.find_theme_dir(self.theme)
+        self.theme_dir = self.find_theme_dir(self.theme, self.copy_theme)
         self.template_file = self.get_template_file()
 
     def add_user_css(self, css_list):
@@ -133,7 +140,7 @@ class Generator(object):
                 if not os.path.exists(css_path):
                     raise IOError('%s user css file not found' % (css_path,))
                 self.user_css.append({
-                    'path_url': utils.get_abs_path_url(css_path),
+                    'path_url': utils.get_path_url(css_path, self.relative),
                     'contents': open(css_path).read(),
                 })
 
@@ -149,7 +156,7 @@ class Generator(object):
                 if not os.path.exists(js_path):
                     raise IOError('%s user js file not found' % (js_path,))
                 self.user_js.append({
-                    'path_url': utils.get_abs_path_url(js_path),
+                    'path_url': utils.get_path_url(js_path, self.relative),
                     'contents': open(js_path).read(),
                 })
 
@@ -159,7 +166,8 @@ class Generator(object):
         self.__toc.append({'title': title, 'number': slide_number,
                            'level': level})
 
-    def get_toc(self):
+    @property
+    def toc(self):
         """ Smart getter for Table of Content list.
         """
         toc = []
@@ -172,11 +180,6 @@ class Generator(object):
                 stack.append(stack[-1][-1]['sub'])
             stack[-1].append(entry)
         return toc
-
-    def set_toc(self, value):
-        raise ValueError("toc is read-only")
-
-    toc = property(get_toc, set_toc)
 
     def execute(self):
         """ Execute this generator regarding its current configuration.
@@ -241,7 +244,7 @@ class Generator(object):
 
         return slides
 
-    def find_theme_dir(self, theme):
+    def find_theme_dir(self, theme, copy_theme=False):
         """ Finds them dir path from its name.
         """
         if os.path.exists(theme):
@@ -250,6 +253,17 @@ class Generator(object):
             self.theme_dir = os.path.join(THEMES_DIR, theme)
         else:
             raise IOError(u"Theme %s not found or invalid" % theme)
+        if copy_theme:
+            target_theme_dir = os.path.join(os.environ.get('PWD'), 'theme')
+            self.log(u'Copying %s theme directory to %s'
+                     % (theme, target_theme_dir))
+            if not os.path.exists(target_theme_dir):
+                try:
+                    shutil.copytree(self.theme_dir, target_theme_dir)
+                except Exception, e:
+                    self.log(u"Skipped copy of theme folder: %s" % e)
+                    pass
+            self.theme_dir = target_theme_dir
         return self.theme_dir
 
     def get_css(self):
@@ -267,13 +281,17 @@ class Generator(object):
             if not os.path.exists(print_css):
                 raise IOError(u"Cannot find css/print.css in default theme")
 
-        css['print'] = {'path_url': utils.get_abs_path_url(print_css),
-                        'contents': open(print_css).read()}
+        css['print'] = {
+            'path_url': utils.get_path_url(print_css, self.relative),
+            'contents': open(print_css).read(),
+        }
 
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
         if (os.path.exists(screen_css)):
-            css['screen'] = {'path_url': utils.get_abs_path_url(screen_css),
-                             'contents': open(screen_css).read()}
+            css['screen'] = {
+                'path_url': utils.get_path_url(screen_css, self.relative),
+                'contents': open(screen_css).read(),
+            }
         else:
             self.log(u"No screen stylesheet provided in current theme",
                       'warning')
@@ -292,8 +310,10 @@ class Generator(object):
             if not os.path.exists(js_file):
                 raise IOError(u"Cannot find slides.js in default theme")
 
-        return {'path_url': utils.get_abs_path_url(js_file),
-                'contents': open(js_file).read()}
+        return {
+            'path_url': utils.get_path_url(js_file, self.relative),
+            'contents': open(js_file).read(),
+        }
 
     def get_slide_vars(self, slide_src, source=None):
         """ Computes a single slide template vars from its html source code.
@@ -376,6 +396,8 @@ class Generator(object):
             config['destination'] = raw_config.get('landslide', 'destination')
         if raw_config.has_option('landslide', 'embed'):
             config['embed'] = raw_config.getboolean('landslide', 'embed')
+        if raw_config.has_option('landslide', 'relative'):
+            config['relative'] = raw_config.getboolean('landslide', 'relative')
         if raw_config.has_option('landslide', 'css'):
             config['css'] = raw_config.get('landslide', 'css')\
                 .replace('\r', '').split('\n')
@@ -387,10 +409,12 @@ class Generator(object):
     def process_macros(self, content, source=None):
         """ Processed all macros.
         """
+        macro_options = {'relative': self.relative, }
         classes = []
         for macro_class in self.macros:
             try:
-                macro = macro_class(logger=self.logger, embed=self.embed)
+                macro = macro_class(logger=self.logger, embed=self.embed,
+                    options=macro_options)
                 content, add_classes = macro.process(content, source)
                 if add_classes:
                     classes += add_classes
@@ -416,9 +440,6 @@ class Generator(object):
         template = jinja2.Template(template_src.read())
         slides = self.fetch_contents(self.source)
         context = self.get_template_vars(slides)
-        for k, v in context.iteritems():
-            if isinstance(v, basestring):
-                context.update({k: unicode(v)})
         return template.render(context)
 
     def write(self):

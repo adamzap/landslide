@@ -47,7 +47,8 @@ class GeneratorTest(BaseTestCase):
         g = Generator(base_dir, logger=self.logtest)
         g.add_user_css(os.path.join(SAMPLES_DIR, 'test.css'))
         g.add_user_js(os.path.join(SAMPLES_DIR, 'test.js'))
-        # TODO
+        self.assertEquals(g.user_css[0]['contents'], '* {color: red;}')
+        self.assertEquals(g.user_js[0]['contents'], "alert('foo');")
 
     def test_get_toc(self):
         base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')

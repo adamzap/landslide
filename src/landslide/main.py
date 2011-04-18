@@ -37,6 +37,13 @@ def _parse_options():
                "http://princexml.com/")
 
     parser.add_option(
+        "-c", "--copy-theme",
+        action="store_true",
+        dest="copy_theme",
+        help="Copy theme directory into current presentation source directory",
+        default=False)
+
+    parser.add_option(
         "-b", "--debug",
         action="store_true",
         dest="debug",

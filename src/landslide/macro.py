@@ -32,9 +32,15 @@ class Macro(object):
        alter some provided HTML contents and to provide supplementary
        informations to the slide context.
     """
-    def __init__(self, logger=sys.stdout, embed=False):
+    options = {}
+
+    def __init__(self, logger=sys.stdout, embed=False, options=None):
         self.logger = logger
         self.embed = embed
+        if options:
+            if not isinstance(options, dict):
+                raise ValueError(u'Macro options must be a dict instance')
+            self.options = options
 
     def process(self, content, source=None):
         """Generic processor (does actually nothing)"""
@@ -150,13 +156,15 @@ class FixImagePathsMacro(Macro):
     """This Macro replaces html image paths with fully qualified absolute
        urls.
     """
+    relative = False
+
     def process(self, content, source=None):
         classes = []
 
         if self.embed:
             return content, classes
-
-        base_url = os.path.split(utils.get_abs_path_url(source))[0]
+        base_path = utils.get_path_url(source, self.options.get('relative'))
+        base_url = os.path.split(base_path)[0]
         fn = lambda p: r'<img src="%s" />' % os.path.join(base_url, p.group(1))
 
         sub_regex = r'<img.*?src="(?!http://)(.*?)".*/?>'

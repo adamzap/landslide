@@ -18,5 +18,24 @@ import os
 
 
 def get_abs_path_url(path):
-    """Returns the absolute url for a given local path."""
+    """ Returns the absolute url for a given local path.
+    """
     return "file://%s" % os.path.abspath(path)
+
+
+def get_path_url(abs_path, relative=False):
+    """ Returns an absolute or relative path url from an absolute path.
+    """
+    if relative:
+        return get_rel_path_url(abs_path, relative)
+    else:
+        return get_abs_path_url(abs_path)
+
+
+def get_rel_path_url(path):
+    """ Returns a relative path. Silently returns provided path on failure.
+    """
+    try:
+        return path.split(os.environ.get('PWD'))[1]
+    except (IndexError, TypeError):
+        return path
