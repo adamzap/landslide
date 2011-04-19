@@ -358,6 +358,8 @@ If you intend to publish your HTML presentation online, you'll have to use the `
 
 That way, you'll just have to host the whole presentation directory to a webserver. Of course, no Python nor PHP nor anything else than a HTTP webserver (like Apache) is required to host a landslide presentation.
 
+Check out a [Landslide presentation customized this way](http://www.akei.com/presentations/2011-Djangocong/index.html).
+
 ---
 
 Theme Variables
