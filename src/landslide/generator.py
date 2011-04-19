@@ -71,7 +71,7 @@ class Generator(object):
         """
         self.copy_theme = kwargs.get('copy_theme', False)
         self.debug = kwargs.get('debug', False)
-        self.destination_file = kwargs.get('direct', 'presentation.html')
+        self.destination_file = kwargs.get('destination_file', 'presentation.html')
         self.direct = kwargs.get('direct', False)
         self.embed = kwargs.get('embed', False)
         self.encoding = kwargs.get('encoding', 'utf8')
