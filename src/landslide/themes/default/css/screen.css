@@ -62,6 +62,14 @@ div.slide {
   -webkit-border-bottom-left-radius: 20px;
 }
 
+div#current_presenter_notes {
+  visibility: hidden;
+}
+
+div.slide div.presenter_notes {
+  visibility: hidden;
+}
+
 /* Expose */
 
 body.expose div.slides {
@@ -171,6 +179,49 @@ body.presenter_view .slide.future {
 body.presenter_view .slide.far-future {
   display: block;
   margin-left: 525px;
+}
+
+body.presenter_view div#current_presenter_notes {
+	visibility: visible;
+	display: block;
+	position: absolute;
+	overflow: auto;
+	vertical-align: middle;
+	left: 50%;
+	top: 50%;
+	margin-left: -475px;
+	margin-top: 100px;
+	z-index: 2;
+	width: 950px;
+	border-style: solid;
+	height: 30%;
+	background-color: silver;
+}
+
+div#current_presenter_notes section {
+  font-family: 'Lucida Grande';
+  color: black;
+  text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
+  display: block;
+  overflow: visible;
+	position: relative;
+	background-color: #fffeff;
+	height: 120px;
+	margin-right: 30px;
+	margin-top: 60px;
+	margin-left: 30px;
+	padding-right: 10px;
+	padding-left: 10px;
+	padding-top: 10px;
+}
+
+div#current_presenter_notes section p {
+	margin: 0;
+}
+
+div#current_presenter_notes h1 {
+	font-size: 50%;
+	display: block;
 }
 
 /* Slide styles */

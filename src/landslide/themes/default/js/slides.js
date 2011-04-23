@@ -80,6 +80,17 @@ function main() {
     return null;
   };
 
+  var getSlidePresenterNote = function(slideNo) {
+    var el = getSlideEl(slideNo);
+    if (el) {
+      var n = el.getElementsByClassName('presenter_notes');
+      if (n.length > 0) {
+        return n[0];
+      }
+    }
+    return null;
+  };
+
   var changeSlideElClass = function(slideNo, className) {
     var el = getSlideEl(slideNo);
     if (el) {
@@ -107,7 +118,19 @@ function main() {
 
     document.getElementsByTagName('title')[0].innerText = getSlideTitle(currentSlideNo);
 
+    updatePresenterNotes();
+
     if (updateOther) { updateOtherPage(); }
+  };
+
+  var updatePresenterNotes = function() {
+    if (!isPresenterView) { return; }
+
+    var existingNote = document.getElementById('current_presenter_notes');
+    var currentNote = getSlidePresenterNote(currentSlideNo).cloneNode(true);
+    currentNote.setAttribute('id', 'presenter_note');
+
+    existingNote.replaceChild(currentNote, document.getElementById('presenter_note'));
   };
 
   var highlightCurrentTocLink = function() {
