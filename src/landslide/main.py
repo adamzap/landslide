@@ -120,6 +120,18 @@ def _parse_options():
         default=''
     )
 
+    parser.add_option(
+        "-l", "--linenos",
+        type="choice",
+        choices=["no", "inline", "table"],
+        dest="linenos",
+        help="How to ouput linenos in source code. Three options availables: "
+        "no (no line numbers); "
+        "inline (inside <pre> tag); "
+        "table (lines numbers in another cell, copy-paste friendly)",
+        default="inline"
+    )
+
     (options, args) = parser.parse_args()
 
     if not args:

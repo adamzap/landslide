@@ -80,6 +80,7 @@ class Generator(object):
         self.relative = kwargs.get('relative', False)
         self.theme = kwargs.get('theme', 'default')
         self.verbose = kwargs.get('verbose', False)
+        self.linenos = kwargs.get('linenos', 'inline')
         self.num_slides = 0
         self.__toc = []
 
@@ -107,6 +108,7 @@ class Generator(object):
             self.theme = config.get('theme', 'default')
             self.add_user_css(config.get('css', []))
             self.add_user_js(config.get('js', []))
+            self.linenos_check(config.get('linenos', 'inline'))
         else:
             self.source = source
 
@@ -165,6 +167,13 @@ class Generator(object):
         """
         self.__toc.append({'title': title, 'number': slide_number,
                            'level': level})
+
+    def linenos_check(self, value):
+        valids = ['no', 'inline', 'table']
+        if value not in valids:
+            self.linenos = 'inline'
+        else:
+            self.linenos = value
 
     @property
     def toc(self):
@@ -394,6 +403,8 @@ class Generator(object):
             self.log(u"Using    configured theme %s" % config['theme'])
         if raw_config.has_option('landslide', 'destination'):
             config['destination'] = raw_config.get('landslide', 'destination')
+        if raw_config.has_option('landslide', 'linenos'):
+            config['linenos'] = raw_config.get('landslide', 'linenos')
         if raw_config.has_option('landslide', 'embed'):
             config['embed'] = raw_config.getboolean('landslide', 'embed')
         if raw_config.has_option('landslide', 'relative'):
@@ -409,7 +420,7 @@ class Generator(object):
     def process_macros(self, content, source=None):
         """ Processed all macros.
         """
-        macro_options = {'relative': self.relative, }
+        macro_options = {'relative': self.relative, 'linenos': self.linenos}
         classes = []
         for macro_class in self.macros:
             try:

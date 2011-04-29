@@ -237,6 +237,7 @@ Landslide allows to configure your presentation using a `cfg` configuration file
     js =     jquery.js
              my_fancy_javascript.js
     relative = True
+    linenos = inline
 
 Please just don't forget to declare the `[landslide]` section. To generate the presentation as configured, just run:
 
