@@ -63,11 +63,11 @@ div.slide {
 }
 
 div#current_presenter_notes {
-  visibility: hidden;
+	display: none;
 }
 
 div.slide div.presenter_notes {
-  visibility: hidden;
+	display: none;
 }
 
 /* Expose */
@@ -198,7 +198,7 @@ body.presenter_view div#current_presenter_notes {
 	background-color: silver;
 }
 
-div#current_presenter_notes section {
+body.presenter_view div#current_presenter_notes section {
   font-family: 'Lucida Grande';
   color: black;
   text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
@@ -215,11 +215,11 @@ div#current_presenter_notes section {
 	padding-top: 10px;
 }
 
-div#current_presenter_notes section p {
+body.presenter_view div#current_presenter_notes section p {
 	margin: 0;
 }
 
-div#current_presenter_notes h1 {
+body.presenter_view div#current_presenter_notes h1 {
 	font-size: 50%;
 	display: block;
 }

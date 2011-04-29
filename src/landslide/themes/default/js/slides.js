@@ -260,6 +260,11 @@ function main() {
       return;
     }
 
+    if (isPresenterView) {
+      var action = overviewActive ? removeClass : addClass;
+      action(document.body, 'presenter_view');
+    }
+
     var toc = document.getElementById('toc');
 
     if (!toc) {
@@ -405,6 +410,7 @@ function main() {
       currentSlideNo = Number(window.location.hash.replace('#presenter', ''));
       isPresenterView = true;
       showingPresenterView = true;
+      presenterViewWin = window;
       addClass(document.body, 'presenter_view');
     } else {
       currentSlideNo = Number(window.location.hash.replace('#slide', ''));
