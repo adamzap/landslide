@@ -303,14 +303,14 @@ function main() {
       case 51: // 3
         switch3D();
         break;
-      case 52: // 4
-        showPresenterView();
-        break;
       case 72: // h
         showHelp();
         break;
       case 78: // n
         showSlideNumbers();
+        break;
+      case 80: // p
+        showPresenterView();
         break;
       case 83: // s
         showSlideSources();

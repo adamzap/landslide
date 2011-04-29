@@ -255,7 +255,7 @@ Some other macros are also available by default: `.fx: foo bar` will add the `fo
 
 Presenter Notes
 ===============
-You can also add presenter notes to each slide. Press the '4' key to open the presenter view.
+You can also add presenter notes to each slide. Press the 'p' key to open the presenter view.
 
 ---
 
