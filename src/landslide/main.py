@@ -18,9 +18,9 @@
 import sys
 
 try:
-    from landslide.generator import Generator
+    from landslide import generator
 except ImportError:
-    from generator import Generator
+    import generator
 
 from optparse import OptionParser
 
@@ -75,11 +75,23 @@ def _parse_options():
         default=False)
 
     parser.add_option(
+        "-l", "--linenos",
+        type="choice",
+        choices=generator.VALID_LINENOS,
+        dest="linenos",
+        help="How to ouput linenos in source code. Three options availables: "
+        "no (no line numbers); "
+        "inline (inside <pre> tag); "
+        "table (lines numbers in another cell, copy-paste friendly)",
+        default="inline",
+    )
+
+    parser.add_option(
         "-o", "--direct-ouput",
         action="store_true",
         dest="direct",
-        help="Prints the generated HTML code to stdin; won't work "
-             "with PDF export",
+        help="Prints the generated HTML code to stdin; won't work with PDF "
+             "export",
         default=False)
 
     parser.add_option(
@@ -96,7 +108,7 @@ def _parse_options():
         help="Make your presentation asset links relative to current pwd; "
              "This may be useful if you intend to publish your html "
              "presentation online.",
-        default=False
+        default=False,
     )
 
     parser.add_option(
@@ -117,19 +129,7 @@ def _parse_options():
         "-x", "--extensions",
         dest="extensions",
         help="Comma-separated list of extensions for Markdown",
-        default=''
-    )
-
-    parser.add_option(
-        "-l", "--linenos",
-        type="choice",
-        choices=["no", "inline", "table"],
-        dest="linenos",
-        help="How to ouput linenos in source code. Three options availables: "
-        "no (no line numbers); "
-        "inline (inside <pre> tag); "
-        "table (lines numbers in another cell, copy-paste friendly)",
-        default="inline"
+        default='',
     )
 
     (options, args) = parser.parse_args()
@@ -151,7 +151,7 @@ def run(input_file, options):
     """ Runs the Generator using parsed options.
     """
     options.logger = log
-    generator = Generator(input_file, **options.__dict__)
+    generator = generator.Generator(input_file, **options.__dict__)
     generator.execute()
 
 

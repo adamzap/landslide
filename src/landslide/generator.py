@@ -33,6 +33,7 @@ from parser import Parser
 BASE_DIR = os.path.dirname(__file__)
 THEMES_DIR = os.path.join(BASE_DIR, 'themes')
 TOC_MAX_LEVEL = 2
+VALID_LINENOS = ('no', 'inline', 'table')
 
 
 class Generator(object):
@@ -71,7 +72,8 @@ class Generator(object):
         """
         self.copy_theme = kwargs.get('copy_theme', False)
         self.debug = kwargs.get('debug', False)
-        self.destination_file = kwargs.get('destination_file', 'presentation.html')
+        self.destination_file = kwargs.get('destination_file',
+                                           'presentation.html')
         self.direct = kwargs.get('direct', False)
         self.embed = kwargs.get('embed', False)
         self.encoding = kwargs.get('encoding', 'utf8')
@@ -80,7 +82,7 @@ class Generator(object):
         self.relative = kwargs.get('relative', False)
         self.theme = kwargs.get('theme', 'default')
         self.verbose = kwargs.get('verbose', False)
-        self.linenos = kwargs.get('linenos', 'inline')
+        self.linenos = self.linenos_check(kwargs.get('linenos'))
         self.num_slides = 0
         self.__toc = []
 
@@ -108,7 +110,7 @@ class Generator(object):
             self.theme = config.get('theme', 'default')
             self.add_user_css(config.get('css', []))
             self.add_user_js(config.get('js', []))
-            self.linenos_check(config.get('linenos', 'inline'))
+            self.linenos = self.linenos_check(config.get('linenos'))
         else:
             self.source = source
 
@@ -167,13 +169,6 @@ class Generator(object):
         """
         self.__toc.append({'title': title, 'number': slide_number,
                            'level': level})
-
-    def linenos_check(self, value):
-        valids = ['no', 'inline', 'table']
-        if value not in valids:
-            self.linenos = 'inline'
-        else:
-            self.linenos = value
 
     @property
     def toc(self):
@@ -377,6 +372,11 @@ class Generator(object):
                 'css': self.get_css(), 'js': self.get_js(),
                 'user_css': self.user_css, 'user_js': self.user_js}
 
+    def linenos_check(self, value):
+        """ Checks and returns a valid value for the ``linenos`` option.
+        """
+        return value if value in VALID_LINENOS else 'inline'
+
     def log(self, message, type='notice'):
         """ Logs a message (eventually, override to do something more clever).
         """
@@ -438,7 +438,7 @@ class Generator(object):
         """ Registers macro classes passed a method arguments.
         """
         for m in macros:
-            if (inspect.isclass(m) and issubclass(m, macro_module.Macro)):
+            if inspect.isclass(m) and issubclass(m, macro_module.Macro):
                 self.macros.append(m)
             else:
                 raise TypeError("Coundn't register macro; a macro must inherit"
@@ -461,8 +461,7 @@ class Generator(object):
         if self.file_type == 'pdf':
             self.write_pdf(html)
         else:
-            outfile = codecs.open(self.destination_file, 'w',
-                                  encoding='utf_8')
+            outfile = codecs.open(self.destination_file, 'w', encoding='utf_8')
             outfile.write(html)
 
     def write_pdf(self, html):
