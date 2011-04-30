@@ -151,8 +151,7 @@ def run(input_file, options):
     """ Runs the Generator using parsed options.
     """
     options.logger = log
-    generator = generator.Generator(input_file, **options.__dict__)
-    generator.execute()
+    generator.Generator(input_file, **options.__dict__).execute()
 
 
 def main():
