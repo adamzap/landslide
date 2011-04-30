@@ -52,7 +52,8 @@ class Parser(object):
         if not self.format:
             raise NotImplementedError(u"Unsupported format %s" % extension)
         if md_extensions:
-            self.md_extensions = filter(None, (value.strip() for value in md_extensions.split(',')))
+            exts = (value.strip() for value in md_extensions.split(','))
+            self.md_extensions = filter(None, exts)
 
     def parse(self, text):
         """Parses and renders a text as HTML regarding current format.
