@@ -255,6 +255,8 @@ class Generator(object):
         """
         find = re.search(r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
+        presenter_notes = None
+
         if not find:
             header = level = title = None
             content = slide_src.strip()
@@ -269,6 +271,12 @@ class Generator(object):
         if content:
             content, slide_classes = self.process_macros(content, source)
 
+            find = re.search(r'(.+)?<h\d+?.*?>presenter notes</h\d>\s?(.+)?$', content,
+                             re.DOTALL | re.UNICODE | re.IGNORECASE)
+            if find:
+                content = find.group(1)
+                presenter_notes = find.group(2).strip() if find.group(2) else None
+
         source_dict = {}
 
         if source:
@@ -278,7 +286,7 @@ class Generator(object):
         if header or content:
             return {'header': header, 'title': title, 'level': level,
                     'content': content, 'classes': slide_classes,
-                    'source': source_dict}
+                    'source': source_dict, 'presenter_notes': presenter_notes}
 
     def get_template_vars(self, slides):
         """Computes template vars from slides html source code."""
