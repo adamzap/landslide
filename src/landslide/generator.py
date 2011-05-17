@@ -19,6 +19,7 @@ import re
 import codecs
 import inspect
 import jinja2
+import shutil
 import tempfile
 import utils
 import ConfigParser
@@ -32,6 +33,7 @@ from parser import Parser
 BASE_DIR = os.path.dirname(__file__)
 THEMES_DIR = os.path.join(BASE_DIR, 'themes')
 TOC_MAX_LEVEL = 2
+VALID_LINENOS = ('no', 'inline', 'table')
 
 
 class Generator(object):
@@ -39,6 +41,7 @@ class Generator(object):
        folder or a configuration file and provides methods to render them as a
        presentation.
     """
+    DEFAULT_DESTINATION = 'presentation.html'
     default_macros = [
         macro_module.CodeHighlightingMacro,
         macro_module.EmbedImagesMacro,
@@ -47,98 +50,130 @@ class Generator(object):
         macro_module.NotesMacro,
         macro_module.QRMacro,
     ]
+    user_css = []
+    user_js = []
 
-    def __init__(self, source, destination_file='presentation.html',
-                 theme='default', direct=False, debug=False, verbose=True,
-                 embed=False, encoding='utf8', logger=None, extensions=''):
-        """Configures the generator."""
-        self.debug = debug
-        self.direct = direct
-        self.encoding = encoding
-        self.logger = None
+    def __init__(self, source, **kwargs):
+        """ Configures this generator. Available ``args`` are:
+            - ``source``: source file or directory path
+            Available ``kwargs`` are:
+            - ``copy_theme``: copy theme directory and files into presentation
+                              one
+            - ``destination_file``: path to html or PDF destination file
+            - ``direct``: enables direct rendering presentation to stdout
+            - ``debug``: enables debug mode
+            - ``embed``: generates a standalone document, with embedded assets
+            - ``encoding``: the encoding to use for this presentation
+            - ``extensions``: Comma separated list of markdown extensions
+            - ``logger``: a logger lambda to use for logging
+            - ``relative``: enable relative asset urls
+            - ``theme``: path to the them to use for this presentation
+            - ``verbose``: enables verbose output
+        """
+        self.copy_theme = kwargs.get('copy_theme', False)
+        self.debug = kwargs.get('debug', False)
+        self.destination_file = kwargs.get('destination_file',
+                                           'presentation.html')
+        self.direct = kwargs.get('direct', False)
+        self.embed = kwargs.get('embed', False)
+        self.encoding = kwargs.get('encoding', 'utf8')
+        self.extensions = kwargs.get('extensions', None)
+        self.logger = kwargs.get('logger', None)
+        self.relative = kwargs.get('relative', False)
+        self.theme = kwargs.get('theme', 'default')
+        self.verbose = kwargs.get('verbose', False)
+        self.linenos = self.linenos_check(kwargs.get('linenos'))
         self.num_slides = 0
-        self.extensions = extensions
         self.__toc = []
 
         # macros registering
         self.macros = []
         self.register_macro(*self.default_macros)
 
-        if logger:
-            if callable(logger):
-                self.logger = logger
-            else:
-                raise ValueError(u"Invalid logger set, must be a callable")
-        self.verbose = False if direct else verbose and self.logger
+        if self.direct:
+            self.verbose = True
 
-        if source and os.path.exists(source):
-            self.source_base_dir = os.path.split(os.path.abspath(source))[0]
-            if source.endswith('.cfg'):
-                self.log(u"Config   %s" % source)
-                try:
-                    config = ConfigParser.RawConfigParser()
-                    config.read(source)
-                except Exception, e:
-                    raise RuntimeError(u"Invalid configuration file: %s" % e)
-                self.source = config.get('landslide', 'source')\
-                    .replace('\r', '').split('\n')
-                if config.has_option('landslide', 'theme'):
-                    theme = config.get('landslide', 'theme')
-                    self.log(u"Using    configured theme %s" % theme)
-                if config.has_option('landslide', 'destination'):
-                    destination_file = config.get('landslide', 'destination')
-                if config.has_option('landslide', 'embed'):
-                    embed = config.getboolean('landslide', 'embed')
-            else:
-                self.source = source
-        else:
+        if not source or not os.path.exists(source):
             raise IOError(u"Source file/directory %s does not exist"
                           % source)
 
-        if (os.path.exists(destination_file)
-            and not os.path.isfile(destination_file)):
-            raise IOError(u"Destination %s exists and is not a file"
-                          % destination_file)
+        self.source_base_dir = os.path.split(os.path.abspath(source))[0]
+        if source.endswith('.cfg'):
+            config = self.parse_config(source)
+            self.source = config.get('source')
+            if not self.source:
+                raise IOError('unable to fetch a valid source from config')
+            self.destination_file = config.get('destination',
+                self.DEFAULT_DESTINATION)
+            self.embed = config.get('embed', False)
+            self.relative = config.get('relative', False)
+            self.theme = config.get('theme', 'default')
+            self.add_user_css(config.get('css', []))
+            self.add_user_js(config.get('js', []))
+            self.linenos = self.linenos_check(config.get('linenos'))
         else:
-            self.destination_file = destination_file
+            self.source = source
+
+        if (os.path.exists(self.destination_file)
+            and not os.path.isfile(self.destination_file)):
+            raise IOError(u"Destination %s exists and is not a file"
+                          % self.destination_file)
 
         if self.destination_file.endswith('.html'):
             self.file_type = 'html'
         elif self.destination_file.endswith('.pdf'):
             self.file_type = 'pdf'
+            self.embed = True
         else:
             raise IOError(u"This program can only write html or pdf files. "
                            "Please use one of these file extensions in the "
                            "destination")
 
-        self.embed = True if self.file_type == 'pdf' else embed
+        self.theme_dir = self.find_theme_dir(self.theme, self.copy_theme)
+        self.template_file = self.get_template_file()
 
-        self.theme = theme if theme else 'default'
+    def add_user_css(self, css_list):
+        """ Adds supplementary user css files to the presentation. The
+            ``css_list`` arg can be either a ``list`` or a ``basestring``
+            instance.
+        """
+        if isinstance(css_list, basestring):
+            css_list = [css_list]
+        for css_path in css_list:
+            if css_path and not css_path in self.user_css:
+                if not os.path.exists(css_path):
+                    raise IOError('%s user css file not found' % (css_path,))
+                self.user_css.append({
+                    'path_url': utils.get_path_url(css_path, self.relative),
+                    'contents': open(css_path).read(),
+                })
 
-        if os.path.exists(theme):
-            self.theme_dir = theme
-        elif os.path.exists(os.path.join(THEMES_DIR, theme)):
-            self.theme_dir = os.path.join(THEMES_DIR, theme)
-        else:
-            raise IOError(u"Theme %s not found or invalid" % theme)
-
-        if not os.path.exists(os.path.join(self.theme_dir, 'base.html')):
-            default_dir = os.path.join(THEMES_DIR, 'default')
-
-            if not os.path.exists(os.path.join(default_dir, 'base.html')):
-                raise IOError(u"Cannot find base.html in default theme")
-            else:
-                self.template_file = os.path.join(default_dir, 'base.html')
-        else:
-            self.template_file = os.path.join(self.theme_dir, 'base.html')
+    def add_user_js(self, js_list):
+        """ Adds supplementary user javascript files to the presentation. The
+            ``js_list`` arg can be either a ``list`` or a ``basestring``
+            instance.
+        """
+        if isinstance(js_list, basestring):
+            js_list = [js_list]
+        for js_path in js_list:
+            if js_path and not js_path in self.user_js:
+                if not os.path.exists(js_path):
+                    raise IOError('%s user js file not found' % (js_path,))
+                self.user_js.append({
+                    'path_url': utils.get_path_url(js_path, self.relative),
+                    'contents': open(js_path).read(),
+                })
 
     def add_toc_entry(self, title, level, slide_number):
-        """Adds a new entry to current presentation Table of Contents."""
+        """ Adds a new entry to current presentation Table of Contents.
+        """
         self.__toc.append({'title': title, 'number': slide_number,
                            'level': level})
 
-    def get_toc(self):
-        """Smart getter for Table of Content list."""
+    @property
+    def toc(self):
+        """ Smart getter for Table of Content list.
+        """
         toc = []
         stack = [toc]
         for entry in self.__toc:
@@ -150,13 +185,9 @@ class Generator(object):
             stack[-1].append(entry)
         return toc
 
-    def set_toc(self, value):
-        raise ValueError("toc is read-only")
-
-    toc = property(get_toc, set_toc)
-
     def execute(self):
-        """Execute this generator regarding its current configuration."""
+        """ Execute this generator regarding its current configuration.
+        """
         if self.direct:
             if self.file_type == 'pdf':
                 raise IOError(u"Direct output mode is not available for PDF "
@@ -167,9 +198,19 @@ class Generator(object):
             self.write()
             self.log(u"Generated file: %s" % self.destination_file)
 
+    def get_template_file(self):
+        """ Retrieves Jinja2 template file path.
+        """
+        if os.path.exists(os.path.join(self.theme_dir, 'base.html')):
+            return os.path.join(self.theme_dir, 'base.html')
+        default_dir = os.path.join(THEMES_DIR, 'default')
+        if not os.path.exists(os.path.join(default_dir, 'base.html')):
+            raise IOError(u"Cannot find base.html in default theme")
+        return os.path.join(default_dir, 'base.html')
+
     def fetch_contents(self, source):
-        """Recursively fetches Markdown contents from a single file or
-           directory containing itself Markdown files.
+        """ Recursively fetches Markdown contents from a single file or
+            directory containing itself Markdown files.
         """
         slides = []
 
@@ -184,7 +225,8 @@ class Generator(object):
                 slides.extend(self.fetch_contents(os.path.join(source, entry)))
         else:
             try:
-                parser = Parser(os.path.splitext(source)[1], self.encoding, self.extensions)
+                parser = Parser(os.path.splitext(source)[1], self.encoding,
+                    self.extensions)
             except NotImplementedError:
                 return slides
 
@@ -206,10 +248,32 @@ class Generator(object):
 
         return slides
 
+    def find_theme_dir(self, theme, copy_theme=False):
+        """ Finds them dir path from its name.
+        """
+        if os.path.exists(theme):
+            self.theme_dir = theme
+        elif os.path.exists(os.path.join(THEMES_DIR, theme)):
+            self.theme_dir = os.path.join(THEMES_DIR, theme)
+        else:
+            raise IOError(u"Theme %s not found or invalid" % theme)
+        target_theme_dir = os.path.join(os.environ.get('PWD'), 'theme')
+        if copy_theme or os.path.exists(target_theme_dir):
+            self.log(u'Copying %s theme directory to %s'
+                     % (theme, target_theme_dir))
+            if not os.path.exists(target_theme_dir):
+                try:
+                    shutil.copytree(self.theme_dir, target_theme_dir)
+                except Exception, e:
+                    self.log(u"Skipped copy of theme folder: %s" % e)
+                    pass
+            self.theme_dir = target_theme_dir
+        return self.theme_dir
+
     def get_css(self):
-        """Fetches and returns stylesheet file path or contents, for both print
-           and screen contexts, depending if we want a standalone presentation
-           or not.
+        """ Fetches and returns stylesheet file path or contents, for both
+            print and screen contexts, depending if we want a standalone
+            presentation or not.
         """
         css = {}
 
@@ -221,13 +285,17 @@ class Generator(object):
             if not os.path.exists(print_css):
                 raise IOError(u"Cannot find css/print.css in default theme")
 
-        css['print'] = {'path_url': utils.get_abs_path_url(print_css),
-                        'contents': open(print_css).read()}
+        css['print'] = {
+            'path_url': utils.get_path_url(print_css, self.relative),
+            'contents': open(print_css).read(),
+        }
 
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
         if (os.path.exists(screen_css)):
-            css['screen'] = {'path_url': utils.get_abs_path_url(screen_css),
-                             'contents': open(screen_css).read()}
+            css['screen'] = {
+                'path_url': utils.get_path_url(screen_css, self.relative),
+                'contents': open(screen_css).read(),
+            }
         else:
             self.log(u"No screen stylesheet provided in current theme",
                       'warning')
@@ -235,8 +303,8 @@ class Generator(object):
         return css
 
     def get_js(self):
-        """Fetches and returns javascript file path or contents, depending if
-           we want a standalone presentation or not.
+        """ Fetches and returns javascript file path or contents, depending if
+            we want a standalone presentation or not.
         """
         js_file = os.path.join(self.theme_dir, 'js', 'slides.js')
 
@@ -246,12 +314,14 @@ class Generator(object):
             if not os.path.exists(js_file):
                 raise IOError(u"Cannot find slides.js in default theme")
 
-        return {'path_url': utils.get_abs_path_url(js_file),
-                'contents': open(js_file).read()}
+        return {
+            'path_url': utils.get_path_url(js_file, self.relative),
+            'contents': open(js_file).read(),
+        }
 
     def get_slide_vars(self, slide_src, source=None):
-        """Computes a single slide template vars from its html source code.
-           Also extracts slide informations for the table of contents.
+        """ Computes a single slide template vars from its html source code.
+            Also extracts slide informations for the table of contents.
         """
         find = re.search(r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
@@ -289,7 +359,8 @@ class Generator(object):
                     'source': source_dict, 'presenter_notes': presenter_notes}
 
     def get_template_vars(self, slides):
-        """Computes template vars from slides html source code."""
+        """ Computes template vars from slides html source code.
+        """
         try:
             head_title = slides[0]['title']
         except (IndexError, TypeError):
@@ -306,19 +377,63 @@ class Generator(object):
 
         return {'head_title': head_title, 'num_slides': str(self.num_slides),
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,
-                'css': self.get_css(), 'js': self.get_js()}
+                'css': self.get_css(), 'js': self.get_js(),
+                'user_css': self.user_css, 'user_js': self.user_js}
+
+    def linenos_check(self, value):
+        """ Checks and returns a valid value for the ``linenos`` option.
+        """
+        return value if value in VALID_LINENOS else 'inline'
 
     def log(self, message, type='notice'):
-        """Log a message (eventually, override to do something more clever)."""
+        """ Logs a message (eventually, override to do something more clever).
+        """
+        if self.logger and not callable(self.logger):
+            raise ValueError(u"Invalid logger set, must be a callable")
         if self.verbose and self.logger:
             self.logger(message, type)
 
+    def parse_config(self, config_source):
+        """ Parses a landslide configuration file and returns a normalized
+            python dict.
+        """
+        self.log(u"Config   %s" % config_source)
+        try:
+            raw_config = ConfigParser.RawConfigParser()
+            raw_config.read(config_source)
+        except Exception, e:
+            raise RuntimeError(u"Invalid configuration file: %s" % e)
+        config = {}
+        config['source'] = raw_config.get('landslide', 'source')\
+            .replace('\r', '').split('\n')
+        if raw_config.has_option('landslide', 'theme'):
+            config['theme'] = raw_config.get('landslide', 'theme')
+            self.log(u"Using    configured theme %s" % config['theme'])
+        if raw_config.has_option('landslide', 'destination'):
+            config['destination'] = raw_config.get('landslide', 'destination')
+        if raw_config.has_option('landslide', 'linenos'):
+            config['linenos'] = raw_config.get('landslide', 'linenos')
+        if raw_config.has_option('landslide', 'embed'):
+            config['embed'] = raw_config.getboolean('landslide', 'embed')
+        if raw_config.has_option('landslide', 'relative'):
+            config['relative'] = raw_config.getboolean('landslide', 'relative')
+        if raw_config.has_option('landslide', 'css'):
+            config['css'] = raw_config.get('landslide', 'css')\
+                .replace('\r', '').split('\n')
+        if raw_config.has_option('landslide', 'js'):
+            config['js'] = raw_config.get('landslide', 'js')\
+                .replace('\r', '').split('\n')
+        return config
+
     def process_macros(self, content, source=None):
-        """Processed all macros."""
+        """ Processed all macros.
+        """
+        macro_options = {'relative': self.relative, 'linenos': self.linenos}
         classes = []
         for macro_class in self.macros:
             try:
-                macro = macro_class(logger=self.logger, embed=self.embed)
+                macro = macro_class(logger=self.logger, embed=self.embed,
+                    options=macro_options)
                 content, add_classes = macro.process(content, source)
                 if add_classes:
                     classes += add_classes
@@ -328,35 +443,38 @@ class Generator(object):
         return content, classes
 
     def register_macro(self, *macros):
-        """Registers macro classes passed a method arguments."""
+        """ Registers macro classes passed a method arguments.
+        """
         for m in macros:
-            if (inspect.isclass(m) and issubclass(m, macro_module.Macro)):
+            if inspect.isclass(m) and issubclass(m, macro_module.Macro):
                 self.macros.append(m)
             else:
                 raise TypeError("Coundn't register macro; a macro must inherit"
                                 " from macro.Macro")
 
     def render(self):
-        """Returns generated html code."""
+        """ Returns generated html code.
+        """
         template_src = codecs.open(self.template_file, encoding=self.encoding)
         template = jinja2.Template(template_src.read())
         slides = self.fetch_contents(self.source)
-        return template.render(self.get_template_vars(slides))
+        context = self.get_template_vars(slides)
+        return template.render(context)
 
     def write(self):
-        """Writes generated presentation code into the destination file."""
+        """ Writes generated presentation code into the destination file.
+        """
         html = self.render()
 
         if self.file_type == 'pdf':
             self.write_pdf(html)
         else:
-            outfile = codecs.open(self.destination_file, 'w',
-                                  encoding='utf_8')
+            outfile = codecs.open(self.destination_file, 'w', encoding='utf_8')
             outfile.write(html)
 
     def write_pdf(self, html):
-        """Tries to write a PDF export from the command line using PrinceXML if
-           available.
+        """ Tries to write a PDF export from the command line using PrinceXML
+            if available.
         """
         try:
             f = tempfile.NamedTemporaryFile(delete=False, suffix='.html')

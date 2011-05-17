@@ -42,6 +42,14 @@ class GeneratorTest(BaseTestCase):
         self.assertRaises(IOError, Generator, None)
         self.assertRaises(IOError, Generator, 'foo.md')
 
+    def test_add_user_assets(self):
+        base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
+        g = Generator(base_dir, logger=self.logtest)
+        g.add_user_css(os.path.join(SAMPLES_DIR, 'test.css'))
+        g.add_user_js(os.path.join(SAMPLES_DIR, 'test.js'))
+        self.assertEquals(g.user_css[0]['contents'], '* {color: red;}')
+        self.assertEquals(g.user_js[0]['contents'], "alert('foo');")
+
     def test_get_toc(self):
         base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
         g = Generator(base_dir, logger=self.logtest)
@@ -52,31 +60,31 @@ class GeneratorTest(BaseTestCase):
         g.add_toc_entry('Section 2.1', 2, 5)
         g.add_toc_entry('Section 3', 1, 6)
         toc = g.toc
-        self.assertEqual(len(toc), 3)
-        self.assertEqual(toc[0]['title'], 'Section 1')
-        self.assertEqual(len(toc[0]['sub']), 2)
-        self.assertEqual(toc[0]['sub'][1]['title'], 'Section 1.2')
-        self.assertEqual(toc[1]['title'], 'Section 2')
-        self.assertEqual(len(toc[1]['sub']), 1)
-        self.assertEqual(toc[2]['title'], 'Section 3')
-        self.assertEqual(len(toc[2]['sub']), 0)
+        self.assertEquals(len(toc), 3)
+        self.assertEquals(toc[0]['title'], 'Section 1')
+        self.assertEquals(len(toc[0]['sub']), 2)
+        self.assertEquals(toc[0]['sub'][1]['title'], 'Section 1.2')
+        self.assertEquals(toc[1]['title'], 'Section 2')
+        self.assertEquals(len(toc[1]['sub']), 1)
+        self.assertEquals(toc[2]['title'], 'Section 3')
+        self.assertEquals(len(toc[2]['sub']), 0)
 
     def test_get_slide_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
         svars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n<p>bar</p>\n")
-        self.assertEqual(svars['title'], 'heading')
-        self.assertEqual(svars['level'], 1)
-        self.assertEqual(svars['header'], '<h1>heading</h1>')
-        self.assertEqual(svars['content'], '<p>foo</p>\n<p>bar</p>')
-        self.assertEqual(svars['source'], {})
-        self.assertEqual(svars['classes'], [])
+        self.assertEquals(svars['title'], 'heading')
+        self.assertEquals(svars['level'], 1)
+        self.assertEquals(svars['header'], '<h1>heading</h1>')
+        self.assertEquals(svars['content'], '<p>foo</p>\n<p>bar</p>')
+        self.assertEquals(svars['source'], {})
+        self.assertEquals(svars['classes'], [])
 
     def test_unicode(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example3', 'slides.rst'))
         g.execute()
         s = g.render()
         self.assertTrue(s.find('<pre>') != -1)
-        self.assertEqual(len(re.findall('<pre><span', s)), 3)
+        self.assertEquals(len(re.findall('<pre><span', s)), 3)
 
     def test_inputencoding(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example3',
@@ -98,20 +106,20 @@ class GeneratorTest(BaseTestCase):
                                      {'title': "slide2", 'level': 1},
                                      {'title': None, 'level': 1},
                                     ])
-        self.assertEqual(svars['head_title'], 'slide1')
+        self.assertEquals(svars['head_title'], 'slide1')
 
     def test_process_macros(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
         # Notes
         r = g.process_macros('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
-        self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
-        self.assertEqual(r[1], [u'has_notes'])
+        self.assertEquals(r[0].find('<p class="notes">bar</p>'), 11)
+        self.assertEquals(r[1], [u'has_notes'])
         # FXs
         content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
         r = g.process_macros(content)
-        self.assertEqual(r[0], '<p>foo</p>\n<p>baz</p>')
-        self.assertEqual(r[1][0], 'blah')
-        self.assertEqual(r[1][1], 'blob')
+        self.assertEquals(r[0], '<p>foo</p>\n<p>baz</p>')
+        self.assertEquals(r[1][0], 'blah')
+        self.assertEquals(r[1][1], 'blob')
 
     def test_register_macro(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
@@ -166,12 +174,12 @@ echo $bar;
 
     def test_descape(self):
         m = macro.CodeHighlightingMacro(self.logtest)
-        self.assertEqual(m.descape('foo'), 'foo')
-        self.assertEqual(m.descape('&gt;'), '>')
-        self.assertEqual(m.descape('&lt;'), '<')
-        self.assertEqual(m.descape('&amp;lt;'), '&lt;')
-        self.assertEqual(m.descape('&lt;span&gt;'), '<span>')
-        self.assertEqual(m.descape('&lt;spam&amp;eggs&gt;'), '<spam&eggs>')
+        self.assertEquals(m.descape('foo'), 'foo')
+        self.assertEquals(m.descape('&gt;'), '>')
+        self.assertEquals(m.descape('&lt;'), '<')
+        self.assertEquals(m.descape('&amp;lt;'), '&lt;')
+        self.assertEquals(m.descape('&lt;span&gt;'), '<span>')
+        self.assertEquals(m.descape('&lt;spam&amp;eggs&gt;'), '<spam&eggs>')
 
     def test_process(self):
         m = macro.CodeHighlightingMacro(self.logtest)
@@ -179,8 +187,8 @@ echo $bar;
         self.assertTrue(hl[0].startswith('<div class="highlight"><pre'))
         self.assertEquals(hl[1][0], u'has_code')
         input = "<p>Nothing to declare</p>"
-        self.assertEqual(m.process(input)[0], input)
-        self.assertEqual(m.process(input)[1], [])
+        self.assertEquals(m.process(input)[0], input)
+        self.assertEquals(m.process(input)[1], [])
 
     def test_process_rst_code_blocks(self):
         m = macro.CodeHighlightingMacro(self.logtest)
@@ -217,24 +225,24 @@ class FxMacroTest(BaseTestCase):
         m = macro.FxMacro(self.logtest)
         content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
         r = m.process(content)
-        self.assertEqual(r[0], '<p>foo</p>\n<p>baz</p>')
-        self.assertEqual(r[1][0], 'blah')
-        self.assertEqual(r[1][1], 'blob')
+        self.assertEquals(r[0], '<p>foo</p>\n<p>baz</p>')
+        self.assertEquals(r[1][0], 'blah')
+        self.assertEquals(r[1][1], 'blob')
 
 
 class NotesMacroTest(BaseTestCase):
     def test_process(self):
         m = macro.NotesMacro(self.logtest)
         r = m.process('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
-        self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
-        self.assertEqual(r[1], [u'has_notes'])
+        self.assertEquals(r[0].find('<p class="notes">bar</p>'), 11)
+        self.assertEquals(r[1], [u'has_notes'])
 
 
 class ParserTest(BaseTestCase):
     def test___init__(self):
-        self.assertEqual(Parser('.md').format, 'markdown')
-        self.assertEqual(Parser('.markdown').format, 'markdown')
-        self.assertEqual(Parser('.rst').format, 'restructuredtext')
+        self.assertEquals(Parser('.md').format, 'markdown')
+        self.assertEquals(Parser('.markdown').format, 'markdown')
+        self.assertEquals(Parser('.rst').format, 'restructuredtext')
         self.assertRaises(NotImplementedError, Parser, '.txt')
 
 

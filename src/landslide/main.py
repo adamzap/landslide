@@ -18,15 +18,16 @@
 import sys
 
 try:
-    from landslide.generator import Generator
+    from landslide import generator
 except ImportError:
-    from generator import Generator
+    import generator
 
 from optparse import OptionParser
 
 
 def _parse_options():
-    """Parses ``landslide`` args options."""
+    """ Parses ``landslide`` args options.
+    """
 
     parser = OptionParser(
         usage="%prog [options] input.md ...",
@@ -34,6 +35,13 @@ def _parse_options():
                     "slideshow from Markdown or other formats",
         epilog="Note: PDF export requires the `prince` program: "
                "http://princexml.com/")
+
+    parser.add_option(
+        "-c", "--copy-theme",
+        action="store_true",
+        dest="copy_theme",
+        help="Copy theme directory into current presentation source directory",
+        default=False)
 
     parser.add_option(
         "-b", "--debug",
@@ -67,17 +75,23 @@ def _parse_options():
         default=False)
 
     parser.add_option(
-        "-t", "--theme",
-        dest="theme",
-        help="A theme name, or path to a landlside theme directory",
-        default='default')
+        "-l", "--linenos",
+        type="choice",
+        choices=generator.VALID_LINENOS,
+        dest="linenos",
+        help="How to ouput linenos in source code. Three options availables: "
+        "no (no line numbers); "
+        "inline (inside <pre> tag); "
+        "table (lines numbers in another cell, copy-paste friendly)",
+        default="inline",
+    )
 
     parser.add_option(
         "-o", "--direct-ouput",
         action="store_true",
         dest="direct",
-        help="Prints the generated HTML code to stdin; won't work "
-             "with PDF export",
+        help="Prints the generated HTML code to stdin; won't work with PDF "
+             "export",
         default=False)
 
     parser.add_option(
@@ -86,6 +100,22 @@ def _parse_options():
         dest="verbose",
         help="Won't write anything to stdin (silent mode)",
         default=False)
+
+    parser.add_option(
+        "-r", "--relative",
+        action="store_true",
+        dest="relative",
+        help="Make your presentation asset links relative to current pwd; "
+             "This may be useful if you intend to publish your html "
+             "presentation online.",
+        default=False,
+    )
+
+    parser.add_option(
+        "-t", "--theme",
+        dest="theme",
+        help="A theme name, or path to a landlside theme directory",
+        default='default')
 
     parser.add_option(
         "-v", "--verbose",
@@ -99,7 +129,7 @@ def _parse_options():
         "-x", "--extensions",
         dest="extensions",
         help="Comma-separated list of extensions for Markdown",
-        default=''
+        default='',
     )
 
     (options, args) = parser.parse_args()
@@ -112,19 +142,21 @@ def _parse_options():
 
 
 def log(message, type):
+    """Basic logger, print output directly to stdout and errors to stderr.
+    """
     (sys.stdout if type == 'notice' else sys.stderr).write(message + "\n")
 
 
 def run(input_file, options):
-    generator = Generator(input_file, options.destination_file,
-                          options.theme, direct=options.direct,
-                          debug=options.debug, verbose=options.verbose,
-                          embed=options.embed, encoding=options.encoding,
-                          logger=log, extensions=options.extensions)
-    generator.execute()
+    """ Runs the Generator using parsed options.
+    """
+    options.logger = log
+    generator.Generator(input_file, **options.__dict__).execute()
 
 
 def main():
+    """ Main program entry point.
+    """
     options, input_file = _parse_options()
 
     if (options.debug):

@@ -38,6 +38,15 @@
     <link rel="stylesheet" media="print" href="{{ css.print.path_url }}">
     <link rel="stylesheet" media="screen, projection" href="{{ css.screen.path_url }}">
     {% endif %}
+    {% for css in user_css %}
+      {% if embed %}
+      <style type="text/css" media="screen, projection">
+        {{ css.contents }}
+      </style>
+      {% else %}
+      <link rel="stylesheet" href="{{ css.path_url }}">
+      {% endif %}
+    {% endfor %}
     <!-- /Styles -->
     <!-- Javascripts -->
     {% if embed %}
@@ -47,6 +56,15 @@
     {% else %}
     <script type="text/javascript" src="{{ js.path_url }}"></script>
     {% endif %}
+    {% for js in user_js %}
+      {% if embed %}
+      <script>
+        {{ js.contents }}
+      </script>
+      {% else %}
+      <script type="text/javascript" src="{{ js.path_url }}"></script>
+      {% endif %}
+    {% endfor %}
     <!-- /Javascripts -->
 </head>
 <body>
@@ -78,7 +96,7 @@
           <footer>
             {% if slide.source %}
             <aside class="source">
-              Source: <a href="file://{{ slide.source.abs_path }}">{{ slide.source.rel_path }}</a>
+              Source: <a href="{{ slide.source.rel_path }}">{{ slide.source.rel_path }}</a>
             </aside>
             {% endif %}
             <aside class="page_number">
@@ -95,7 +113,7 @@
     <h2>Table of Contents</h2>
     <table>
       <caption>Table of Contents</caption>
-      {% for section in toc %}      
+      {% for section in toc %}
       <tr id="toc-row-{{ section.number }}">
         <th><a href="#slide{{ section.number }}">{{ section.title }}</a></th>
         <td><a href="#slide{{ section.number }}">{{ section.number }}</a></td>

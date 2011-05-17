@@ -38,6 +38,7 @@ class Parser(object):
             (r'<h(\d+?).*?>', r'<h\1>', re.DOTALL | re.UNICODE),
             (r'<hr.*?>\n', r'<hr />\n', re.DOTALL | re.UNICODE),
     ]
+    md_extensions = ''
 
     def __init__(self, extension, encoding='utf8', md_extensions=''):
         """Configures this parser.
@@ -50,8 +51,9 @@ class Parser(object):
                     self.format = supp_format
         if not self.format:
             raise NotImplementedError(u"Unsupported format %s" % extension)
-
-        self.md_extensions = filter(None, (value.strip() for value in md_extensions.split(',')))
+        if md_extensions:
+            exts = (value.strip() for value in md_extensions.split(','))
+            self.md_extensions = filter(None, exts)
 
     def parse(self, text):
         """Parses and renders a text as HTML regarding current format.
