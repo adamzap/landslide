@@ -80,7 +80,7 @@ body.expose div.slide {
   margin: 10px !important;
   -webkit-transition: none;
   -moz-transition: none;
-  -o-transition: none;  
+  -o-transition: none;
   -moz-transform: scale(.33, .33);
   -moz-transform-origin: 0 0;
   -webkit-transform: scale(.33, .33);

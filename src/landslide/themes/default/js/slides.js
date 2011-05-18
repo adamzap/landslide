@@ -6,6 +6,7 @@ function main() {
 
   var currentSlideNo;
   var notesOn = false;
+  var expanded = false;
   var slides = document.getElementsByClassName('slide');
   var touchStartX = 0;
   var spaces = /\s+/, a1 = [""];
@@ -216,13 +217,38 @@ function main() {
     if (!toc) {
       return;
     }
-    
+
     if (!tocOpened || !overviewActive) {
       presentation.style.marginLeft = '0px';
       presentation.style.width = '100%';
     } else {
       presentation.style.marginLeft = toc.clientWidth + 'px';
       presentation.style.width = (presentation.clientWidth - toc.clientWidth) + 'px';
+    }
+  };
+
+  var setScale = function(scale) {
+    var presentation = document.getElementsByClassName('slides')[0];
+    var transform = "scale(" + scale + ")"
+    presentation.style.MozTransform = transform;
+    presentation.style.WebkitTransform = transform;
+    presentation.style.OTransform = transform;
+    presentation.style.msTransform = transform;
+    presentation.style.transform = transform;
+  };
+
+  var expandSlides = function() {
+    if (expanded) {
+      setScale(1);
+      expanded = false;
+    } else {
+      try {
+        var cSlide = document.getElementsByClassName('current')[0];
+        var sx = cSlide.clientWidth / window.innerWidth;
+        var sy = cSlide.clientHeight / window.innerHeight;
+        setScale(1 / Math.max(sx, sy));
+        expanded = true;
+      } catch (e) {}
     }
   };
 
@@ -248,6 +274,9 @@ function main() {
         break;
       case 51: // 3
         switch3D();
+        break;
+      case 69: // e
+        expandSlides();
         break;
       case 72: // h
         showHelp();
