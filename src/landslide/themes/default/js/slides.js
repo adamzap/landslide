@@ -14,6 +14,7 @@ function main() {
   var tocOpened = false;
   var helpOpened = false;
   var overviewActive = false;
+  var scale = 1;
 
   var str2array = function(s) {
     if (typeof s == 'string' || s instanceof String) {
@@ -45,6 +46,9 @@ function main() {
 
   var removeClass = function(node, classStr) {
     var cls;
+    if (!node) {
+      throw 'no node provided';
+    }
     if (classStr !== undefined) {
       classStr = str2array(classStr);
       cls = ' ' + node.className + ' ';
@@ -199,16 +203,19 @@ function main() {
   };
 
   var toggleOverview = function() {
-    var action;
-    if (overviewActive) {
-      action = removeClass;
-      processContext();
+    if (!overviewActive) {
+      addClass(document.body, 'expose');
+      overviewActive = true;
+      processContext(); // force slides context display in expose mode
+      setScale(1);
     } else {
-      action = addClass;
-      showContext(); // force slides context display in expose mode
+      removeClass(document.body, 'expose');
+      overviewActive = false;
+      processContext();
+      if (expanded) {
+        setScale(scale);  // restore scale
+      }
     }
-    action(document.body, 'expose');
-    overviewActive = !overviewActive;
     updateOverview();
   };
 
@@ -234,12 +241,15 @@ function main() {
     }
   };
 
+  var computeScale = function(scale) {
+    var cSlide = document.getElementsByClassName('current')[0];
+    var sx = cSlide.clientWidth / window.innerWidth;
+    var sy = cSlide.clientHeight / window.innerHeight;
+    return 1 / Math.max(sx, sy);
+  };
+
   var setScale = function(scale) {
-    try {
-      var presentation = document.getElementsByClassName('slides')[0];
-    } catch (e) {
-      return;
-    }
+    var presentation = document.getElementsByClassName('slides')[0];
     var transform = 'scale(' + scale + ')';
     presentation.style.MozTransform = transform;
     presentation.style.WebkitTransform = transform;
@@ -249,77 +259,44 @@ function main() {
   };
 
   var expandSlides = function() {
+    if (overviewActive) {
+      return;
+    }
     if (expanded) {
       setScale(1);
       expanded = false;
     } else {
-      try {
-        var cSlide = document.getElementsByClassName('current')[0];
-        var sx = cSlide.clientWidth / window.innerWidth;
-        var sy = cSlide.clientHeight / window.innerHeight;
-        setScale(1 / Math.max(sx, sy));
-        expanded = true;
-      } catch (e) {}
-    }
-  };
-
-  var nodeLists2Array = function() {
-    var result = [];
-    for (var i = 0; i < arguments.length; i++) {
-      result = result.concat(Array.prototype.slice.call(arguments[i]));
-    }
-    return result;
-  };
-
-  var fetchContext = function() {
-    return nodeLists2Array(
-      document.querySelectorAll('.slide.far-past'),
-      document.querySelectorAll('.slide.past'),
-      document.querySelectorAll('.slide.future'),
-      document.querySelectorAll('.slide.far-future')
-    );
-  };
-
-  var hideContext = function() {
-    var context = fetchContext();
-    for (var i = 0; i < context.length; i++) {
-      context[i].style.opacity = 0;
+      scale = computeScale();
+      setScale(scale);
+      expanded = true;
     }
   };
 
   var showContext = function() {
-    var context = fetchContext();
-    for (var i = 0; i < context.length; i++) {
-      context[i].style.opacity = 1;
-    }
-  };
-
-  var processContext = function() {
-    if (overviewActive) {
-      return;
-    }
-    if (hiddenContext && !overviewActive) {
-      hideContext();
-    } else {
-      showContext();
-    }
     try {
-      document.querySelectorAll('.current')[0].style.opacity = 1;
+      var presentation = document.getElementsByClassName('slides')[0];
+      removeClass(presentation, 'nocontext');
     } catch (e) {}
   };
 
-  var toggleContext = function() {
-    if (overviewActive) {
-      return;
-    }
+  var hideContext = function() {
+    try {
+      var presentation = document.getElementsByClassName('slides')[0];
+      addClass(presentation, 'nocontext');
+    } catch (e) {}
+  };
+
+  var processContext = function() {
     if (hiddenContext) {
-      showContext();
-      hiddenContext = false;
-    } else {
       hideContext();
-      hiddenContext = true;
+    } else {
+      showContext();
     }
-    console.log(hiddenContext);
+  };
+
+  var toggleContext = function() {
+    hiddenContext = !hiddenContext;
+    processContext();
   };
 
   var handleBodyKeyDown = function(event) {
@@ -343,13 +320,19 @@ function main() {
         showNotes();
         break;
       case 51: // 3
-        switch3D();
+        if (!overviewActive) {
+          switch3D();
+        }
         break;
       case 67: // c
-        toggleContext();
+        if (!overviewActive) {
+          toggleContext();
+        }
         break;
       case 69: // e
-        expandSlides();
+        if (!overviewActive) {
+          expandSlides();
+        }
         break;
       case 72: // h
         showHelp();
@@ -424,7 +407,6 @@ function main() {
 
   var addTocLinksListeners = function() {
     var toc = document.getElementById('toc');
-
     if (toc) {
       var tocLinks = toc.getElementsByTagName('a');
       for (var i=0; i < tocLinks.length; i++) {
@@ -450,6 +432,8 @@ function main() {
     document.addEventListener('DOMMouseScroll', handleWheel, false);
     window.onmousewheel = document.onmousewheel = handleWheel;
 
+    window.onresize = expandSlides;
+
     var els = slides;
     for (var i = 0, el; el = els[i]; i++) {
       addClass(el, 'slide far-future');
@@ -462,7 +446,5 @@ function main() {
     addTocLinksListeners();
 
     addSlideClickListeners();
-
-    window.onresize = expandSlides;
   })();
 }
