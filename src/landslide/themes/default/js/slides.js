@@ -7,16 +7,17 @@ function main() {
   var currentSlideNo;
   var notesOn = false;
   var expanded = false;
+  var hiddenContext = false;
   var slides = document.getElementsByClassName('slide');
   var touchStartX = 0;
-  var spaces = /\s+/, a1 = [""];
+  var spaces = /\s+/, a1 = [''];
   var tocOpened = false;
   var helpOpened = false;
   var overviewActive = false;
 
   var str2array = function(s) {
-    if (typeof s == "string" || s instanceof String) {
-      if (s.indexOf(" ") < 0) {
+    if (typeof s == 'string' || s instanceof String) {
+      if (s.indexOf(' ') < 0) {
         a1[0] = s;
         return a1;
       } else {
@@ -32,11 +33,11 @@ function main() {
 
   var addClass = function(node, classStr) {
     classStr = str2array(classStr);
-    var cls = " " + node.className + " ";
+    var cls = ' ' + node.className + ' ';
     for (var i = 0, len = classStr.length, c; i < len; ++i) {
       c = classStr[i];
-      if (c && cls.indexOf(" " + c + " ") < 0) {
-        cls += c + " ";
+      if (c && cls.indexOf(' ' + c + ' ') < 0) {
+        cls += c + ' ';
       }
     }
     node.className = trim(cls);
@@ -46,13 +47,13 @@ function main() {
     var cls;
     if (classStr !== undefined) {
       classStr = str2array(classStr);
-      cls = " " + node.className + " ";
+      cls = ' ' + node.className + ' ';
       for (var i = 0, len = classStr.length; i < len; ++i) {
-        cls = cls.replace(" " + classStr[i] + " ", " ");
+        cls = cls.replace(' ' + classStr[i] + ' ', ' ');
       }
       cls = trim(cls);
     } else {
-      cls = "";
+      cls = '';
     }
     if (node.className != cls) {
       node.className = cls;
@@ -87,7 +88,7 @@ function main() {
   };
 
   var updateSlideClasses = function() {
-    window.location.hash = "slide" + currentSlideNo;
+    window.location.hash = 'slide' + currentSlideNo;
 
     for (var i=1; i<currentSlideNo-1; i++) {
       changeSlideElClass(i, 'far-past');
@@ -102,6 +103,8 @@ function main() {
     }
 
     highlightCurrentTocLink();
+
+    processContext();
 
     document.getElementsByTagName('title')[0].innerText = getSlideTitle(currentSlideNo);
   };
@@ -164,14 +167,11 @@ function main() {
     if (helpOpened) {
         showHelp();
     }
-
     var toc = document.getElementById('toc');
-
     if (toc) {
-      toc.style.marginLeft = tocOpened ? '-' + toc.clientWidth + 'px' : '0px';
+      toc.style.marginLeft = tocOpened ? '-' + (toc.clientWidth + 20) + 'px' : '0px';
       tocOpened = !tocOpened;
     }
-
     updateOverview();
   };
 
@@ -193,13 +193,20 @@ function main() {
       document.getElementsByClassName('presentation')[0].style.webkitPerspective = '1000px';
       document.body.className += ' three-d';
     } else {
-      window.setTimeout("document.getElementsByClassName('presentation')[0].style.webkitPerspective = '0';", 2000);
+      window.setTimeout('document.getElementsByClassName(\'presentation\')[0].style.webkitPerspective = \'0\';', 2000);
       document.body.className = document.body.className.replace(/three-d/, '');
     }
   };
 
   var toggleOverview = function() {
-    var action = overviewActive ? removeClass : addClass;
+    var action;
+    if (overviewActive) {
+      action = removeClass;
+      processContext();
+    } else {
+      action = addClass;
+      showContext(); // force slides context display in expose mode
+    }
     action(document.body, 'expose');
     overviewActive = !overviewActive;
     updateOverview();
@@ -228,8 +235,12 @@ function main() {
   };
 
   var setScale = function(scale) {
-    var presentation = document.getElementsByClassName('slides')[0];
-    var transform = "scale(" + scale + ")"
+    try {
+      var presentation = document.getElementsByClassName('slides')[0];
+    } catch (e) {
+      return;
+    }
+    var transform = 'scale(' + scale + ')';
     presentation.style.MozTransform = transform;
     presentation.style.WebkitTransform = transform;
     presentation.style.OTransform = transform;
@@ -250,6 +261,65 @@ function main() {
         expanded = true;
       } catch (e) {}
     }
+  };
+
+  var nodeLists2Array = function() {
+    var result = [];
+    for (var i = 0; i < arguments.length; i++) {
+      result = result.concat(Array.prototype.slice.call(arguments[i]));
+    }
+    return result;
+  };
+
+  var fetchContext = function() {
+    return nodeLists2Array(
+      document.querySelectorAll('.slide.far-past'),
+      document.querySelectorAll('.slide.past'),
+      document.querySelectorAll('.slide.future'),
+      document.querySelectorAll('.slide.far-future')
+    );
+  };
+
+  var hideContext = function() {
+    var context = fetchContext();
+    for (var i = 0; i < context.length; i++) {
+      context[i].style.opacity = 0;
+    }
+  };
+
+  var showContext = function() {
+    var context = fetchContext();
+    for (var i = 0; i < context.length; i++) {
+      context[i].style.opacity = 1;
+    }
+  };
+
+  var processContext = function() {
+    if (overviewActive) {
+      return;
+    }
+    if (hiddenContext && !overviewActive) {
+      hideContext();
+    } else {
+      showContext();
+    }
+    try {
+      document.querySelectorAll('.current')[0].style.opacity = 1;
+    } catch (e) {}
+  };
+
+  var toggleContext = function() {
+    if (overviewActive) {
+      return;
+    }
+    if (hiddenContext) {
+      showContext();
+      hiddenContext = false;
+    } else {
+      hideContext();
+      hiddenContext = true;
+    }
+    console.log(hiddenContext);
   };
 
   var handleBodyKeyDown = function(event) {
@@ -274,6 +344,9 @@ function main() {
         break;
       case 51: // 3
         switch3D();
+        break;
+      case 67: // c
+        toggleContext();
         break;
       case 69: // e
         expandSlides();
@@ -367,7 +440,7 @@ function main() {
   // initialize
 
   (function() {
-    if (window.location.hash != "") {
+    if (window.location.hash != '') {
       currentSlideNo = Number(window.location.hash.replace('#slide', ''));
     } else {
       currentSlideNo = 1;
@@ -389,5 +462,7 @@ function main() {
     addTocLinksListeners();
 
     addSlideClickListeners();
+
+    window.onresize = expandSlides;
   })();
-};
+}
