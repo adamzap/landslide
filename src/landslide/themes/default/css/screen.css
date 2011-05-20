@@ -67,6 +67,14 @@ div.slide {
   -webkit-border-bottom-left-radius: 20px;
 }
 
+div#current_presenter_notes {
+	display: none;
+}
+
+div.slide div.presenter_notes {
+	display: none;
+}
+
 /* Expose */
 
 body.expose div.slides {
@@ -136,6 +144,92 @@ body.expose .slide.current {
   -webkit-transform-origin: 0 0;
   -o-transform: scale(.315, .315);
   -o-transform-origin: 0 0;
+}
+
+/* Presenter Mode */
+
+body.presenter_view div.slide {
+  display: inline;
+  position: absolute;
+  overflow: hidden;
+  -moz-transform: scale(.5, .5);
+  -moz-transform-origin: 0 0;
+  -webkit-transform: scale(.5, .5);
+  -webkit-transform-origin: 0 0;
+  -o-transform: scale(.5, .5);
+  -o-transform-origin: 0 0;
+	margin-top: -300px;
+}
+
+body.presenter_view .slide.far-past {
+  display: block;
+  margin-left: -1500px;
+}
+
+body.presenter_view .slide.past {
+  display: block;
+  margin-left: -975px;
+}
+
+body.presenter_view .slide.current {
+  display: block;
+  margin-left: -475px;
+  border: 8px solid maroon;
+  z-index: 2;
+}
+
+body.presenter_view .slide.future {
+  display: block;
+  margin-left: 25px;
+  z-index: 1;
+}
+
+body.presenter_view .slide.far-future {
+  display: block;
+  margin-left: 525px;
+}
+
+body.presenter_view div#current_presenter_notes {
+	visibility: visible;
+	display: block;
+	position: absolute;
+	overflow: auto;
+	vertical-align: middle;
+	left: 50%;
+	top: 50%;
+	margin-left: -475px;
+	margin-top: 100px;
+	z-index: 2;
+	width: 950px;
+	border-style: solid;
+	height: 30%;
+	background-color: silver;
+}
+
+body.presenter_view div#current_presenter_notes section {
+  font-family: 'Lucida Grande';
+  color: black;
+  text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
+  display: block;
+  overflow: visible;
+	position: relative;
+	background-color: #fffeff;
+	height: 120px;
+	margin-right: 30px;
+	margin-top: 60px;
+	margin-left: 30px;
+	padding-right: 10px;
+	padding-left: 10px;
+	padding-top: 10px;
+}
+
+body.presenter_view div#current_presenter_notes section p {
+	margin: 0;
+}
+
+body.presenter_view div#current_presenter_notes h1 {
+	font-size: 50%;
+	display: block;
 }
 
 /* Slide styles */

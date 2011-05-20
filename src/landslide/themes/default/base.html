@@ -69,6 +69,9 @@
 </head>
 <body>
   <div class="presentation">
+    <div id="current_presenter_notes">
+      <div id="presenter_note"></div>
+    </div>
     <div class="slides">
       {% for slide in slides %}
       <!-- slide source: {% if slide.source %}{{ slide.source.rel_path }}{% endif %} -->
@@ -81,6 +84,14 @@
             {% if slide.content %}
             <section>{{ slide.content }}</section>
             {% endif %}
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            {% if slide.presenter_notes %}
+              {{ slide.presenter_notes }}
+            {% endif %}
+            </section>
           </div>
           <footer>
             {% if slide.source %}
@@ -134,6 +145,10 @@
       <tr>
         <th>Full screen slides</th>
         <td>e</td>
+      </tr>
+      <tr>
+        <th>Presenter View</th>
+        <td>p</td>
       </tr>
       <tr>
         <th>Source Files</th>

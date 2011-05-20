@@ -267,6 +267,10 @@ You can toggle display of notes by pressing the `2` key.
 
 Some other macros are also available by default: `.fx: foo bar` will add the `foo` and `bar` classes to the corresponding slide `<div>` element, easing styling of your presentation using CSS.
 
+Presenter Notes
+===============
+You can also add presenter notes to each slide. Press the 'p' key to open the presenter view.
+
 ---
 
 Registering Macros
