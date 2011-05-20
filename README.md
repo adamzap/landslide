@@ -169,7 +169,7 @@ Or get it as a PDF document, at least if PrinceXML is installed and available on
 Viewing
 =======
 
-- Press `t` to toggle display of help
+- Press `h` to toggle display of help
 - Press `left arrow` and `right arrow` to navigate
 - Press `t` to toggle a table of contents for your presentation. Slide titles are links
 - Press `ESC` to display the presentation overview (Exposé)
