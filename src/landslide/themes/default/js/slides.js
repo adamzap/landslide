@@ -184,7 +184,7 @@ function main() {
     for (var i = 0, len = notes.length; i < len; i++) {
       notes.item(i).style.display = (notesOn) ? 'none':'block';
     }
-    notesOn = (notesOn) ? false : true;
+    notesOn = !notesOn;
   };
 
   var showSlideNumbers = function() {
