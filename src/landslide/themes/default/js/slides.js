@@ -439,7 +439,7 @@ function main() {
   };
 
   var handleWheel = function(event) {
-    if (tocOpened || helpOpened) {
+    if (tocOpened || helpOpened || overviewActive) {
       return;
     }
 
