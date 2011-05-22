@@ -282,14 +282,6 @@ aside {
     font-size: 90%;
 }
 
-div#current_presenter_notes {
-	display: none;
-}
-
-div.slide div.presenter_notes {
-	display: none;
-}
-
 /* Expose */
 
 body.expose div.slides {
