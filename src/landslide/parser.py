@@ -17,7 +17,7 @@
 import re
 
 SUPPORTED_FORMATS = {
-    'markdown':         ['.mdown', '.markdown', '.markdn', '.md'],
+    'markdown':         ['.mdown', '.markdown', '.markdn', '.md', '.mdn'],
     'restructuredtext': ['.rst', '.rest'],
 }
 
@@ -63,6 +63,9 @@ class Parser(object):
                 import markdown
             except ImportError:
                 raise RuntimeError(u"Looks like markdown is not installed")
+
+            if text.startswith(u'\ufeff'):  # check for unicode BOM
+              text = text[1:]
 
             return markdown.markdown(text, self.md_extensions)
         elif self.format == 'restructuredtext':
