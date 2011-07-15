@@ -20,7 +20,7 @@ img { display: block; margin: auto; }
 
 body {
   font: 14px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
-  background: #778;
+  background: #555753;
   padding: 0;
   margin: 0;
   overflow: hidden;
@@ -37,17 +37,22 @@ div.presentation {
   background: -moz-linear-gradient(bottom, #555753, #2e3436);
 }
 
-div.slides {
+div.slides, body.expose div.slides.nocontext {
   width: 100%;
   height: 100%;
-  overflow: hidden;
   left: 0;
   top: 0;
   position: absolute;
   display: block;
-  -webkit-transition: -webkit-transform 1s ease-in-out;
-  -moz-transition: -moz-transform 1s ease-in-out;
-  -o-transition: -o-transform 1s ease-in-out;
+}
+
+div.slides.nocontext {
+  width: 900px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  left: auto;
+  top: auto;
 }
 
 div.slide {
@@ -76,6 +81,9 @@ div.slide {
   border-bottom-left-radius: 20px;
   -moz-border-radius-bottomleft: 20px;
   -webkit-border-bottom-left-radius: 20px;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
 }
 
 div.slide p {
