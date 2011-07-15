@@ -8,6 +8,7 @@ function main() {
     var notesOn = false;
     var expanded = false;
     var hiddenContext = false;
+    var blanked = false;
     var slides = document.getElementsByClassName('slide');
     var touchStartX = 0;
     var spaces = /\s+/, a1 = [''];
@@ -353,6 +354,14 @@ function main() {
         processContext();
     };
 
+    var toggleBlank = function() {
+        blank_elem = document.getElementById('blank');
+
+        blank_elem.style.display = blanked ? 'none' : 'block';
+
+        blanked = !blanked;
+    };
+
     var isModifierKey = function(keyCode) {
         switch (keyCode) {
             case 16: // shift
@@ -406,6 +415,11 @@ function main() {
             case 51: // 3
                 if (!modifierKeyDown && !overviewActive) {
                     switch3D();
+                }
+                break;
+            case 66: // b
+                if (!modifierKeyDown && !overviewActive) {
+                    toggleBlank();
                 }
                 break;
             case 67: // c
