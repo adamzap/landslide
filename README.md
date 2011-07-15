@@ -174,6 +174,8 @@ Viewing
 - Press `t` to toggle a table of contents for your presentation. Slide titles are links
 - Press `ESC` to display the presentation overview (Exposé)
 - Press `n` to toggle slide number visibility
+- Press `c` to toggle current slide context (previous and next slides)
+- Press `e` to make slides filling the whole available space within the document body
 - Press `S` to toggle display of link to the source file for each slide
 - Press '2' to toggle notes in your slides (specify with the .notes macro)
 - Press '3' to toggle pseudo-3D display (experimental)
