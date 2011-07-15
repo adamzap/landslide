@@ -1,6 +1,6 @@
 body {
   font: 14px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
-  background: #778;
+  background: #fff;
   padding: 0;
   margin: 0;
   overflow: hidden;
@@ -15,18 +15,24 @@ div.presentation {
   background: inherit;
 }
 
-div.slides {
+div.slides, body.expose div.slides.nocontext {
   width: 100%;
   height: 100%;
-  overflow: hidden;
   left: 0;
   top: 0;
   position: absolute;
   display: block;
   background-color: #fff;
-  -webkit-transition: -webkit-transform 1s ease-in-out;
-  -moz-transition: -moz-transform 1s ease-in-out;
-  -o-transition: -o-transform 1s ease-in-out;
+}
+
+
+div.slides.nocontext {
+  width: 900px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  left: auto;
+  top: auto;
 }
 
 div.slide {
@@ -290,6 +296,9 @@ body.expose div.slide {
   -webkit-transform-origin: 0 0;
   -o-transform: scale(.33, .33);
   -o-transform-origin: 0 0;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
   cursor: pointer;
 }
 
