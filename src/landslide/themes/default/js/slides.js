@@ -417,6 +417,7 @@ function main() {
                     switch3D();
                 }
                 break;
+            case 48: // 0
             case 66: // b
                 if (!modifierKeyDown && !overviewActive) {
                     toggleBlank();
