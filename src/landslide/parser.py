@@ -19,6 +19,7 @@ import re
 SUPPORTED_FORMATS = {
     'markdown':         ['.mdown', '.markdown', '.markdn', '.md'],
     'restructuredtext': ['.rst', '.rest'],
+    'textile':          ['.textile'],
 }
 
 
@@ -75,6 +76,13 @@ class Parser(object):
             for (pattern, replacement, mode) in self.RST_REPLACEMENTS:
                 html = re.sub(pattern, replacement, html, mode)
             return html.strip()
+        elif self.format == 'textile':
+            try:
+                import textile
+            except ImportError:
+                raise RuntimeError(u"Looks like textile is not installed")
+
+            return textile.textile(text, encoding=self.encoding)
         else:
             raise NotImplementedError(u"Unsupported format %s, cannot parse"
                                       % self.format)
