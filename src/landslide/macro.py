@@ -78,8 +78,9 @@ class CodeHighlightingMacro(Macro):
                             % lang, 'warning')
                 return content, classes
 
-            if self.options['linenos'] == 'no':
+            if 'linenos' not in self.options or self.options['linenos'] =='no':
                 self.options['linenos'] = False
+
             formatter = HtmlFormatter(linenos=self.options['linenos'],
                                       nobackground=True)
             pretty_code = pygments.highlight(self.descape(code), lexer,
