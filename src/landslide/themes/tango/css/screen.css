@@ -81,9 +81,6 @@ div.slide {
   border-bottom-left-radius: 20px;
   -moz-border-radius-bottomleft: 20px;
   -webkit-border-bottom-left-radius: 20px;
-  -webkit-transition: none;
-  -moz-transition: none;
-  -o-transition: none;
 }
 
 div.slide p {
