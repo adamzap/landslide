@@ -141,6 +141,22 @@ section, .slide header:only-child h1 {
   overflow: hidden;
 }
 
+section img.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+section img.align-right {
+  display: block;
+  margin-left: auto;
+}
+
+section img.align-left {
+  display: block;
+  margin-right: auto;
+}
+
 a {
   color: inherit;
   display: inline-block;
