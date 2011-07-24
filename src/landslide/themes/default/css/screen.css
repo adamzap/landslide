@@ -309,6 +309,8 @@ section, .slide header:only-child h1 {
   overflow: hidden;
 }
 
+img { display: block; margin: auto; }
+
 section img.align-center {
   display: block;
   margin-left: auto;
