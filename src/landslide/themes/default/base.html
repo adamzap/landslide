@@ -86,14 +86,14 @@
             <section>{{ slide.content }}</section>
             {% endif %}
           </div>
+          {% if slide.presenter_notes %}
           <div class="presenter_notes">
             <header><h1>Presenter Notes</h1></header>
             <section>
-            {% if slide.presenter_notes %}
               {{ slide.presenter_notes }}
-            {% endif %}
             </section>
           </div>
+          {% endif %}
           <footer>
             {% if slide.source %}
             <aside class="source">
