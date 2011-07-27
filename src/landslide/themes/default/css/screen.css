@@ -228,7 +228,7 @@ div#current_presenter_notes {
   display: none;
 }
 
-div.slide div.presenter_notes {
+div.slide div.presenter_notes, div.slides div.presenter_notes {
   display: none;
 }
 
