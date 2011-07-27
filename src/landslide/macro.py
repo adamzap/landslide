@@ -93,7 +93,6 @@ class EmbedImagesMacro(Macro):
        algorithm.
     """
     def process(self, content, source=None):
-        print source
         classes = []
 
         if not self.embed:
@@ -131,11 +130,14 @@ class FixImagePathsMacro(Macro):
             return content, classes
         base_path = utils.get_path_url(source, self.options.get('relative'))
         base_url = os.path.split(base_path)[0]
-        fn = lambda p: r'<img src="%s" />' % os.path.join(base_url, p.group(1))
 
-        sub_regex = r'<img.*?src="(?!http://)(.*?)".*/?>'
+        images = re.findall(r'<img.*?src="(?!http://)(.*?)".*/?>', content,
+            re.DOTALL | re.UNICODE)
 
-        content = re.sub(sub_regex, fn, content, re.UNICODE)
+        for image in images:
+            full_path = os.path.join(base_url, image)
+
+            content = content.replace(image, full_path)
 
         return content, classes
 
