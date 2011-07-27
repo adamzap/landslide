@@ -16,9 +16,7 @@
 
 import os
 import re
-import base64
 import htmlentitydefs
-import mimetypes
 import pygments
 import sys
 import utils
@@ -95,6 +93,7 @@ class EmbedImagesMacro(Macro):
        algorithm.
     """
     def process(self, content, source=None):
+        print source
         classes = []
 
         if not self.embed:
@@ -103,57 +102,18 @@ class EmbedImagesMacro(Macro):
         images = re.findall(r'<img\s.*?src="(.+?)"\s?.*?/?>', content,
                             re.DOTALL | re.UNICODE)
 
-        if not images:
-            return content, classes
+        source_dir = os.path.dirname(source)
 
         for image_url in images:
-            if not image_url or image_url.startswith('data:'):
-                continue
+            encoded_url = utils.encode_image_from_url(image_url, source_dir)
 
-            if image_url.startswith('file://'):
-                self.logger(u"%s: file:// image urls are not supported: "
-                             "skipped" % source, 'warning')
-                continue
-
-            if (image_url.startswith('http://')
-                or image_url.startswith('https://')):
-                continue
-            elif os.path.isabs(image_url):
-                image_real_path = image_url
-            else:
-                image_real_path = os.path.join(os.path.dirname(source),
-                                               image_url)
-
-            if not os.path.exists(image_real_path):
-                self.logger(u"%s: image file %s not found: skipped"
-                            % (source, image_real_path), 'warning')
-                continue
-
-            mime_type, encoding = mimetypes.guess_type(image_real_path)
-
-            if not mime_type:
-                self.logger(u"%s: unknown image mime-type in %s: skipped"
-                            % (source, image_real_path), 'warning')
-                continue
-
-            try:
-                image_contents = open(image_real_path).read()
-                encoded_image = base64.b64encode(image_contents)
-            except IOError:
-                self.logger(u"%s: unable to read image %s: skipping"
-                            % (source, image_real_path), 'warning')
-                continue
-            except Exception:
-                self.logger(u"%s: unable to base64-encode image %s: skipping"
-                            % (source, image_real_path), 'warning')
-                continue
-
-            encoded_url = u"data:%s;base64,%s" % (mime_type, encoded_image)
+            if not encoded_url:
+                return content, classes
 
             content = content.replace(u"src=\"" + image_url,
                                       u"src=\"" + encoded_url, 1)
 
-            self.logger(u"Embedded image %s" % image_real_path, 'notice')
+            self.logger(u"Embedded image %s" % image_url, 'notice')
 
         return content, classes
 

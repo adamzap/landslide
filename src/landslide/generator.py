@@ -460,7 +460,23 @@ class Generator(object):
         template = jinja2.Template(template_src.read())
         slides = self.fetch_contents(self.source)
         context = self.get_template_vars(slides)
-        return template.render(context)
+
+        html = template.render(context)
+
+        if self.embed:
+            images = re.findall(r'\s+background(?:-image)?:\surl\((.+?)\).+;',
+                            html, re.DOTALL | re.UNICODE)
+
+            for img_url in images:
+                img_url = img_url.replace('"', '').replace("'", '')
+
+                source = os.path.join(THEMES_DIR, self.theme, 'css')
+
+                encoded_url = utils.encode_image_from_url(img_url, source)
+
+                html = html.replace(img_url, encoded_url, 1)
+
+        return html
 
     def write(self):
         """ Writes generated presentation code into the destination file.
