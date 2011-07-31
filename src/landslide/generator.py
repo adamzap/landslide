@@ -226,7 +226,6 @@ class Generator(object):
         """
         slides = []
 
-
         if type(source) is list:
             for entry in source:
                 slides.extend(self.fetch_contents(entry))
