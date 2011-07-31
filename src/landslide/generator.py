@@ -28,6 +28,7 @@ from subprocess import Popen
 
 import macro as macro_module
 from parser import Parser
+from watcher import watch
 
 
 BASE_DIR = os.path.dirname(__file__)
@@ -69,6 +70,7 @@ class Generator(object):
             - ``relative``: enable relative asset urls
             - ``theme``: path to the them to use for this presentation
             - ``verbose``: enables verbose output
+            - ``watch``: watch source file for modifications
         """
         self.copy_theme = kwargs.get('copy_theme', False)
         self.debug = kwargs.get('debug', False)
@@ -83,6 +85,8 @@ class Generator(object):
         self.theme = kwargs.get('theme', 'default')
         self.verbose = kwargs.get('verbose', False)
         self.linenos = self.linenos_check(kwargs.get('linenos'))
+        self.watch = kwargs.get('watch', False)
+        self.source_files = []
         self.num_slides = 0
         self.__toc = []
 
@@ -195,8 +199,16 @@ class Generator(object):
             else:
                 print self.render()
         else:
-            self.write()
-            self.log(u"Generated file: %s" % self.destination_file)
+            self.write_and_log()
+            if self.watch:
+                watch(self.source_files, self.write_and_log)
+
+    def write_and_log(self):
+        self.source_files = []
+        self.write()
+        self.log(u"Generated file: %s" % self.destination_file)
+        if self.watch:
+            self.log(u"\nWatching %s\n" % ", ".join(self.source_files))
 
     def get_template_file(self):
         """ Retrieves Jinja2 template file path.
@@ -214,6 +226,7 @@ class Generator(object):
         """
         slides = []
 
+
         if type(source) is list:
             for entry in source:
                 slides.extend(self.fetch_contents(entry))
@@ -230,6 +243,9 @@ class Generator(object):
             except NotImplementedError:
                 return slides
 
+            #the parser weeds out unsupported files so this is where we can get
+            #the list of files that actually get parsed
+            self.source_files.append(source)
             self.log(u"Adding   %s (%s)" % (source, parser.format))
 
             try:
