@@ -17,8 +17,9 @@
 import re
 
 SUPPORTED_FORMATS = {
-    'markdown':         ['.mdown', '.markdown', '.markdn', '.md'],
+    'markdown':         ['.mdown', '.markdown', '.markdn', '.md', '.mdn'],
     'restructuredtext': ['.rst', '.rest'],
+    'textile':          ['.textile'],
 }
 
 
@@ -64,6 +65,9 @@ class Parser(object):
             except ImportError:
                 raise RuntimeError(u"Looks like markdown is not installed")
 
+            if text.startswith(u'\ufeff'):  # check for unicode BOM
+              text = text[1:]
+
             return markdown.markdown(text, self.md_extensions)
         elif self.format == 'restructuredtext':
             try:
@@ -73,8 +77,15 @@ class Parser(object):
             html = html_body(text, input_encoding=self.encoding)
             # RST generates pretty much markup to be removed in our case
             for (pattern, replacement, mode) in self.RST_REPLACEMENTS:
-                html = re.sub(pattern, replacement, html, mode)
+                html = re.sub(pattern, replacement, html, 0, mode)
             return html.strip()
+        elif self.format == 'textile':
+            try:
+                import textile
+            except ImportError:
+                raise RuntimeError(u"Looks like textile is not installed")
+
+            return textile.textile(text, encoding=self.encoding)
         else:
             raise NotImplementedError(u"Unsupported format %s, cannot parse"
                                       % self.format)

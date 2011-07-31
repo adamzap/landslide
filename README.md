@@ -15,77 +15,6 @@ A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 
 ---
 
-News
-====
-
-10/19/10
---------
-
-Version 0.8.2 is tagged and pushed to [pypi](http://pypi.python.org/pypi/landslide/0.8.2).
-
-This release fixes some unicode and theme issues.
-
-Thanks to Olivier Verdier, millette, and n1k0 (as always).
-
-09/21/10
---------
-
-Version 0.8.1 is tagged and pushed to [pypi](http://pypi.python.org/pypi/landslide/0.8.1).
-
-This release fixes an issue in the "light" theme. The help and table of
-contents side bars were toggled on by default, but this has been fixed.
-
----
-
-News
-====
-
-09/06/10
---------
-
-Version 0.8.0 is tagged and pushed to [pypi](http://pypi.python.org/pypi/landslide/0.8.0). New features:
-
-- Added new `light` theme (agonzalezro) (#14)
-- Slide source files are now displayable in presentation (n1k0), press `s` to toggle
-- Press `h` to toggle a help sidebar
-- Greatly improved Restructured Text support
-- Themes will now fall back to the default theme for most missing files
-- Improved project file structure and pypi compatibility (harobed) (#15)
-- Fix for presentations with more than 48 slides (mtrythall and ipmb) (#17)
-- Many small bug fixes and other improvements
-
-Many thanks to n1k0, agonzalezro, harobed, mtrythall, and ipmb for helping to make this release possible.
-
-Also a big thanks to [Lincoln Loop](http://lincolnloop.com/) for supporting and using Landslide!!
-
----
-
-News
-====
-
-07/15/10
---------
-
-Version 0.6.0 is tagged and pushed to [pypi](http://pypi.python.org/pypi/landslide/0.6.0). New features:
-
-- Navigate your slideshow using arrow keys or the space bar
-- Press `t` to toggle a table of contents for your presentation
-- Press `n` to toggle slide number/source file visibility
-- Press `2` to toggle notes in your slides (specify with the .notes macro)
-- Press `3` to switch to 3D display (using latest WebKit versions)
-- ReST (Restructured Text) support. It's kind of experimental!
-- Theme support. Develop your own themes!
-- Macros. Easily add functionality to landslide slideshows!
-- Many bug fixes
-
-06/24/10
---------
-
-- Version 0.4.0 is tagged, and Landslide is on [pypi](http://pypi.python.org/pypi/landslide/0.4.0).
-- Landslide installs as a command line script if you install it via `easy_install` or `pip`.
-
----
-
 Features
 ========
 
@@ -174,6 +103,9 @@ Viewing
 - Press `t` to toggle a table of contents for your presentation. Slide titles are links
 - Press `ESC` to display the presentation overview (Exposé)
 - Press `n` to toggle slide number visibility
+- Press `b` to toggle screen blanking
+- Press `c` to toggle current slide context (previous and next slides)
+- Press `e` to make slides filling the whole available space within the document body
 - Press `S` to toggle display of link to the source file for each slide
 - Press '2' to toggle notes in your slides (specify with the .notes macro)
 - Press '3' to toggle pseudo-3D display (experimental)
@@ -267,7 +199,7 @@ Some other macros are also available by default: `.fx: foo bar` will add the `fo
 
 Presenter Notes
 ===============
-You can also add presenter notes to each slide. Press the 'p' key to open the presenter view.
+You can also add presenter notes to each slide by following the slide content with a heading entitled "Presenter Notes". Press the 'p' key to open the presenter view.
 
 ---
 
