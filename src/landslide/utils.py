@@ -33,7 +33,7 @@ def get_path_url(abs_path, relative=False):
         return get_abs_path_url(abs_path)
 
 
-def get_rel_path_url(path, base_path=os.environ.get('PWD')):
+def get_rel_path_url(path, base_path=os.getcwd()):
     """ Returns a relative path from the absolute one passed as argument.
         Silently returns originally provided path on failure.
     """
