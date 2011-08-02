@@ -67,7 +67,7 @@ class Generator(object):
             - ``extensions``: Comma separated list of markdown extensions
             - ``logger``: a logger lambda to use for logging
             - ``relative``: enable relative asset urls
-            - ``theme``: path to the them to use for this presentation
+            - ``theme``: path to the theme to use for this presentation
             - ``verbose``: enables verbose output
         """
         self.copy_theme = kwargs.get('copy_theme', False)
@@ -257,7 +257,7 @@ class Generator(object):
             self.theme_dir = os.path.join(THEMES_DIR, theme)
         else:
             raise IOError(u"Theme %s not found or invalid" % theme)
-        target_theme_dir = os.path.join(os.environ.get('PWD'), 'theme')
+        target_theme_dir = os.path.join(os.getcwd(), 'theme')
         if copy_theme or os.path.exists(target_theme_dir):
             self.log(u'Copying %s theme directory to %s'
                      % (theme, target_theme_dir))
