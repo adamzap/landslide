@@ -205,6 +205,8 @@ class Generator(object):
 
     def write_and_log(self):
         self.source_files = []
+        self.num_slides = 0
+        self.__toc = []
         self.write()
         self.log(u"Generated file: %s" % self.destination_file)
         if self.watch:
