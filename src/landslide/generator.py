@@ -338,6 +338,9 @@ class Generator(object):
 
         slide_classes = []
 
+        if header:
+            header, _ = self.process_macros(header, source)
+
         if content:
             content, slide_classes = self.process_macros(content, source)
 
