@@ -107,11 +107,11 @@ Several options are available using the command line:
                           base64-encoded images in presentation to make a
                           standalone document
     -l LINENOS, --linenos=LINENOS
-                          How to ouput linenos in source code. Three options
+                          How to output linenos in source code. Three options
                           availables: no (no line numbers); inline (inside <pre>
                           tag); table (lines numbers in another cell, copy-paste
                           friendly)
-    -o, --direct-ouput    Prints the generated HTML code to stdin; won't work
+    -o, --direct-output    Prints the generated HTML code to stdin; won't work
                           with PDF export
     -q, --quiet           Won't write anything to stdin (silent mode)
     -r, --relative        Make your presentation asset links relative to current
