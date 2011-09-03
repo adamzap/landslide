@@ -341,11 +341,11 @@ class Generator(object):
         if content:
             content, slide_classes = self.process_macros(content, source)
 
-            find = re.search(r'<h\d[^>]*>presenter notes</h\d>', content,
+            find = re.search(r'<h1>notes</h1>(.*)', content,
                              re.DOTALL | re.UNICODE | re.IGNORECASE)
 
             if find:
-                presenter_notes = content[find.end():].strip()
+                presenter_notes = find.group(1)
                 content = content[:find.start()]
 
         source_dict = {}
