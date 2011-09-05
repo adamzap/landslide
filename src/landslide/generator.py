@@ -193,7 +193,7 @@ class Generator(object):
                 raise IOError(u"Direct output mode is not available for PDF "
                                "export")
             else:
-                print self.render()
+                print self.render().encode(self.encoding)
         else:
             self.write()
             self.log(u"Generated file: %s" % self.destination_file)
