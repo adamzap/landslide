@@ -132,6 +132,14 @@ def _parse_options():
         default='',
     )
 
+    parser.add_option(
+       "-n", "--notes",
+       action="store_true",
+       dest="notes",
+       help="Show the presenter notes after the slides when you are creating "
+       "a PDF file",
+       default=False)
+
     (options, args) = parser.parse_args()
 
     if not args:

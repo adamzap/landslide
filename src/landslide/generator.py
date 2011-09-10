@@ -69,6 +69,7 @@ class Generator(object):
             - ``relative``: enable relative asset urls
             - ``theme``: path to the theme to use for this presentation
             - ``verbose``: enables verbose output
+            - ``notes``: enable notes at PDF
         """
         self.copy_theme = kwargs.get('copy_theme', False)
         self.debug = kwargs.get('debug', False)
@@ -83,6 +84,7 @@ class Generator(object):
         self.theme = kwargs.get('theme', 'default')
         self.verbose = kwargs.get('verbose', False)
         self.linenos = self.linenos_check(kwargs.get('linenos'))
+        self.notes = kwargs.get('notes', False)
         self.num_slides = 0
         self.__toc = []
 
@@ -299,6 +301,8 @@ class Generator(object):
         else:
             self.log(u"No screen stylesheet provided in current theme",
                       'warning')
+        if self.notes and self.file_type == 'pdf':
+            css['print']['contents'] += ".presenter_notes { display: block; }"
 
         return css
 

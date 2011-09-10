@@ -72,6 +72,6 @@ code {
   margin-top:100px;
   margin-bottom:100px;
 }
-#toc, #help, .slide aside, .slide footer, .slide .notes {
+#toc, #help, .slide aside, .slide footer, .slide .notes, .presenter_notes {
   display: none;
 }
