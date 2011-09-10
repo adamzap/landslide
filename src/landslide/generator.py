@@ -322,7 +322,10 @@ class Generator(object):
         if '@import' in css:
             for line in css.split('\n'):
                 if '@import' in line:
-                    file_path = os.path.join(THEMES_DIR, line[19:][:-3])
+                    file_subpath = (re.search('(\'|\")(.+)(\'|\")', line)
+                                    .group(2))
+                    file_subpath = file_subpath.replace('../', '')
+                    file_path = os.path.join(THEMES_DIR, file_subpath)
                     try:
                         fh = open(file_path)
                         new_css += fh.read()
