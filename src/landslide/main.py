@@ -79,7 +79,7 @@ def _parse_options():
         type="choice",
         choices=generator.VALID_LINENOS,
         dest="linenos",
-        help="How to ouput linenos in source code. Three options availables: "
+        help="How to output linenos in source code. Three options availables: "
         "no (no line numbers); "
         "inline (inside <pre> tag); "
         "table (lines numbers in another cell, copy-paste friendly)",
@@ -87,7 +87,7 @@ def _parse_options():
     )
 
     parser.add_option(
-        "-o", "--direct-ouput",
+        "-o", "--direct-output",
         action="store_true",
         dest="direct",
         help="Prints the generated HTML code to stdin; won't work with PDF "
