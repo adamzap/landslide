@@ -306,6 +306,7 @@ The `base.html` must be a [Jinja2 template file](http://jinja.pocoo.org/2/docume
   - `title`: the section title
   - `number`: the slide number of the section
   - `sub`: subsections, if any
+- `author`: the author's information.
 
 # Styles Scope
 
