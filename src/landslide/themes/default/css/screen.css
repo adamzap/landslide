@@ -445,6 +445,12 @@ aside {
     right: 10px;
     text-indent: 10px;
   }
+  aside.author {
+    position: absolute;
+    bottom: 22px;
+    left: 10px;
+    text-indent: 10px;
+  }
 
 .notes {
   display: none;

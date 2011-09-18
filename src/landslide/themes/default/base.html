@@ -100,6 +100,9 @@
               Source: <a href="{{ slide.source.rel_path }}">{{ slide.source.rel_path }}</a>
             </aside>
             {% endif %}
+            <aside class="author">
+              {{ author }}
+            </aside>
             <aside class="page_number">
               {{ slide.number }}/{{ num_slides }}
             </aside>
@@ -150,6 +153,10 @@
       <tr>
         <th>Presenter View</th>
         <td>p</td>
+      </tr>
+      <tr>
+        <th>Author</th>
+        <td>a</td>
       </tr>
       <tr>
         <th>Source Files</th>

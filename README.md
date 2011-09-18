@@ -152,6 +152,18 @@ Don't forget to declare the `[landslide]` section. To generate the presentation 
 
 You can use macros to enhance your presentation:
 
+## Author
+
+Set the presentation author by using the `.author:` keyword on the first slide, eg.:
+
+    # First slide's title
+
+    .author: I am the author
+
+    Other content goes here
+
+You can toggle display of the author by pressing the `a` key.
+
 ## Notes
 
 Add notes to your slides using the `.notes:` keyword, eg.:

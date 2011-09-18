@@ -326,6 +326,7 @@ class Generator(object):
         find = re.search(r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
         presenter_notes = None
+        author = None
 
         if not find:
             header = level = title = None
@@ -348,6 +349,13 @@ class Generator(object):
                 presenter_notes = content[find.end():].strip()
                 content = content[:find.start()]
 
+            find = re.search(r'<p>\.author:\s?(.*?)</p>', content,
+                             re.DOTALL | re.UNICODE)
+
+            if find:
+                author = find.group(1)
+                content = re.sub(find.re, "", content, re.DOTALL | re.UNICODE)
+
         source_dict = {}
 
         if source:
@@ -357,7 +365,8 @@ class Generator(object):
         if header or content:
             return {'header': header, 'title': title, 'level': level,
                     'content': content, 'classes': slide_classes,
-                    'source': source_dict, 'presenter_notes': presenter_notes}
+                    'source': source_dict, 'presenter_notes': presenter_notes,
+                    'author': author}
 
     def get_template_vars(self, slides):
         """ Computes template vars from slides html source code.
@@ -366,6 +375,11 @@ class Generator(object):
             head_title = slides[0]['title']
         except (IndexError, TypeError):
             head_title = "Untitled Presentation"
+
+        try:
+            slides_author = slides[0]['author']
+        except (IndexError, TypeError):
+            slides_author = ""
 
         for slide_index, slide_vars in enumerate(slides):
             if not slide_vars:
@@ -379,7 +393,8 @@ class Generator(object):
         return {'head_title': head_title, 'num_slides': str(self.num_slides),
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,
                 'css': self.get_css(), 'js': self.get_js(),
-                'user_css': self.user_css, 'user_js': self.user_js}
+                'user_css': self.user_css, 'user_js': self.user_js,
+                'author': slides_author}
 
     def linenos_check(self, value):
         """ Checks and returns a valid value for the ``linenos`` option.

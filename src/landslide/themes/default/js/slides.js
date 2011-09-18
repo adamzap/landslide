@@ -216,6 +216,14 @@ function main() {
         updateOverview();
     };
 
+    var showSlideAuthor = function() {
+        var asides = document.getElementsByClassName('author');
+        var hidden = asides[0].style.display != 'block';
+        for (var i = 0; i < asides.length; i++) {
+            asides.item(i).style.display = hidden ? 'block' : 'none';
+        }
+    };
+
     var showHelp = function() {
         if (tocOpened) {
                 showToc();
@@ -454,6 +462,11 @@ function main() {
                 break;
             case 84: // t
                 showToc();
+                break;
+            case 65: // a
+                if (!modifierKeyDown && !overviewActive) {
+                    showSlideAuthor();
+                }
                 break;
         }
     };
