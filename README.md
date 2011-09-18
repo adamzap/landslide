@@ -88,6 +88,7 @@ Or get it as a PDF document if PrinceXML is installed and available on your syst
 - Press `S` to toggle display of link to the source file for each slide
 - Press '2' to toggle notes in your slides (specify with the .notes macro)
 - Press '3' to toggle pseudo-3D display (experimental)
+- Press `a` to toggle display of the author name
 - Browser zooming is supported
 
 # Commandline Options
