@@ -1,0 +1,9 @@
+@import url('../../tango/css/screen.css');
+.slides { background-color: #eeeeec; }
+.highlight {
+  background-color: #d3d7cf;
+  padding: 5px 15px 5px 15px;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
