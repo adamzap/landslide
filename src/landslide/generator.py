@@ -377,7 +377,7 @@ class Generator(object):
                                    slide_number)
             else:
                 # Put something in the TOC even if it doesn't have a title or level
-                self.add_toc_entry(u"Untitled", 1, slide_number)
+                self.add_toc_entry(u"-", 1, slide_number)
 
         return {'head_title': head_title, 'num_slides': str(self.num_slides),
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,
