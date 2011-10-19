@@ -91,7 +91,8 @@ class Generator(object):
         self.register_macro(*self.default_macros)
 
         if self.direct:
-            self.verbose = True
+            # Only output html in direct output mode, not log messages
+            self.verbose = False
 
         if not source or not os.path.exists(source):
             raise IOError(u"Source file/directory %s does not exist"
