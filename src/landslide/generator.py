@@ -49,6 +49,7 @@ class Generator(object):
         macro_module.FxMacro,
         macro_module.NotesMacro,
         macro_module.QRMacro,
+        macro_module.IncludeMacro,
     ]
     user_css = []
     user_js = []
