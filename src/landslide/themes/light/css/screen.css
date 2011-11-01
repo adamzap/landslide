@@ -167,15 +167,35 @@ a {
   border-bottom: 2px solid #3f3f3f;
 }
 
-pre {
+pre, .gist .gist-file .gist-data {
   font-size: 16px;
-  font-family: Monaco, Courier, monospace;
+  font-family: Monaco, 'Bitstream Vera Sans Mono', 'Lucida Console', FreeMono, Courier, monospace;
+  max-height: 485px;
+  padding-top: 0.25em !important;
+  padding-right: 0.5em !important;
+  padding-left: 2.5em !important;
+  overflow: auto;
+}
+
+/* render a nice scrollbar in overflowed pre area's */
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: -webkit-gradient(linear, left bottom, left top, from(#777), to(#bbd));
+  -webkit-border-radius: 1ex;
+}
+::-webkit-scrollbar-corner {
+  background: #dedede;
 }
 
 li {
   padding: 10px 0;
   font-size: 20px;
 }
+
+li pre { margin-left: 0em; }
 
 .slide header:only-child h1 {
   line-height: 180%;
@@ -422,6 +442,7 @@ body.expose .slide.current {
 .vg { color: #19177C } /* Name.Variable.Global */
 .vi { color: #19177C } /* Name.Variable.Instance */
 .il { color: #666666 } /* Literal.Number.Integer.Long */
+.lineno { padding-right: 10px } /* A few space after linenos */
 
 /* Presenter Mode */
 
