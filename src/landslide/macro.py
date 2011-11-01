@@ -189,7 +189,7 @@ class QRMacro(Macro):
         return new_content, classes
 
 
-class IncMacro(Macro):
+class IncludeMacro(Macro):
     """This Macro includes the specified line or, range of lines of the given
        file as a highlighted code block or as is (raw HTML).
     """
@@ -210,9 +210,9 @@ class IncMacro(Macro):
         include_matches = self.include_re.finditer(content)
         if include_matches:
             self.options['expandtabs']  = self.options.get('expandtabs',
-                                                        IncMacro.EXPANDTABS)
+                                                           IncludeMacro.EXPANDTABS)
             self.options['includepath'] = self.options.get('includepath',
-                                                        IncMacro.INCLUDEPATH)
+                                                           IncludeMacro.INCLUDEPATH)
             for match in include_matches:
                 macro   = match.group('macro')
                 argline = match.group('argline')
@@ -222,8 +222,8 @@ class IncMacro(Macro):
                     include_file, start, stop = self.parse_argline(argline)
                     found = self.locate_file(include_file, source)
                     if not found:
-                        raise IncMacro.Error("couldn't locate file \"%s\" from include path \"%s\""
-                                            % (include_file, self.options['includepath']))
+                        raise IncludeMacro.Error("couldn't locate file \"%s\" from include path \"%s\""
+                                                 % (include_file, self.options['includepath']))
                     include_file = found
 
                     include_content = self.get_lines(include_file, start, stop)
@@ -264,7 +264,7 @@ class IncMacro(Macro):
                                     match.group('leading') +
                                     include_content +
                                     match.group('trailing'), 1)
-                except IncMacro.Error, e:
+                except IncludeMacro.Error, e:
                     self.logger(u"Include error at \"%s\": %s" % (context, e), 'warning')
                 except Exception, e:
                     self.logger(u"Unexpected error at \"%s\": %s; please report a bug"
@@ -301,18 +301,18 @@ class IncMacro(Macro):
             try:
                 compiled = re.compile(pattern, re.DOTALL | re.UNICODE)
             except Exception:
-                raise IncMacro.Error("invalid pattern: \"%s\"" % string)
+                raise IncludeMacro.Error("invalid pattern: \"%s\"" % string)
 
             if offset:
                 m = re.search(r'(?P<sign>[+-]?)(?P<offset>\d*)', offset)
                 if not m:
-                    raise IncMacro.Error("invalid offset: \"%s\"" % string)
+                    raise IncludeMacro.Error("invalid offset: \"%s\"" % string)
                 sign, offset = m.group('sign'), m.group('offset')
                 if offset:
                     try:
                         offset = int(offset)
                     except ValueError:
-                        raise IncMacro.Error("invalid offset: \"%s\"" % string)
+                        raise IncludeMacro.Error("invalid offset: \"%s\"" % string)
                 else:
                     offset = 1 if sign else 0
                 if sign == '-':
@@ -347,7 +347,7 @@ class IncMacro(Macro):
             pass
 
         if not path:
-            raise IncMacro.Error("no include file specified")
+            raise IncludeMacro.Error("no include file specified")
 
         return path, start, stop
 
@@ -364,8 +364,8 @@ class IncMacro(Macro):
                     found = f
                     break
         else:
-            raise IncMacro.Error("invalid include path: \"%s\""
-                                 % self.option['includepath'])
+            raise IncludeMacro.Error("invalid include path: \"%s\""
+                                     % self.option['includepath'])
 
         return found
 
@@ -383,12 +383,12 @@ class IncMacro(Macro):
                 found = i
                 break
         if not found:
-            raise IncMacro.Error("no matched line for pattern \"%s\""
-                                 % pattern['source'])
+            raise IncludeMacro.Error("no matched line for pattern \"%s\""
+                                     % pattern['source'])
 
         found += pattern['offset']
         if found < 0 or found >= max:
-            raise IncMacro.Error("offset matched line is out of range [1-%d]" % max)
+            raise IncludeMacro.Error("offset matched line is out of range [1-%d]" % max)
 
         return found
 
@@ -397,7 +397,7 @@ class IncMacro(Macro):
         """Converts a 1-indexed line number to a 0-indexed value."""
         max = len(lines)
         if abs(num) > max:
-            raise IncMacro.Error("line %d is out of range [1-%d]" % (num, max))
+            raise IncludeMacro.Error("line %d is out of range [1-%d]" % (num, max))
         # note the semantics for negative line numbers
         return num - 1 if num > 0 else num
 
@@ -442,7 +442,7 @@ class IncMacro(Macro):
                 if results:
                     result = "".join(results)
                 elif start_index >= stop_index:
-                    raise IncMacro.Error("lines out of order in [%s, %s]" % (start, stop))
+                    raise IncludeMacro.Error("lines out of order in [%s, %s]" % (start, stop))
 
         tabsize = self.options['expandtabs']
         if tabsize > 0:
