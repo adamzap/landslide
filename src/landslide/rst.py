@@ -106,3 +106,122 @@ def html_body(input_string, source_path=None, destination_path=None,
         initial_header_level=initial_header_level)
     fragment = parts['html_body']
     return fragment
+
+########### Begin: Youtube directive
+# this code is used under the MIT license from http://countergram.com/youtube-in-rst
+def youtube(name, args, options, content, lineno,
+            contentOffset, blockText, state, stateMachine):
+    """ Restructured text extension for inserting youtube embedded videos """
+    CODE = """\
+<object type="application/x-shockwave-flash"
+        width="%(width)s"
+        height="%(height)s"
+        class="youtube-embed"
+        data="http://www.youtube.com/v/%(yid)s">
+    <param name="movie" value="http://www.youtube.com/v/%(yid)s"></param>
+    <param name="wmode" value="transparent"></param>%(extra)s
+</object>
+"""
+    PARAM = """\n    <param name="%s" value="%s"></param>"""
+
+    if len(content) == 0:
+        return
+    string_vars = {
+        'yid': content[0],
+        'width': 425,
+        'height': 344,
+        'extra': ''
+        }
+    extra_args = content[1:] # Because content[0] is ID
+    extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    extra_args = [ea for ea in extra_args if len(ea) == 2] # drop bad lines
+    extra_args = dict(extra_args)
+    if 'width' in extra_args:
+        string_vars['width'] = extra_args.pop('width')
+    if 'height' in extra_args:
+        string_vars['height'] = extra_args.pop('height')
+    if extra_args:
+        params = [PARAM % (key, extra_args[key]) for key in extra_args]
+        string_vars['extra'] = "".join(params)
+    return [nodes.raw('', CODE % (string_vars), format='html')]
+
+youtube.content = True
+directives.register_directive('youtube', youtube)
+
+########### END: Youtube directive
+
+
+########### Begin: video directive
+# this code is used under the MIT license from http://countergram.com/youtube-in-rst
+
+
+def videodirective(name, args, options, content, lineno,
+            contentOffset, blockText, state, stateMachine):
+    """ Restructured text extension for inserting HTML5 embedded videos """
+    CODE = """\
+<video width="%(width)s" height="%(height)s" controls>
+  <source src="%(source)s" type='%(type)s'  />
+</video>
+"""
+  #<source src="test.ogv" type='video/ogg; codecs="theora, vorbis"'>
+
+    if len(content) == 0:
+        return
+    string_vars = {
+        'source': content[0],
+        'width': 425,
+        'height': 344,
+        'type': 'video/webm',
+	'codecs': ''
+        }
+
+    extra_args = content[1:] # Because content[0] is ID
+    extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    extra_args = [ea for ea in extra_args if len(ea) == 2] # drop bad lines
+    extra_args = dict(extra_args)
+    if 'width' in extra_args:
+        string_vars['width'] = extra_args.pop('width')
+    if 'height' in extra_args:
+        string_vars['height'] = extra_args.pop('height')
+    if 'type' in extra_args:
+        string_vars['type'] = extra_args.pop('type')
+
+    return [nodes.raw('', CODE % (string_vars), format='html')]
+videodirective.content = True
+directives.register_directive('video', videodirective)
+
+########### END: video directive
+
+
+########### Begin: audio directive
+# this code is used under the MIT license from http://countergram.com/youtube-in-rst
+
+
+def audiodirective(name, args, options, content, lineno,
+            contentOffset, blockText, state, stateMachine):
+    """ Restructured text extension for inserting HTML5 embedded audio """
+    CODE = """\
+<audio controls="controls">
+  <source src="%(source)s" type='%(type)s'  />
+</audio>
+"""
+
+    if len(content) == 0:
+        return
+    string_vars = {
+        'source': content[0],
+        'type': 'audio/ogg',
+        }
+
+    extra_args = content[1:] # Because content[0] is ID
+    extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    extra_args = [ea for ea in extra_args if len(ea) == 2] # drop bad lines
+    extra_args = dict(extra_args)
+    if 'type' in extra_args:
+        string_vars['type'] = extra_args.pop('type')
+
+    return [nodes.raw('', CODE % (string_vars), format='html')]
+audiodirective.content = True
+directives.register_directive('audio', audiodirective)
+
+########### END: audio directive
