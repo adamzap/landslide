@@ -1,6 +1,7 @@
 body {
   font: 14px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
-  background: #778;
+  color: #cfcfcf;
+  background: #000;
   padding: 0;
   margin: 0;
   overflow: hidden;
@@ -47,9 +48,8 @@ div.slide {
   margin-left: -400px;
   left: 50%;
   top: 50%;
-  background: -webkit-gradient(linear, left bottom, left top, from(#bbd), to(#fff));
-  background-color: #eee;
-  background: -moz-linear-gradient(bottom, #bbd, #fff);
+  background: #000;
+  background-color: #000;
   -webkit-transition: margin 0.25s ease-in-out;
   -moz-transition: margin 0.25s ease-in-out;
   -o-transition: margin 0.25s ease-in-out;
@@ -277,7 +277,7 @@ header:not(:only-child) {
   font-weight: normal;
   font-size: 50px;
   letter-spacing: -.05em;
-  color: black;
+  color: #cfcfcf;
   text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
   position: absolute;
   left: 30px;
@@ -300,7 +300,7 @@ header h2:first-child {
 
 section, .slide header:only-child h1 {
   font-family: "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
-  color: #3f3f3f;
+  color: #cfcfcf;
   text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
   margin-left: 30px;
   margin-right: 30px;
@@ -361,10 +361,8 @@ li {
 
 .sidebar {
   clear: both;
-  background: -webkit-gradient(linear, top right, bottom right, from(#dde), to(#fff));
-  -webkit-transition: margin 0.25s ease-in-out;
-  background-color: #eee;
-  background: -moz-linear-gradient(right, #dde, #fff);
+  background: #111;
+  background-color: #111;
   border-right: 5px solid #ccd;
   z-index: 9999999;
   height: 100%;
@@ -459,7 +457,8 @@ aside {
 }
 
 /* Pygments default theme */
-.hll { background-color: #ffffcc }
+/*.hll { background-color: #ffffcc }*/
+.hll { background-color: #ffffff }
 .c { color: #408080; font-style: italic } /* Comment */
 .err { border: 1px solid #FF0000 } /* Error */
 .k { color: #008000; font-weight: bold } /* Keyword */
