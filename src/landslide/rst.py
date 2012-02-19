@@ -152,9 +152,6 @@ directives.register_directive('youtube', youtube)
 
 
 ########### Begin: video directive
-# this code is used under the MIT license from http://countergram.com/youtube-in-rst
-
-
 def videodirective(name, args, options, content, lineno,
             contentOffset, blockText, state, stateMachine):
     """ Restructured text extension for inserting HTML5 embedded videos """
@@ -194,9 +191,6 @@ directives.register_directive('video', videodirective)
 
 
 ########### Begin: audio directive
-# this code is used under the MIT license from http://countergram.com/youtube-in-rst
-
-
 def audiodirective(name, args, options, content, lineno,
             contentOffset, blockText, state, stateMachine):
     """ Restructured text extension for inserting HTML5 embedded audio """
@@ -225,3 +219,36 @@ audiodirective.content = True
 directives.register_directive('audio', audiodirective)
 
 ########### END: audio directive
+
+########### Begin: flashvideo directive
+def flashvideodirective(name, args, options, content, lineno,
+            contentOffset, blockText, state, stateMachine):
+    """Restructured text extension for inserting video to be watched with a flash-based video player."""
+    CODE = """\
+<script type="text/javascript" src="flowplayer-3.2.6.min.js"></script>
+<a href="%(source)s" style="display:block;width:%(width)s;height:%(height)s"  id="%(player_id)s"> </a> 
+<script> flowplayer("%(player_id)s", "flowplayer-3.2.7.swf", {clip:  { autoPlay: false, autoBuffering: true }}); </script>
+"""
+    if len(content) == 0:
+        return
+    string_vars = {
+        'source': content[0],
+        'width': '',
+        'height': '90%',
+        'player_id': "player" # TODO: autogen random player id
+        }
+
+    extra_args = content[1:] # Because content[0] is ID
+    extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    extra_args = [ea for ea in extra_args if len(ea) == 2] # drop bad lines
+    extra_args = dict(extra_args)
+    if 'width' in extra_args:
+        string_vars['width'] = extra_args.pop('width')
+    if 'height' in extra_args:
+        string_vars['height'] = extra_args.pop('height')
+
+    return [nodes.raw('', CODE % (string_vars), format='html')]
+flashvideodirective.content = True
+directives.register_directive('flashvideo', flashvideodirective)
+
+########### END: flashvideo directive
