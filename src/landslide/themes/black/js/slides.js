@@ -7,7 +7,7 @@ function main() {
     var currentSlideNo;
     var notesOn = false;
     var expanded = false;
-    var hiddenContext = false;
+    var hiddenContext = true;
     var blanked = false;
     var slides = document.getElementsByClassName('slide');
     var touchStartX = 0;
