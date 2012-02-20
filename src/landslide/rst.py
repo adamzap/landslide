@@ -14,6 +14,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import re
+
 from docutils import core, nodes
 from docutils.parsers.rst import directives, Directive
 
@@ -133,7 +135,9 @@ def youtube(name, args, options, content, lineno,
         'extra': ''
         }
     extra_args = content[1:] # Because content[0] is ID
-    extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    #extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    split_option = lambda s: re.match(':([a-zA-Z0-9]+): (.*)', s).groups()
+    extra_args = [split_option(ea) for ea in extra_args] # key=value
     extra_args = [ea for ea in extra_args if len(ea) == 2] # drop bad lines
     extra_args = dict(extra_args)
     if 'width' in extra_args:
@@ -173,7 +177,9 @@ def videodirective(name, args, options, content, lineno,
         }
 
     extra_args = content[1:] # Because content[0] is ID
-    extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    #extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    split_option = lambda s: re.match(':([a-zA-Z0-9]+): (.*)', s).groups()
+    extra_args = [split_option(ea) for ea in extra_args] # key=value
     extra_args = [ea for ea in extra_args if len(ea) == 2] # drop bad lines
     extra_args = dict(extra_args)
     if 'width' in extra_args:
@@ -208,7 +214,9 @@ def audiodirective(name, args, options, content, lineno,
         }
 
     extra_args = content[1:] # Because content[0] is ID
-    extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    #extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    split_option = lambda s: re.match(':([a-zA-Z0-9]+): (.*)', s).groups()
+    extra_args = [split_option(ea) for ea in extra_args] # key=value
     extra_args = [ea for ea in extra_args if len(ea) == 2] # drop bad lines
     extra_args = dict(extra_args)
     if 'type' in extra_args:
@@ -234,12 +242,14 @@ def flashvideodirective(name, args, options, content, lineno,
     string_vars = {
         'source': content[0],
         'width': '',
-        'height': '90%',
+        'height': '',
         'player_id': "player" # TODO: autogen random player id
         }
 
     extra_args = content[1:] # Because content[0] is ID
-    extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    #extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
+    split_option = lambda s: re.match(':([a-zA-Z0-9]+): (.*)', s).groups()
+    extra_args = [split_option(ea) for ea in extra_args] # key=value
     extra_args = [ea for ea in extra_args if len(ea) == 2] # drop bad lines
     extra_args = dict(extra_args)
     if 'width' in extra_args:
