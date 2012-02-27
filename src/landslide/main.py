@@ -68,6 +68,7 @@ def _parse_options():
         type="int",
         dest="expandtabs",
         help="Number of spaces to expand tabs in included files.",
+        metavar="INTEGER",
         default=macro.IncludeMacro.EXPANDTABS)
 
     parser.add_option(
@@ -81,7 +82,7 @@ def _parse_options():
         "-I", "--includepath",
         dest="includepath",
         help="Colon separated list of directories to locate included files.",
-        metavar="FILE",
+        metavar="PATH",
         default=macro.IncludeMacro.INCLUDEPATH)
 
     parser.add_option(
