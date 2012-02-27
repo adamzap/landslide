@@ -59,9 +59,9 @@ Whole File
 
 Whole file with line numbers:
 
-        .coden: day.c
+        .coden: src/day.c
 
-.coden: day.c
+.coden: src/day.c
 
 ---
 
@@ -70,16 +70,16 @@ One Line
 
 - 8th line
 
-        .code: day.c 8
+        .code: src/day.c 8
 
-.code: day.c 8
+.code: src/day.c 8
 
 
 - Matched line
 
-        .code: day.c /.+wednesday/
+        .code: src/day.c /.+wednesday/
 
-.code: day.c /.+wednesday/
+.code: src/day.c /.+wednesday/
 
 ---
 
@@ -88,16 +88,16 @@ One Line
 
 - Last line (two alternatives)
 
-        .code: day.c -1
-        .code: day.c $
+        .code: src/day.c -1
+        .code: src/day.c $
 
-.code: day.c $
+.code: src/day.c $
 
 - Third line from end
 
-        .code: day.c -3
+        .code: src/day.c -3
 
-.code: day.c -3
+.code: src/day.c -3
 
 ---
 
@@ -106,16 +106,16 @@ Multi Lines
 
 - Between numbered lines (inclusive)
 
-        .code: day.c 8 10
+        .code: src/day.c 8 10
 
-.code: day.c 8 10
+.code: src/day.c 8 10
 
 
 - Between matched lines (inclusive)
 
-        .code: day.c /.+wednesday/ /.+friday/
+        .code: src/day.c /.+wednesday/ /.+friday/
 
-.code: day.c /.+wednesday/ /.+friday/
+.code: src/day.c /.+wednesday/ /.+friday/
 
 ---
 
@@ -124,9 +124,9 @@ Multi Lines
 
 - Matched line to end
 
-        .code: day.c /int/ $
+        .code: src/day.c /int/ $
 
-.code: day.c /int/ $
+.code: src/day.c /int/ $
 
 ---
 
@@ -136,9 +136,9 @@ Multi Lines
 
 - Last 5 lines
 
-        .code: day.c -5 $
+        .code: src/day.c -5 $
 
-.code: day.c -5 $
+.code: src/day.c -5 $
 
 ---
 
@@ -147,9 +147,9 @@ Line Offsets
 
 - Matched lines with offsets
 
-        .code: day.c /main\(.+\)/- /}/
+        .code: src/day.c /main\(.+\)/- /}/
 
-.code: day.c /main\(.+\)/- /}/
+.code: src/day.c /main\(.+\)/- /}/
 
 ---
 
@@ -159,15 +159,15 @@ Line Offsets
 
 - Matched lines with offsets
 
-        .code: day.c /static.const.char.+day/+2 /}/-
+        .code: src/day.c /static.const.char.+day/+2 /}/-
 
-.code: day.c /static.const.char.+day/+2 /}/-
+.code: src/day.c /static.const.char.+day/+2 /}/-
 
 - Between matched lines (exclusive)
 
-        .code: day.c /.+wednesday/+ /.+friday/-
+        .code: src/day.c /.+wednesday/+ /.+friday/-
 
-.code: day.c /.+wednesday/+ /.+friday/-
+.code: src/day.c /.+wednesday/+ /.+friday/-
 
 ---
 
@@ -200,11 +200,7 @@ Include Path
 
 - The default value of "`includepath`" is as follows:
 
-        includepath=.:./src:./code:..:../src:../code
-
-- That means, you can put the file, e.g. "`day.c`", into the "`src`" or "`code`"
-  subdirectory, and later include it as "`.code: day.c`" (instead of "`.code:
-  src/day.c`").
+        includepath=.
 
 ---
 
