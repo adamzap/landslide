@@ -242,47 +242,47 @@ class IncludeMacroTest(BaseTestCase):
     def test_process_whole_file(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
-        content, classes = m.process('<p>.coden: day.c</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*stdio\.h', content))
         self.assertTrue(re.search(r'"lineno"> *22<.*>}<', content))
         self.assertFalse(re.search(r'"lineno"> *23<', content))
     def test_process_oneline_num_positive(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
-        content, classes = m.process('<p>.coden: day.c 8</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c 8</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*wednesday', content))
         self.assertFalse(re.search(r'"lineno"> *2<', content))
     def test_process_oneline_num_negative(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
-        content, classes = m.process('<p>.coden: day.c -1</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c -1</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*>}<', content))
         self.assertFalse(re.search(r'"lineno"> *2<', content))
     def test_process_oneline_dollar(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
-        content, classes = m.process('<p>.coden: day.c $</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c $</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*>}<', content))
         self.assertFalse(re.search(r'"lineno"> *2<', content))
     def test_process_oneline_pattern(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
-        content, classes = m.process('<p>.coden: day.c /.+wednesday/</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c /.+wednesday/</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*wednesday', content))
         self.assertFalse(re.search(r'"lineno"> *2<', content))
     def test_process_oneline_errors(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
         self.assertRaises(WarningMessage, m.process,
-                          '<p>.code: day.c /foo/</p>', source)
+                          '<p>.code: src/day.c /foo/</p>', source)
         self.assertRaises(WarningMessage, m.process,
-                          '<p>.code: day.c 1000</p>', source)
+                          '<p>.code: src/day.c 1000</p>', source)
         self.assertRaises(WarningMessage, m.process,
-                          '<p>.code: day.c -1000</p>', source)
+                          '<p>.code: src/day.c -1000</p>', source)
     def test_process_multiline_pattern(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
-        content, classes = m.process('<p>.coden: day.c /.+wednesday/ /.+friday/</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c /.+wednesday/ /.+friday/</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*wednesday', content))
         self.assertTrue(re.search(r'"lineno"> *2<.*thursday', content))
         self.assertTrue(re.search(r'"lineno"> *3<.*friday', content))
@@ -290,7 +290,7 @@ class IncludeMacroTest(BaseTestCase):
     def test_process_multiline_num_positive(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
-        content, classes = m.process('<p>.coden: day.c 8 10</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c 8 10</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*wednesday', content))
         self.assertTrue(re.search(r'"lineno"> *2<.*thursday', content))
         self.assertTrue(re.search(r'"lineno"> *3<.*friday', content))
@@ -298,7 +298,7 @@ class IncludeMacroTest(BaseTestCase):
     def test_process_multiline_num_negative(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
-        content, classes = m.process('<p>.coden: day.c -15 -13</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c -15 -13</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*wednesday', content))
         self.assertTrue(re.search(r'"lineno"> *2<.*thursday', content))
         self.assertTrue(re.search(r'"lineno"> *3<.*friday', content))
@@ -307,15 +307,15 @@ class IncludeMacroTest(BaseTestCase):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
         self.assertRaises(WarningMessage, m.process,
-                          '<p>.code: day.c /foo/ /bar/</p>', source)
+                          '<p>.code: src/day.c /foo/ /bar/</p>', source)
         self.assertRaises(WarningMessage, m.process,
-                          '<p>.code: day.c 11 7</p>', source)
+                          '<p>.code: src/day.c 11 7</p>', source)
         self.assertRaises(WarningMessage, m.process,
-                          '<p>.code: day.c -5 -10</p>', source)
+                          '<p>.code: src/day.c -5 -10</p>', source)
     def test_process_offset_simple(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
-        content, classes = m.process('<p>.coden: day.c /main\(.+\)/- /}/</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c /main\(.+\)/- /}/</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*int', content))
         self.assertTrue(re.search(r'"lineno"> *2<.*main', content))
         self.assertTrue(re.search(r'"lineno"> *9<.*}', content))
@@ -323,7 +323,7 @@ class IncludeMacroTest(BaseTestCase):
     def test_process_offset_fancy(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
-        content, classes = m.process('<p>.coden: day.c /static.const.char.+day/+2 /}/-</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c /static.const.char.+day/+2 /}/-</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*monday', content))
         self.assertTrue(re.search(r'"lineno"> *7<.*sunday', content))
         self.assertFalse(re.search(r'"lineno"> *8<', content))
@@ -331,11 +331,11 @@ class IncludeMacroTest(BaseTestCase):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
         self.assertRaises(WarningMessage, m.process,
-                          '<p>.code: day.c /main/+8</p>', source)
+                          '<p>.code: src/day.c /main/+8</p>', source)
         self.assertRaises(WarningMessage, m.process,
-                          '<p>.code: day.c /main/-15</p>', source)
+                          '<p>.code: src/day.c /main/-15</p>', source)
         self.assertRaises(WarningMessage, m.process,
-                          '<p>.code: day.c /main/+4 /}/-4</p>', source)
+                          '<p>.code: src/day.c /main/+4 /}/-4</p>', source)
     def test_process_option_includepath(self):
         source = os.path.join(SAMPLES_DIR, 'example5', 'slides.md')
         m = macro.IncludeMacro(self.logtest)
@@ -351,10 +351,10 @@ class IncludeMacroTest(BaseTestCase):
         m = macro.IncludeMacro(self.logtest)
         expandtabs_old = m.options['expandtabs']
         ts = m.options['expandtabs'] = 4
-        content, classes = m.process('<p>.coden: day.c /.+wednesday/</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c /.+wednesday/</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*>\s?[ ]{' + str(ts) + '}<.*wednesday', content))
         ts = m.options['expandtabs'] = 12
-        content, classes = m.process('<p>.coden: day.c /.+wednesday/</p>', source)
+        content, classes = m.process('<p>.coden: src/day.c /.+wednesday/</p>', source)
         self.assertTrue(re.search(r'"lineno"> *1<.*>\s?[ ]{' + str(ts) + '}<.*wednesday', content))
         m.options['expandtabs'] = expandtabs_old
 

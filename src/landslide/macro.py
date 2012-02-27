@@ -195,8 +195,8 @@ class IncludeMacro(Macro):
     """
 
     # Defaults
-    INCLUDEPATH  = '.:./src:./code:..:../src:../code'
-    EXPANDTABS   = 8
+    INCLUDEPATH = '.'
+    EXPANDTABS  = 8
 
     # Macro pattern.
     include_re   = re.compile(
@@ -354,20 +354,17 @@ class IncludeMacro(Macro):
     def locate_file(self, path, source=None):
         """Locate the given file in includepath"""
         paths = self.options['includepath'].split(':')
-        found = None
-        if paths:
-            curdir = os.path.dirname(source)
-            if not curdir: curdir = "."
-            for p in paths:
-                f = os.path.normpath(os.path.join(curdir, p, path))
-                if os.path.exists(f):
-                    found = f
-                    break
-        else:
-            raise IncludeMacro.Error("invalid include path: \"%s\""
-                                     % self.option['includepath'])
+        if '.' not in paths: # current directory should always be in path
+            paths.append('.')
+        curdir = os.path.dirname(source)
+        if not curdir:
+            curdir = "."
+        for p in paths:
+            f = os.path.normpath(os.path.join(curdir, p, path))
+            if os.path.exists(f):
+                return f
 
-        return found
+        return None
 
     def index_matched(self, lines, start, pattern):
         """Identifies the line in lines that matches the pattern, starting from
