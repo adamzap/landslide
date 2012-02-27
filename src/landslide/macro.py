@@ -353,7 +353,8 @@ class IncludeMacro(Macro):
 
     def locate_file(self, path, source=None):
         """Locate the given file in includepath"""
-        paths = self.options['includepath'].split(':')
+        paths = [os.path.expanduser(p)
+                 for p in self.options['includepath'].split(':')]
         if '.' not in paths: # current directory should always be in path
             paths.append('.')
         curdir = os.path.dirname(source)
