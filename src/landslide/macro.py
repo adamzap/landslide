@@ -380,7 +380,7 @@ class IncludeMacro(Macro):
             if pattern['re'].match(lines[i]):
                 found = i
                 break
-        if not found:
+        if found is None:
             raise IncludeMacro.Error("no matched line for pattern \"%s\""
                                      % pattern['source'])
 
