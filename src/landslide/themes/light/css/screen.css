@@ -168,12 +168,12 @@ a {
 }
 
 pre, .gist .gist-file .gist-data {
-  font-size: 16px;
+  font-size: 90%;
   font-family: Monaco, 'Bitstream Vera Sans Mono', 'Lucida Console', FreeMono, Courier, monospace;
   max-height: 485px;
   padding-top: 0.25em !important;
   padding-right: 0.5em !important;
-  padding-left: 2.5em !important;
+  padding-left: 0.5em !important;
   overflow: auto;
 }
 
