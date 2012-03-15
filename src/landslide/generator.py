@@ -430,7 +430,7 @@ class Generator(object):
         if raw_config.has_option('landslide', 'embed'):
             config['embed'] = raw_config.getboolean('landslide', 'embed')
         if raw_config.has_option('landslide', 'expandtabs'):
-            config['expandtabs'] = raw_config.get('landslide', 'expandtabs')
+            config['expandtabs'] = raw_config.getint('landslide', 'expandtabs')
         if raw_config.has_option('landslide', 'includepath'):
             config['includepath'] = raw_config.get('landslide', 'includepath')
         if raw_config.has_option('landslide', 'relative'):
