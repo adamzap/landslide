@@ -338,7 +338,7 @@ a {
 }
 
 pre, .gist .gist-file .gist-data {
-  font-size: 90%;
+  font-size: 18px;
   font-family: Monaco, 'Bitstream Vera Sans Mono', 'Lucida Console', FreeMono, Courier, monospace;
   max-height: 485px;
   padding-top: 0.25em !important;
