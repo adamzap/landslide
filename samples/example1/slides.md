@@ -143,3 +143,17 @@ Landslide can generate QR codes:
 ---
 
 This is a slide with no heading. It works too.
+
+---
+
+Slide #8
+========
+
+This slide has presenter notes.
+
+Press p to open a new window for the presenter with its notes.
+
+To add presenter notes in a slide :
+
+    !html
+    <h1>Presenter notes</h1>
