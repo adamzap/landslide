@@ -146,14 +146,13 @@ This is a slide with no heading. It works too.
 
 ---
 
-Slide #8
+Slide #9
 ========
 
 This slide has presenter notes.
 
-Press p to open a new window for the presenter with its notes.
+Press `p` to open a new window for the presenter with its notes.
 
-To add presenter notes in a slide :
+# Presenter Notes
 
-    !html
-    <h1>Presenter notes</h1>
+Hello from presenter notes
