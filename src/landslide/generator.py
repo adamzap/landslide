@@ -93,7 +93,8 @@ class Generator(object):
         self.register_macro(*self.default_macros)
 
         if self.direct:
-            self.verbose = True
+            # Only output html in direct output mode, not log messages
+            self.verbose = False
 
         if not source or not os.path.exists(source):
             raise IOError(u"Source file/directory %s does not exist"
@@ -195,7 +196,7 @@ class Generator(object):
                 raise IOError(u"Direct output mode is not available for PDF "
                                "export")
             else:
-                print self.render()
+                print self.render().encode(self.encoding)
         else:
             self.write()
             self.log(u"Generated file: %s" % self.destination_file)
@@ -410,6 +411,9 @@ class Generator(object):
             if slide_vars['level'] and slide_vars['level'] <= TOC_MAX_LEVEL:
                 self.add_toc_entry(slide_vars['title'], slide_vars['level'],
                                    slide_number)
+            else:
+                # Put something in the TOC even if it doesn't have a title or level
+                self.add_toc_entry(u"-", 1, slide_number)
 
         return {'head_title': head_title, 'num_slides': str(self.num_slides),
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,

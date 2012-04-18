@@ -47,7 +47,7 @@ def _parse_options():
         "-b", "--debug",
         action="store_true",
         dest="debug",
-        help="Will display any exception trace to stdin",
+        help="Will display any exception trace to stdout",
         default=False)
 
     parser.add_option(
@@ -79,7 +79,7 @@ def _parse_options():
         type="choice",
         choices=generator.VALID_LINENOS,
         dest="linenos",
-        help="How to ouput linenos in source code. Three options availables: "
+        help="How to output linenos in source code. Three options availables: "
         "no (no line numbers); "
         "inline (inside <pre> tag); "
         "table (lines numbers in another cell, copy-paste friendly)",
@@ -87,10 +87,10 @@ def _parse_options():
     )
 
     parser.add_option(
-        "-o", "--direct-ouput",
+        "-o", "--direct-output",
         action="store_true",
         dest="direct",
-        help="Prints the generated HTML code to stdin; won't work with PDF "
+        help="Prints the generated HTML code to stdout; won't work with PDF "
              "export",
         default=False)
 
@@ -98,7 +98,7 @@ def _parse_options():
         "-q", "--quiet",
         action="store_false",
         dest="verbose",
-        help="Won't write anything to stdin (silent mode)",
+        help="Won't write anything to stdout (silent mode)",
         default=False)
 
     parser.add_option(
@@ -121,8 +121,7 @@ def _parse_options():
         "-v", "--verbose",
         action="store_true",
         dest="verbose",
-        help="Write informational messages to stdin (enabled by "
-        "default)",
+        help="Write informational messages to stdout (enabled by default)",
         default=True)
 
     parser.add_option(
