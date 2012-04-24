@@ -66,6 +66,7 @@ class Generator(object):
             - ``encoding``: the encoding to use for this presentation
             - ``extensions``: Comma separated list of markdown extensions
             - ``logger``: a logger lambda to use for logging
+            - ``presenter_notes``: enable presenter notes
             - ``relative``: enable relative asset urls
             - ``theme``: path to the theme to use for this presentation
             - ``verbose``: enables verbose output
@@ -79,6 +80,7 @@ class Generator(object):
         self.encoding = kwargs.get('encoding', 'utf8')
         self.extensions = kwargs.get('extensions', None)
         self.logger = kwargs.get('logger', None)
+        self.presenter_notes = kwargs.get('presenter_notes', True)
         self.relative = kwargs.get('relative', False)
         self.theme = kwargs.get('theme', 'default')
         self.verbose = kwargs.get('verbose', False)
@@ -346,7 +348,8 @@ class Generator(object):
                              re.DOTALL | re.UNICODE | re.IGNORECASE)
 
             if find:
-                presenter_notes = content[find.end():].strip()
+                if self.presenter_notes:
+                    presenter_notes = content[find.end():].strip()
                 content = content[:find.start()]
 
         source_dict = {}
