@@ -52,6 +52,20 @@ directives.register_directive('sourcecode', Pygments)
 directives.register_directive('code-block', Pygments)
 
 
+class Notes(Directive):
+    required_arguments = 0
+    optional_arguments = 0
+    has_content = True
+
+    def run(self):
+        self.assert_has_content()
+        text = '<br>'.join(self.content)
+        return [nodes.raw('', '<h3>presenter notes</h3><p>%s</p>' % text,
+                          format='html')]
+
+directives.register_directive('notes', Notes)
+
+
 def html_parts(input_string, source_path=None, destination_path=None,
                input_encoding='unicode', doctitle=1, initial_header_level=1):
     """
