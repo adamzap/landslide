@@ -66,7 +66,7 @@ def encode_image_from_url(url, source_path):
         return False
 
     try:
-        image_contents = open(real_path).read()
+        image_contents = open(real_path, 'rb').read()
         encoded_image = base64.b64encode(image_contents)
     except IOError:
         return False
