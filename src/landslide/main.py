@@ -99,7 +99,7 @@ def _parse_options():
         action="store_false",
         dest="presenter_notes",
         help="Don't include presenter notes in the output",
-        default=False)
+        default=True)
 
     parser.add_option(
         "-q", "--quiet",
