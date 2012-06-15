@@ -88,6 +88,7 @@ Or get it as a PDF document if PrinceXML is installed and available on your syst
 - Press `S` to toggle display of link to the source file for each slide
 - Press '2' to toggle notes in your slides (specify with the .notes macro)
 - Press '3' to toggle pseudo-3D display (experimental)
+- Press `a` to toggle display of the author name
 - Browser zooming is supported
 
 # Commandline Options
@@ -151,6 +152,18 @@ Don't forget to declare the `[landslide]` section. To generate the presentation 
 # Macros
 
 You can use macros to enhance your presentation:
+
+## Author
+
+Set the presentation author by using the `.author:` keyword on the first slide, eg.:
+
+    # First slide's title
+
+    .author: I am the author
+
+    Other content goes here
+
+You can toggle display of the author by pressing the `a` key.
 
 ## Notes
 
@@ -293,6 +306,7 @@ The `base.html` must be a [Jinja2 template file](http://jinja.pocoo.org/2/docume
   - `title`: the section title
   - `number`: the slide number of the section
   - `sub`: subsections, if any
+- `author`: the author's information.
 
 # Styles Scope
 
