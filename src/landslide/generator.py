@@ -70,6 +70,7 @@ class Generator(object):
             - ``relative``: enable relative asset urls
             - ``theme``: path to the theme to use for this presentation
             - ``verbose``: enables verbose output
+            - ``notes``: enable notes at PDF
         """
         self.copy_theme = kwargs.get('copy_theme', False)
         self.debug = kwargs.get('debug', False)
@@ -85,6 +86,7 @@ class Generator(object):
         self.theme = kwargs.get('theme', 'default')
         self.verbose = kwargs.get('verbose', False)
         self.linenos = self.linenos_check(kwargs.get('linenos'))
+        self.notes = kwargs.get('notes', False)
         self.num_slides = 0
         self.__toc = []
 
@@ -303,7 +305,40 @@ class Generator(object):
             self.log(u"No screen stylesheet provided in current theme",
                       'warning')
 
+        if self.notes and self.file_type == 'pdf':
+            css['print']['contents'] += ".presenter_notes { display: block; }"
+
+        if self.embed:
+            contents = css['screen']['contents']
+            css['screen']['contents'] = self.embed_imported_files(contents)
+
         return css
+
+    def embed_imported_files(self, css):
+        """If the @import is used at the css file to base the design of the
+           style in other CSS, this function gets the file path and embed it.
+
+           Note: the CSS line must be like this
+                 @import url('../../default/css/screen.css');
+        """
+        new_css = ''
+        if '@import' in css:
+            for line in css.split('\n'):
+                if '@import' in line:
+                    file_subpath = (re.search('(\'|\")(.+)(\'|\")', line)
+                                    .group(2))
+                    file_subpath = file_subpath.replace('../', '')
+                    file_path = os.path.join(THEMES_DIR, file_subpath)
+                    try:
+                        fh = open(file_path)
+                        new_css += fh.read()
+                    except IOError:
+                        raise IOError(u"Impossible get the file to embed")
+                else:
+                    new_css += "%s\n" % line
+            return new_css
+        else:
+            return css
 
     def get_js(self):
         """ Fetches and returns javascript file path or contents, depending if
@@ -484,7 +519,8 @@ class Generator(object):
 
                 encoded_url = utils.encode_image_from_url(img_url, source)
 
-                html = html.replace(img_url, encoded_url, 1)
+                if encoded_url:
+                    html = html.replace(img_url, encoded_url, 1)
 
         return html
 
