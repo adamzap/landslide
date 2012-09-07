@@ -126,7 +126,7 @@ Several options are available using the command line:
 
 # Presentation Configuration
 
-Landslide allows to configure your presentation using a `cfg` configuration file, therefore easing the aggregation of source directories and the reuse of them accross presentations. Landslide configuration files use the `cfg` syntax. If you know `ini` files, you get the picture. Below is a sample configuration file:
+Landslide allows to configure your presentation using a `cfg` configuration file, therefore easing the aggregation of source directories and the reuse of them across presentations. Landslide configuration files use the `cfg` syntax. If you know `ini` files, you get the picture. Below is a sample configuration file:
 
     [landslide]
     theme  = /path/to/my/beautiful/theme
