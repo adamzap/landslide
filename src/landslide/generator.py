@@ -34,7 +34,6 @@ BASE_DIR = os.path.dirname(__file__)
 THEMES_DIR = os.path.join(BASE_DIR, 'themes')
 TOC_MAX_LEVEL = 2
 VALID_LINENOS = ('no', 'inline', 'table')
-MATHJAX_CDN = "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 
 
 class Generator(object):
@@ -83,7 +82,6 @@ class Generator(object):
         self.logger = kwargs.get('logger', None)
         self.presenter_notes = kwargs.get('presenter_notes', True)
         self.relative = kwargs.get('relative', False)
-        self.mathjax = kwargs.get('mathjax', False)
         self.theme = kwargs.get('theme', 'default')
         self.verbose = kwargs.get('verbose', False)
         self.linenos = self.linenos_check(kwargs.get('linenos'))
@@ -112,7 +110,6 @@ class Generator(object):
                 self.DEFAULT_DESTINATION)
             self.embed = config.get('embed', False)
             self.relative = config.get('relative', False)
-            self.mathjax = config.get('mathjax', False)
             self.extensions = config.get('extensions', '')
             self.theme = config.get('theme', 'default')
             self.add_user_css(config.get('css', []))
@@ -162,19 +159,20 @@ class Generator(object):
         """
         if isinstance(js_list, basestring):
             js_list = [js_list]
-        if self.mathjax:
-            self.user_js.append({
-                "path_url": MATHJAX_CDN,
-                "contents": ""
-            })
         for js_path in js_list:
             if js_path and not js_path in self.user_js:
-                if not os.path.exists(js_path):
+                if js_path.startswith("http:"):
+                    self.user_js.append({
+                        'path_url': js_path,
+                        'contents': '',
+                    })
+                elif not os.path.exists(js_path):
                     raise IOError('%s user js file not found' % (js_path,))
-                self.user_js.append({
-                    'path_url': utils.get_path_url(js_path, self.relative),
-                    'contents': open(js_path).read(),
-                })
+                else:
+                    self.user_js.append({
+                        'path_url': utils.get_path_url(js_path, self.relative),
+                        'contents': open(js_path).read(),
+                    })
 
     def add_toc_entry(self, title, level, slide_number):
         """ Adds a new entry to current presentation Table of Contents.
@@ -437,8 +435,6 @@ class Generator(object):
             config['embed'] = raw_config.getboolean('landslide', 'embed')
         if raw_config.has_option('landslide', 'relative'):
             config['relative'] = raw_config.getboolean('landslide', 'relative')
-        if raw_config.has_option('landslide', 'mathjax'):
-            config['mathjax'] = raw_config.getboolean('landslide', 'mathjax')
         if raw_config.has_option('landslide', 'extensions'):
             config['extensions'] = ",".join(raw_config.get('landslide', 'extensions')\
                 .replace('\r', '').split('\n'))
