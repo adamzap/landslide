@@ -50,7 +50,7 @@ class CodeHighlightingMacro(Macro):
        Pygments.
     """
     code_blocks_re = re.compile(
-        r'(<pre.+?>(<code>)?\s?!([\w+]+?)\n(.*?)(</code>)?</pre>)',
+        r'(<pre.+?>(<code>)?\s?!(\S+?)\n(.*?)(</code>)?</pre>)',
         re.UNICODE | re.MULTILINE | re.DOTALL)
 
     html_entity_re = re.compile('&(\w+?);')
