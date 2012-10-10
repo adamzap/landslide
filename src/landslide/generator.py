@@ -148,7 +148,8 @@ class Generator(object):
                     raise IOError('%s user css file not found' % (css_path,))
                 self.user_css.append({
                     'path_url': utils.get_path_url(css_path, self.relative),
-                    'contents': open(css_path).read(),
+                    'contents': codecs.open(css_path,
+                                            encoding=self.encoding).read(),
                 })
 
     def add_user_js(self, js_list):
@@ -164,7 +165,8 @@ class Generator(object):
                     raise IOError('%s user js file not found' % (js_path,))
                 self.user_js.append({
                     'path_url': utils.get_path_url(js_path, self.relative),
-                    'contents': open(js_path).read(),
+                    'contents': codecs.open(js_path,
+                                            encoding=self.encoding).read(),
                 })
 
     def add_toc_entry(self, title, level, slide_number):
@@ -290,14 +292,15 @@ class Generator(object):
 
         css['print'] = {
             'path_url': utils.get_path_url(print_css, self.relative),
-            'contents': open(print_css).read(),
+            'contents': codecs.open(print_css, encoding=self.encoding).read(),
         }
 
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
         if (os.path.exists(screen_css)):
             css['screen'] = {
                 'path_url': utils.get_path_url(screen_css, self.relative),
-                'contents': open(screen_css).read(),
+                'contents': codecs.open(screen_css,
+                                        encoding=self.encoding).read(),
             }
         else:
             self.log(u"No screen stylesheet provided in current theme",
@@ -319,7 +322,7 @@ class Generator(object):
 
         return {
             'path_url': utils.get_path_url(js_file, self.relative),
-            'contents': open(js_file).read(),
+            'contents': codecs.open(js_file, encoding=self.encoding).read(),
         }
 
     def get_slide_vars(self, slide_src, source=None):
