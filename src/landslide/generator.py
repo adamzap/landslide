@@ -483,11 +483,18 @@ class Generator(object):
             for img_url in images:
                 img_url = img_url.replace('"', '').replace("'", '')
 
-                source = os.path.join(THEMES_DIR, self.theme, 'css')
+                if self.theme_dir:
+                    source = os.path.join(self.theme_dir, 'css')
+                else:
+                    source = os.path.join(THEMES_DIR, self.theme, 'css')
 
                 encoded_url = utils.encode_image_from_url(img_url, source)
-
-                html = html.replace(img_url, encoded_url, 1)
+                if encoded_url:
+                    html = html.replace(img_url, encoded_url, 1)
+                    self.log("Embedded theme image %s from theme directory %s" % (img_url, source))
+                else:
+                    #Missing image file, etc...
+                    self.log(u"Failed to embed theme image %s" % img_url)
 
         return html
 
