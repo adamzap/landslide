@@ -22,16 +22,15 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, TextLexer
 
 
-DEFAULT = HtmlFormatter(noclasses=False)
-VARIANTS = {}
-
-
 class Pygments(Directive):
     """ Source code syntax hightlighting for ReST syntax."""
     required_arguments = 1
     optional_arguments = 0
     final_argument_whitespace = True
-    option_spec = dict([(key, directives.flag) for key in VARIANTS])
+    option_spec = {
+        'linenos': directives.flag,
+        'emphasize-lines': directives.unchanged_required,
+    }
     has_content = True
 
     def run(self):
@@ -41,9 +40,12 @@ class Pygments(Directive):
         except ValueError:
             # no lexer found - use the text one instead of an exception
             lexer = TextLexer()
-        # take an arbitrary option if more than one is given
-        formatter = (self.options and VARIANTS[self.options.keys()[0]]
-                     or DEFAULT)
+        args = {'noclasses': False}
+        if 'linenos' in self.options:
+            args['linenos'] = 'table'
+        if 'emphasize-lines' in self.options:
+            args['hl_lines'] = self.options['emphasize-lines'].split(',')
+        formatter = HtmlFormatter(**args)
         parsed = highlight(u'\n'.join(self.content), lexer, formatter)
         return [nodes.raw('', parsed, format='html')]
 
