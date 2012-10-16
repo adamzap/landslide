@@ -70,7 +70,7 @@ class CodeHighlightingMacro(Macro):
         classes = []
         for block, void1, lang, code, void2 in code_blocks:
             try:
-                lexer = get_lexer_by_name(lang)
+                lexer = get_lexer_by_name(lang, startinline=True)
             except Exception:
                 self.logger(u"Unknown pygment lexer \"%s\", skipping"
                             % lang, 'warning')
