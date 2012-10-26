@@ -79,9 +79,13 @@ def html_parts(input_string, source_path=None, destination_path=None,
     - `initial_header_level`: The initial level for header elements (e.g. 1
       for "<h1>").
     """
-    overrides = {'input_encoding': input_encoding,
-                 'doctitle_xform': doctitle,
-                 'initial_header_level': initial_header_level}
+    overrides = {
+        'input_encoding': input_encoding,
+        'doctitle_xform': doctitle,
+        'initial_header_level': initial_header_level,
+        'report_level': 'quiet'
+    }
+
     parts = core.publish_parts(
         source=input_string, source_path=source_path,
         destination_path=destination_path,
