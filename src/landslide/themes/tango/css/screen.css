@@ -190,6 +190,12 @@ pre {
   font-family: Monaco, Courier, monospace;
 }
 
+blockquote {
+  border-left: solid 8px #555753;
+  padding: .1ex 1ex;
+  font-style: italic;
+}
+
 li {
   padding: 10px 0;
   font-size: 20px;
