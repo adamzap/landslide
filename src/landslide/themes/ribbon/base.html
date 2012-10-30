@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>{{ head_title }}</title>
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans|PT+Sans+Narrow|PT+Mono' rel='stylesheet' type='text/css'>
+    <!-- Styles -->
+    {% if embed %}
+    <style type="text/css" media="print">
+      {{ css.print.contents }}
+    </style>
+    <style type="text/css" media="screen, projection">
+      {{ css.screen.contents }}
+    </style>
+    {% else %}
+    <link rel="stylesheet" media="print" href="{{ css.print.path_url }}">
+    <link rel="stylesheet" media="screen, projection" href="{{ css.screen.path_url }}">
+    {% endif %}
+    {% for css in user_css %}
+      {% if embed %}
+      <style type="text/css" media="screen, projection">
+        {{ css.contents }}
+      </style>
+      {% else %}
+      <link rel="stylesheet" href="{{ css.path_url }}">
+      {% endif %}
+    {% endfor %}
+    <!-- /Styles -->
+</head>
+<body class="list">
+    {% for slide in slides %}
+      <!-- slide source: {% if slide.source %}{{ slide.source.rel_path }}{% endif %} -->
+        <section class="slide{% if slide.classes %}{% for class in slide.classes %} {{ class }}{% endfor %}{% endif %}">
+            <div>
+                {% if slide.header %}
+                    <header>{{ slide.header }}</header>
+                {% endif %}
+                {% if slide.content %}
+                    <section class="slide-content">{{ slide.content }}</section>
+                {% endif %}
+                <div class="presenter_notes">
+                    <section>
+                    {% if slide.presenter_notes %}
+                        {{ slide.presenter_notes }}
+                    {% endif %}
+                    </section>
+                </div>
+            </div>
+        </section>
+     {% endfor %}
+	<!--
+		To hide progress bar from entire presentation
+		just remove “progress” element.
+		-->
+	<div class="progress"><div></div></div>
+    <!-- Javascripts -->
+        {% if embed %}
+        <script>
+        {{ js.contents }}
+        </script>
+        {% else %}
+        <script type="text/javascript" src="{{ js.path_url }}"></script>
+        {% endif %}
+        {% for js in user_js %}
+        {% if embed %}
+        <script>
+            {{ js.contents }}
+        </script>
+        {% else %}
+        <script type="text/javascript" src="{{ js.path_url }}"></script>
+        {% endif %}
+        {% endfor %}
+    <!-- /Javascripts -->
+
+	<!-- Copyright © 2010–2012 Vadim Makeev — pepelsbey.net -->
+</body>
+</html>
