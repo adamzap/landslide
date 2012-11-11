@@ -1,0 +1,244 @@
+/**
+	CSSS basic slideshow theme
+	
+	@author Lea Verou
+	@version 1.0
+*/
+
+/**
+ * Variables
+ */
+.slide h2,
+section > header.slide > h1 {
+	font-family: 'Helvetica Neue', Helvetica, sans-serif;
+	font-weight: 100;
+}
+ 
+/**
+ * Styles
+ */
+
+* {
+	padding:0;	
+	margin:0;
+	font:inherit;
+	color:inherit;
+}
+
+html {
+	background: black url(img/rainbow-wood.jpg) bottom center;
+	background-size: cover;
+}
+
+body {
+	font-family: sans-serif;
+}
+
+button {
+	padding:.2em .5em;
+}
+
+a:hover {
+	text-shadow: 0 0 .5em white, 0 0 1em white;
+}
+
+select {
+	color: black;
+}
+
+code, pre, style, textarea, input {
+	font-family: Consolas, 'Andale Mono', 'Courier New', monospace;	
+	background:rgba(0,0,0,.4);
+}
+
+code {
+	padding:.2em .2em .1em;
+	white-space: nowrap;
+	border-radius:.2em;
+	border: 1px solid rgba(0,0,0,0.5);
+	background: rgba(0,0,0,0.25);
+	box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px rgba(255,255,255,0.3), inset 0 12px rgba(255,255,255,0.15), inset 0 10px 20px rgba(255,255,255,0.25), inset 0 -15px 30px rgba(0,0,0,0.3);
+}
+
+pre, style, textarea {
+	padding:.3em .5em;
+	margin-left: -.1em;
+	border:2px solid rgba(255, 255, 255, .1);
+	box-shadow:.1em .1em .5em black inset;
+}
+
+	pre > code {
+		padding: 0;
+		white-space: pre;
+		border: 0;
+		background: 0;
+		box-shadow: none;
+	}
+
+textarea {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+strong, b {
+	font-weight:bold;	
+}
+
+	pre strong {
+		text-shadow: 0 0 .6em white;
+	}
+
+.slide {
+	padding:0 2.5% 2%;
+	background: rgba(0,0,0,.5);
+	background-clip: padding-box;
+	text-shadow:.05em .05em .1em rgba(0,0,0,.4);
+	color: white;
+	border:30px solid transparent;
+}
+
+#indicator {
+	background: rgba(255, 255, 255, .6);
+	color: black;
+	text-shadow: .03em .03em .1em white;
+}
+
+	.slide h2 {
+		font-family: 'Helvetica Neue', Helvetica, sans-serif;
+		font-weight: 100;
+		font-size: 1.2in;
+	}
+	
+	.slide p,
+	.slide li {
+		font-weight: bold;
+		letter-spacing: -.03em;
+	}
+		
+	.slide > ul {
+		list-style:none;	
+	}
+	
+	.slide ol {
+		margin-left:2em;	
+	}
+		
+		.slide > ul ul {
+			margin-left:2em;	
+			list-style: none;
+		}
+		
+			.slide li li {
+				font-size:80%;
+			}
+			
+		.slide li {
+			margin:.2em 0;
+		}
+		
+		.slide > ul > li:before {
+			content:'\2714';
+			color: #a0c12c;
+			padding-right: .2em;
+		}
+		
+			.slide li li:before {
+				content: '\279C';
+				color: #28bcbc;
+				padding-right: .2em;
+			}
+			
+section > header.slide {
+	background-color: rgba(0,0,0,.8);
+}
+
+	section > header.slide > h1 {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		right: 0;
+		margin-top: -.6em;
+		font-size: 400%;
+		line-height: 1;
+		text-align: center;
+	}
+
+.slide .emphasis {
+	padding: .4em .5em .3em;
+	margin: .3em 0;
+	background: #f80;
+	background: linear-gradient(#fa0, #f80);
+	color: white;
+	font-weight: bold;
+	letter-spacing: -.05em;
+	line-height: .85;
+	text-shadow: .05em .05em .1em rgba(0,0,0,.4);
+	border-radius: .3em;
+	box-shadow:.1em .1em .5em black;
+}
+
+.light.slide .emphasis {
+	box-shadow:.1em .1em .5em rgba(0,0,0,.4);
+}
+
+.slide .emphasis::before {
+	content: '\279C';
+	color: rgba(255,255,255,.5);
+	float: left;	
+	width: .75em;
+	height: 0;
+	padding: .45em 0 .3em;
+	margin: -.2em .2em 0 -.25em;
+	border: .12em solid;
+	text-align: center;
+	line-height: 0;
+	font-size: 120%;
+	font-family: inherit;
+	text-shadow: none;
+	border-radius:999px;
+	transform: rotate(45deg);
+}
+
+.attribution {
+	background: rgba(0,0,0,.8);
+	color: white;
+	display: block;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 1em;
+	padding: .5em 1em;
+	font-size: 30%;
+	text-shadow: .05em .05em .1em black;
+}
+
+	.attribution a {
+		text-decoration: none;
+	}
+	
+	.attribution a::after {
+		content:  ' (' attr(href) ')';
+	}
+
+/* Syntax highlighting */
+
+.comment {
+	color: #999;
+}
+
+.string {
+	color: yellow;
+}
+
+.keyword {
+	font-weight: bold;
+	color: deeppink;
+}
+
+.number, .boolean {
+	color: #0cf;
+}
+
+.regex {
+	color: orange;
+}

@@ -1,0 +1,41 @@
+#intro {
+	background: rgba(0,0,0,.7);
+	padding: 0;
+	border: 0;
+}
+
+#intro h1 {
+	width: 60%;
+	min-height: 500px;
+	margin: 5% auto 0;
+}
+
+#intro .attribution {
+	font-family: Helvetica, sans-serif;
+	font-weight: bold;
+	text-align: center;
+	font-size: 100%;
+	line-height: .3;
+	color: rgba(0,0,0,.7);
+	text-shadow: none;
+	background: url(img/rainbow-wood.jpg) bottom;
+	padding:.6em 0 0;
+	overflow: hidden;
+}
+
+
+#css-controls-demo label {
+	display: block;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio:0) {
+/* hack to avoid using the Object element in Safari/WebKit, due to WebKit Bug 27190 */
+	object[type="image/svg+xml"] {
+		display: none;
+	}
+	
+	#intro h1 {
+		background: url(logo.svg) no-repeat center;
+		background-size:100% auto;
+	}
+}
