@@ -115,7 +115,6 @@ class Generator(object):
             self.add_user_css(config.get('css', []))
             self.add_user_js(config.get('js', []))
             self.linenos = self.linenos_check(config.get('linenos'))
-            self.extensions = config.get('extensions', '')
         else:
             self.source = source
 
@@ -448,8 +447,6 @@ class Generator(object):
         if raw_config.has_option('landslide', 'js'):
             config['js'] = raw_config.get('landslide', 'js')\
                 .replace('\r', '').split('\n')
-        if raw_config.has_option('landslide', 'extensions'):
-            config['extensions'] = raw_config.get('landslide', 'extensions')
         return config
 
     def process_macros(self, content, source=None):
