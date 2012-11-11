@@ -1,12 +1,12 @@
 # Overview
 
-Landslide generates a slideshow using the slides that power
+Landslide generates a fancy slideshow using from markdown, ReST, or textile
+using the slides that power 
 [the html5-slides presentation](http://apirocks.com/html5/html5.html).
 
 ![demo](http://adamzap.com/random/landslide.png)
 
 A sample slideshow is [here](http://adamzap.com/random/landslide.html).
-
 
 # Features
 
@@ -21,12 +21,15 @@ A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 
 - `jinja2`
 - `pygments` for code blocks syntax coloration
+
+## Markup Conversion
+
 - `markdown` if you use Markdown syntax for your slide contents
 - `docutils` if you use ReStructuredText syntax for your slide contents
+- `textile` for textile support
 
 ## Optional
 
-- `textile` for textile support
 - `watchdog` for watching/auto-regeneration with the `-w` flag
 
 # Installation
