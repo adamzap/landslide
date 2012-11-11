@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='landslide',
-    version='1.0.1',
+    version='1.1.0',
     description='Lightweight markup language-based html5 slideshow generator',
     packages=find_packages('src'),
     package_dir = {'': 'src'},
@@ -34,8 +34,8 @@ setup(
         'Topic :: Text Processing :: Markup'
     ],
     long_description="""\
-Landslide takes your Markdown, RST, or Textile file(s) and generates a
-slideshow like `this <http://adamzap.com/random/landslide.html>`_.
+Landslide takes your Markdown, ReST, or Textile file(s) and generates fancy
+HTML5 slideshow like `this <http://adamzap.com/random/landslide.html>`_.
 
 Read the `README <http://github.com/adamzap/landslide/blob/master/README.md>`_
 for formatting instructions and more information.
