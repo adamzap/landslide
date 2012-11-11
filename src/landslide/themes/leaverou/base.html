@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>{{ head_title }}</title>
+    <!-- Styles -->
+    {% if embed %}
+    <style type="text/css" media="print">
+      {{ css.print.contents }}
+    </style>
+    <style type="text/css" media="screen, projection">
+      {{ css.screen.contents }}
+    </style>
+    {% else %}
+    <link href="./css/slideshow.css" rel="stylesheet" />
+	<link href="./css/theme.css" rel="stylesheet" />
+	<link href="./css/talk.css" rel="stylesheet" />
+	<link href="./css/sidebar.css" rel="stylesheet" />
+    {% endif %}
+    {% for css in user_css %}
+      {% if embed %}
+      <style type="text/css" media="screen, projection">
+        {{ css.contents }}
+      </style>
+      {% else %}
+      <link rel="stylesheet" href="{{ css.path_url }}">
+      {% endif %}
+    {% endfor %}
+    <!-- /Styles -->
+    <!-- Javascripts -->
+    {% if embed %}
+    <script>
+      {{ js.contents }}
+    </script>
+    {% else %}
+	<script type="text/javascript" src="./js/prefixfree.min.js"></script>
+    {% endif %}
+    {% for js in user_js %}
+      {% if embed %}
+      <script>
+        {{ js.contents }}
+      </script>
+      {% else %}
+      <script type="text/javascript" src="{{ js.path_url }}"></script>
+      {% endif %}
+    {% endfor %}
+    <!-- /Javascripts -->
+</head>
+<body>
+ <section>
+	 {% for slide in slides %}
+	  {% if slide.number == 1 %}
+	   {% if slide.header %}
+        <header class="slide" id="intro">{{ slide.header }}
+        {% if slide.content %}
+        {{ slide.content }}
+        {% endif %}
+        </header>
+		{% endif %}
+	  {% else %}
+      {% if slide.content %}
+        <section class="slide">
+		 {% if slide.header %}
+		  <header>{{ slide.header }}</header>
+         {% endif %}
+         {{ slide.content }}
+		</section>
+	  {% else %}
+		{% if slide.header %}
+        <header class="slide">{{ slide.header }}</header>
+		{% endif %}
+      {% endif %}
+      {% endif %}
+     {% endfor %}
+ </section>
+  
+  {% if toc %}
+  <div id="toc" class="sidebar hidden">
+    <h2>Table of Contents</h2>
+    <table>
+      <caption>Table of Contents</caption>
+      {% for section in toc %}
+      <tr id="toc-row-{{ section.number }}">
+        <th><a href="#slide{{ section.number }}">{{ section.title }}</a></th>
+        <td><a href="#slide{{ section.number }}">{{ section.number }}</a></td>
+      </tr>
+      {% if section.sub %}
+        {% for subsection in section.sub %}
+        <tr id="toc-row-{{ subsection.number }}" class="sub">
+          <th><a href="#slide{{ subsection.number }}">{{ subsection.title }}</a></th>
+          <td><a href="#slide{{ subsection.number }}">{{ subsection.number }}</a></td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+      {% endfor %}
+    </table>
+  </div>
+  {% endif %}
+  <div id="help" class="sidebar hidden">
+    <h2>Help</h2>
+    <table>
+      <caption>Help</caption>
+      <tr>
+        <th>Table of Contents</th>
+        <td>t</td>
+      </tr>
+      <tr>
+        <th>Exposé</th>
+        <td>ESC</td>
+      </tr>
+      <tr>
+        <th>Full screen slides</th>
+        <td>e</td>
+      </tr>
+      <tr>
+        <th>Presenter View</th>
+        <td>p</td>
+      </tr>
+      <tr>
+        <th>Source Files</th>
+        <td>s</td>
+      </tr>
+      <tr>
+        <th>Slide Numbers</th>
+        <td>n</td>
+      </tr>
+      <tr>
+        <th>Toggle screen blanking</th>
+        <td>b</td>
+      </tr>
+      <tr>
+        <th>Show/hide slide context</th>
+        <td>c</td>
+      </tr>
+      <tr>
+        <th>Notes</th>
+        <td>2</td>
+      </tr>
+      <tr>
+        <th>Help</th>
+        <td>h</td>
+      </tr>
+    </table>
+  </div>
+	<script src="./js/slideshow.js"></script>
+	<script src="./js/plugins/css-edit.js"></script>
+	<script src="./js/plugins/css-snippets.js"></script>
+	<script src="./js/plugins/css-controls.js"></script>
+	<script src="./js/plugins/code-highlight.js"></script>
+	<script>
+	var slideshow = new SlideShow();
+
+	var snippets = document.querySelectorAll('.snippet');
+	for(var i=0; i<snippets.length; i++) {
+		new CSSSnippet(snippets[i]);
+	}
+
+	var cssControls = document.querySelectorAll('.css-control');
+	for(var i=0; i<cssControls.length; i++) {
+		new CSSControl(cssControls[i]);
+	}
+</script>
+</body>
+</html>
