@@ -24,6 +24,7 @@ import tempfile
 import utils
 import ConfigParser
 
+from watcher import watch
 from subprocess import Popen
 
 import macro as macro_module
@@ -85,6 +86,7 @@ class Generator(object):
         self.theme = kwargs.get('theme', 'default')
         self.verbose = kwargs.get('verbose', False)
         self.linenos = self.linenos_check(kwargs.get('linenos'))
+        self.watch = kwargs.get('watch', False)
         self.num_slides = 0
         self.__toc = []
 
@@ -100,12 +102,12 @@ class Generator(object):
             raise IOError(u"Source file/directory %s does not exist"
                           % source)
 
-        self.source_base_dir = os.path.split(os.path.abspath(source))[0]
         if source.endswith('.cfg'):
             config = self.parse_config(source)
             self.source = config.get('source')
             if not self.source:
                 raise IOError('unable to fetch a valid source from config')
+            source_abspath = os.path.abspath(self.source[0])
             self.destination_file = config.get('destination',
                 self.DEFAULT_DESTINATION)
             self.embed = config.get('embed', False)
@@ -117,6 +119,12 @@ class Generator(object):
             self.linenos = self.linenos_check(config.get('linenos'))
         else:
             self.source = source
+            source_abspath = os.path.abspath(source)
+
+        if not os.path.isdir(source_abspath):
+            source_abspath = os.path.dirname(source_abspath)
+
+        self.watch_dir = source_abspath
 
         if (os.path.exists(self.destination_file)
             and not os.path.isfile(self.destination_file)):
@@ -207,8 +215,19 @@ class Generator(object):
             else:
                 print self.render().encode(self.encoding)
         else:
-            self.write()
-            self.log(u"Generated file: %s" % self.destination_file)
+            self.write_and_log()
+
+            if self.watch:
+                self.log(u"Watching %s\n" % self.watch_dir)
+
+                watch(self.watch_dir, self.write_and_log)
+
+    def write_and_log(self):
+        self.watch_files = []
+        self.num_slides = 0
+        self.__toc = []
+        self.write()
+        self.log(u"Generated file: %s" % self.destination_file)
 
     def get_template_file(self):
         """ Retrieves Jinja2 template file path.
