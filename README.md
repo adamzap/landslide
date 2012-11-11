@@ -27,6 +27,7 @@ A sample slideshow is [here](http://adamzap.com/random/landslide.html).
 ## Optional
 
 - `textile` for textile support
+- `watchdog` for watching/auto-regeneration with the `-w` flag
 
 # Installation
 
