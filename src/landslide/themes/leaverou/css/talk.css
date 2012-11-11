@@ -5,8 +5,8 @@
 }
 
 #intro h1 {
-	width: 60%;
-	min-height: 500px;
+	width: 100%;
+	min-height: 200px;
 	margin: 5% auto 0;
 }
 
@@ -14,13 +14,13 @@
 	font-family: Helvetica, sans-serif;
 	font-weight: bold;
 	text-align: center;
-	font-size: 100%;
-	line-height: .3;
-	color: rgba(0,0,0,.7);
+	font-size: 60%;
+	line-height: 2;
+	color: rgba(0,0,100,.8);
 	text-shadow: none;
-	background: url(img/rainbow-wood.jpg) bottom;
+	background: url(../img/rainbow-wood.jpg) bottom;
 	padding:.6em 0 0;
-	overflow: hidden;
+/*	overflow: hidden;*/
 }
 
 
