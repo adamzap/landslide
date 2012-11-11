@@ -1,4 +1,4 @@
-#Présentation de Landslide<br/>avec le modèle Lea Verou
+#Présentation de Landslide <br/> avec le modèle Lea Verou
 Jean-Philippe ZIMMER - IUT Dijon-Auxerre - jean-philippe.zimmer@u-bourgogne.fr
 {: .attribution}
 
@@ -71,7 +71,11 @@ Second bloc de code (\!php):
 Un hyperlien est facilement réalisé en mettant le texte du lien entre crochets (\[ et \]) suivi
 de l'adresse de l'URL entre parenthèses () . 
 
-Ex : [MySafeKey vous aide a sécuriser votre PC](http://www.mysafekey.org).
+Par exemple : 
+
+\[MySafeKey vous aide a sécuriser votre PC\](http://www.mysafekey.org) donne : 
+
+[MySafeKey vous aide a sécuriser votre PC](http://www.mysafekey.org).
 
 ---
 
