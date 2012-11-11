@@ -12,3 +12,4 @@ dist/
 .komodotools
 landslide.sublime-project
 docs/_build
+venv
