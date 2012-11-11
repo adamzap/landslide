@@ -88,7 +88,7 @@
 
 .delayed.displayed,
 .delayed-children > .displayed {
-	opacity: .3;
+	opacity: .9;
 }
 
 .delayed.current,
