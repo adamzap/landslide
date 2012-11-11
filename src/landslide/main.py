@@ -22,6 +22,11 @@ try:
 except ImportError:
     import generator
 
+try:
+    from landslide import macro
+except ImportError:
+    import macro
+
 from optparse import OptionParser
 
 
@@ -59,11 +64,26 @@ def _parse_options():
         default="presentation.html")
 
     parser.add_option(
+        "-E", "--expandtabs",
+        type="int",
+        dest="expandtabs",
+        help="Number of spaces to expand tabs in included files.",
+        metavar="INTEGER",
+        default=macro.IncludeMacro.EXPANDTABS)
+
+    parser.add_option(
         "-e", "--encoding",
         dest="encoding",
         help="The encoding of your files (defaults to utf8)",
         metavar="ENCODING",
         default="utf8")
+
+    parser.add_option(
+        "-I", "--includepath",
+        dest="includepath",
+        help="Colon separated list of directories to locate included files.",
+        metavar="PATH",
+        default=macro.IncludeMacro.INCLUDEPATH)
 
     parser.add_option(
         "-i", "--embed",

@@ -50,6 +50,7 @@ class Generator(object):
         macro_module.FxMacro,
         macro_module.NotesMacro,
         macro_module.QRMacro,
+        macro_module.IncludeMacro,
     ]
     user_css = []
     user_js = []
@@ -65,7 +66,9 @@ class Generator(object):
             - ``debug``: enables debug mode
             - ``embed``: generates a standalone document, with embedded assets
             - ``encoding``: the encoding to use for this presentation
+            - ``expandtabs``: number of spaces to expand tabs
             - ``extensions``: Comma separated list of markdown extensions
+            - ``includepath``: Colon separated list of directories to locate included files
             - ``logger``: a logger lambda to use for logging
             - ``presenter_notes``: enable presenter notes
             - ``relative``: enable relative asset urls
@@ -78,7 +81,9 @@ class Generator(object):
                                            'presentation.html')
         self.direct = kwargs.get('direct', False)
         self.embed = kwargs.get('embed', False)
+        self.expandtabs = kwargs.get('expandtabs', macro_module.IncludeMacro.EXPANDTABS)
         self.encoding = kwargs.get('encoding', 'utf8')
+        self.includepath = kwargs.get('includepath', macro_module.IncludeMacro.INCLUDEPATH)
         self.extensions = kwargs.get('extensions', None)
         self.logger = kwargs.get('logger', None)
         self.presenter_notes = kwargs.get('presenter_notes', True)
@@ -111,6 +116,10 @@ class Generator(object):
             self.destination_file = config.get('destination',
                 self.DEFAULT_DESTINATION)
             self.embed = config.get('embed', False)
+            self.expandtabs = config.get('expandtabs',
+                                         macro_module.IncludeMacro.EXPANDTABS)
+            self.includepath = config.get('includepath',
+                                          macro_module.IncludeMacro.INCLUDEPATH)
             self.relative = config.get('relative', False)
             self.extensions = config.get('extensions', '')
             self.theme = config.get('theme', 'default')
@@ -455,6 +464,10 @@ class Generator(object):
             config['linenos'] = raw_config.get('landslide', 'linenos')
         if raw_config.has_option('landslide', 'embed'):
             config['embed'] = raw_config.getboolean('landslide', 'embed')
+        if raw_config.has_option('landslide', 'expandtabs'):
+            config['expandtabs'] = raw_config.getint('landslide', 'expandtabs')
+        if raw_config.has_option('landslide', 'includepath'):
+            config['includepath'] = raw_config.get('landslide', 'includepath')
         if raw_config.has_option('landslide', 'relative'):
             config['relative'] = raw_config.getboolean('landslide', 'relative')
         if raw_config.has_option('landslide', 'extensions'):
@@ -471,7 +484,10 @@ class Generator(object):
     def process_macros(self, content, source=None):
         """ Processed all macros.
         """
-        macro_options = {'relative': self.relative, 'linenos': self.linenos}
+        macro_options = {
+            'relative': self.relative, 'linenos': self.linenos,
+            'expandtabs': self.expandtabs, 'includepath': self.includepath,
+        }
         classes = []
         for macro_class in self.macros:
             try:
