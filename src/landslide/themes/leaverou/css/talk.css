@@ -6,8 +6,9 @@
 
 #intro h1 {
 	width: 100%;
+	font-size: 200%;
 	min-height: 200px;
-	margin: 5% auto 0;
+	margin: 1% auto 0;
 }
 
 #intro .attribution {
