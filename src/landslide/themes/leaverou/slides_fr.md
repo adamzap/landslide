@@ -1,5 +1,5 @@
 #Présentation de Landslide <br/> avec le modèle Lea Verou
-Jean-Philippe ZIMMER - IUT Dijon-Auxerre - jean-philippe.zimmer@u-bourgogne.fr
+Jean-Philippe ZIMMER - IUT Dijon-Auxerre
 {: .attribution}
 
 ---
@@ -13,7 +13,9 @@ Cette version utilise le modèle de [présentation de Lea Verou](http://leaverou
 
 Landslide a besoin du langage **python** avec les modules *jinja2*, *markdown*, et *pygments* pour fonctionner.
 
-Sous **debian** et **ubuntu**, l'installation est réalisée avec `apt-get install landslide`. 
+Sous **debian** et **ubuntu**, l'installation est réalisée avec `apt-get install landslide`. Néanmoins, la
+version de l'application landslide contenue dans les dépots ne contient pas les dernières améliorations. Pour
+y avoir accès vous devez suivre la procédure d'installation comme indiquée sur la page principale du dépot GitHub.
 
 ## Comment faire votre diaporama ?
 
@@ -23,12 +25,47 @@ Sous **debian** et **ubuntu**, l'installation est réalisée avec `apt-get insta
 
 ---
 
+# Pourquoi utiliser la présentation Lea Verou ?
+
+- Elle est basée sur HTML5/CSS3 et prend en compte les dernières avancées de ces standards.
+- Elle a un design propre, efficace et est agréable à regarder.
+- Elle est Open Source et téléchargeable sur [GitHub](https://github.com/LeaVerou/csss).
+- Les déplacements sont faciles :
+    - les fléches pour avancer ou reculer finement
+    - CTRL fléche pour avancer ou reculer de diapo en diapo
+    - HOME pour aller à la première diapo, END pour la dernière
+    - CTRL G pour aller à la diapo indiquée
+- La taille des contenus des pages est dynamique
+- Le titre de page prend le titre de la diapo
+- ...
+ 
+---
+
+# Pourquoi la présentation Lea Verou avec Landslide
+
+Dans le but de réaliser une application de présentation qui pourrait remplacer des applications
+classiques comme MS Powerpoint ou OO Impress, j'ai rechercher des présentations qui serait visualisables
+par un navigateur.
+
+J'ai trouvé cette présentation (et d'autre aussi disponible) basée sur HTML5/CSS3.
+Cette présentation est assez simple a utiliser pour quelqu'un qui sait un peu coder en HTML. 
+Néanmoins, pour un novice ou une personne réticente à la programmation, j'ai cherché une meilleure
+solution pour composer les diapositives d'une présentation. 
+
+Après avoir fait différents essais et recherches, j'ai tester avec bonheur l'application landslide.
+C'est réellement l'application qu'il me fallait pour mener à bien ma réalisation. 
+
+Le reste est un peu d'adaptation et de codage pour présenter une application simple, facile a utiliser
+et réfléchir à quelques améliorations.
+
+---
+
 # Instructions pour le formatage Markdown
 
 - Les instructions suivantes sont succinctes. Vous pouvez trouver [sur ce site](http://daringfireball.net/projects/markdown/syntax)
 des instructions plus détaillées.
 - Séparez vos diapositives avec une ligne horizontale (--- en markdown).
-    - Your first slide (title slide) should not have a heading, only `<p>`s
+    - La première diapositive sera utilisée comme titre de la présentation.
     - Les autres diapositives peuvent avoir un titre.
 - Les titres principaux sont marqués avec un #, les secondaires avec ##, ... 
 
@@ -76,6 +113,11 @@ Par exemple :
 \[MySafeKey vous aide a sécuriser votre PC\](http://www.mysafekey.org) donne : 
 
 [MySafeKey vous aide a sécuriser votre PC](http://www.mysafekey.org).
+
+En suivant ce principe et en précédent d'un \! on peut aussi facilement insérer une image :
+
+Par exemple :
+\!\[MySafeKey \](./img/logomysafekey3.png) donne : ![MySafeKey](./img/logomysafekey3.png)
 
 ---
 
@@ -141,7 +183,8 @@ devient
 
 	<p id="un_id" class="une_class">Ceci est un paragraphe.</p>
 	
-C'est grâce à cette option que la classe "delayed" de Lea Verou vue précemment est utilisée.
-
+C'est grâce à cette option que la classe "delayed" de Lea Verou vue dans la diapo précédente ou que la 
+classe "attribution" de la page de titre de présentation sont utilisées.
+ 
 Bien d'autres extensions sont possibles, vous ouvez vous reporter à la page précédemment citée.
 
