@@ -2,6 +2,12 @@
 
 A log of changes to Landslide that are worth mentioning
 
+## v1.1.1
+
+### Fixes
+
+- Don't accidentally require watchdog (#134)
+
 ## v1.1.0
 
 ### Major Enhancements
