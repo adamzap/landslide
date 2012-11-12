@@ -24,7 +24,6 @@ import tempfile
 import utils
 import ConfigParser
 
-from watcher import watch
 from subprocess import Popen
 
 import macro as macro_module
@@ -218,6 +217,8 @@ class Generator(object):
             self.write_and_log()
 
             if self.watch:
+                from watcher import watch
+
                 self.log(u"Watching %s\n" % self.watch_dir)
 
                 watch(self.watch_dir, self.write_and_log)
