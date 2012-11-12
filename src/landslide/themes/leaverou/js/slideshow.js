@@ -3,6 +3,10 @@
  * @author Lea Verou (http://leaverou.me)
  * @version 2.0
  */
+/**
+ * addings by JP Zimmer
+ * ShowToc from slides.js and event on char "T"
+ */
  
 /**
  * Make the environment a bit friendlier
@@ -22,6 +26,9 @@ if(!('classList' in body)) {
 
 // Cache <title> element, we may need it for slides that don't have titles
 var documentTitle = document.title + '';
+
+// Addings JP Zimmer
+var tocOpened = false;
 
 var self = window.SlideShow = function(slide) {
 	var me = this;
@@ -232,6 +239,8 @@ self.prototype = {
 							
 							// Switch this one to presenter view
 							body.classList.add('presenter');
+						case 84: // T
+							this.ShowToc();
 					}
 				}
 				break;
@@ -520,7 +529,22 @@ self.prototype = {
 		}
 		
 		return false;
-	}
+	},
+	
+/** 
+ * From slides.js : added by JP Zimmer
+ */	
+	ShowToc: function() {
+
+        //var tocOpened=false;
+        var toc = document.getElementById('toc');
+        if (toc) {
+            toc.style.marginLeft = tocOpened ? '-' + (toc.clientWidth + 20) + 'px' : '0px';
+            tocOpened = !tocOpened;
+        }
+        //updateOverview();
+    }
+
 };
 
 /**********************************************
