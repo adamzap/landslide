@@ -14,6 +14,6 @@ This is actually the application that I needed to complete my project.
 The rest is a bit of coding and adaptation to present a simple, easy to use 
 application and to think about some improvements.
 
-You can see the results in the presentation html file.
+You can see the results in the html presentation file.
 
 Jean-Philippe ZIMMER

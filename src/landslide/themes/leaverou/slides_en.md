@@ -77,7 +77,7 @@ more detailed instructions.
 - Separate your slides with a horizontal line (--- with markdown).
     - The first slide will be used as the title of the presentation.
     - Other slides can have a title (it is better to set one).
-- The main titles are marked with one #, with the secondary with ##, ... 
+- The main titles are marked with one #, with the secondaries with ##, ... 
 
 ---
 
@@ -156,7 +156,7 @@ gives :
 ---
 
 # The lists with Markdown - 2
-## Addings a Lea Verou's style
+## Addings a CSSS style
 
 Items appear one after the other:
 
@@ -191,7 +191,7 @@ gives
 
 	<p id="one_id" class="one_class">This is a paragraph.</p>
 	
-It is through this option that the class called "delayed" presents in the previous slide or the
+It is through this option that the CSSS class called "delayed" presents in the previous slide or the
 class "allocation" of the title page of presentation are used.
  
 Many other extensions are possible, you can refer to the page mentioned above.
