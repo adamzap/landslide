@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <title>Présentation de Landslide <br/> avec le modèle Lea Verou</title>
+    <title>Présentation de Landslide <br/> avec le modèle CSSS de Lea Verou</title>
     <!-- Styles -->
     
     <link href="./css/slideshow.css" rel="stylesheet" />
@@ -25,7 +25,7 @@
 	 
 	  
 	   
-        <header class="slide" id="intro"><h1>Présentation de Landslide <br/> avec le modèle Lea Verou</h1>
+        <header class="slide" id="intro"><h1>Présentation de Landslide <br/> avec le modèle CSSS de Lea Verou</h1>
         
         <p class="attribution">Jean-Philippe ZIMMER - IUT Dijon-Auxerre</p>
         
@@ -39,18 +39,18 @@
 		 
 		  <header><h1>Landslide</h1></header>
          
-         <p>Lanslide permet de générer un diaporama en utilisant des diapositives simples à écrire.
+         <p>Landslide permet de générer un diaporama en utilisant des diapositives simples à écrire.
 La version de base utilise le modèle de diapos google.</p>
-<p>Cette version utilise le modèle de <a href="http://leaverou.github.com/CSSS/">présentation de Lea Verou</a>.</p>
+<p>Cette version utilise le modèle de <a href="http://leaverou.github.com/CSSS/">présentation CSSS de Lea Verou</a>.</p>
 <p>Landslide a besoin du langage <strong>python</strong> avec les modules <em>jinja2</em>, <em>markdown</em>, et <em>pygments</em> pour fonctionner.</p>
 <p>Sous <strong>debian</strong> et <strong>ubuntu</strong>, l'installation est réalisée avec <code>apt-get install landslide</code>. Néanmoins, la
 version de l'application landslide contenue dans les dépots ne contient pas les dernières améliorations. Pour
-y avoir accès vous devez suivre la procédure d'installation comme indiquée sur la page principale du dépot GitHub.</p>
+avoir accès à ces améliorations, vous devez suivre la procédure d'installation comme indiquée sur la page principale du dépot GitHub.</p>
 <h2>Comment faire votre diaporama ?</h2>
 <ul>
-<li>Elaborez vos diapos avec des balises simples dans le fichier <em>slides.md</em>,</li>
-<li>Lancez la commande <code>landslide leaverou.cfg</code>,</li>
-<li>Visualisez le résultat de <em>presentation.html</em>.</li>
+<li>Elaborez vos diapos avec des balises simples dans le fichier <em>slides_fr.md</em>,</li>
+<li>Lancez la commande <code>landslide leaverou_fr.cfg</code>,</li>
+<li>Visualisez le résultat de <em>presentation_fr.html</em>.</li>
 </ul>
 		</section>
 	  
@@ -60,17 +60,17 @@ y avoir accès vous devez suivre la procédure d'installation comme indiquée su
       
         <section class="slide">
 		 
-		  <header><h1>Pourquoi utiliser la présentation Lea Verou ?</h1></header>
+		  <header><h1>Pourquoi utiliser la présentation CSSS de Lea Verou ?</h1></header>
          
          <ul>
 <li>Elle est basée sur HTML5/CSS3 et prend en compte les dernières avancées de ces standards.</li>
 <li>Elle a un design propre, efficace et est agréable à regarder.</li>
 <li>Elle est Open Source et téléchargeable sur <a href="https://github.com/LeaVerou/csss">GitHub</a>.</li>
 <li>Les déplacements sont faciles :<ul>
-<li>les fléches pour avancer ou reculer finement</li>
-<li>CTRL fléche pour avancer ou reculer de diapo en diapo</li>
-<li>HOME pour aller à la première diapo, END pour la dernière</li>
-<li>CTRL G pour aller à la diapo indiquée</li>
+<li>les flèches pour avancer ou reculer finement,</li>
+<li>CTRL fléche pour avancer ou reculer de diapo en diapo,</li>
+<li>HOME pour aller à la première diapo, END pour la dernière,</li>
+<li>MAJ+G pour aller à la diapo indiquée.</li>
 </ul>
 </li>
 <li>La taille des contenus des pages est dynamique</li>
@@ -85,19 +85,36 @@ y avoir accès vous devez suivre la procédure d'installation comme indiquée su
       
         <section class="slide">
 		 
-		  <header><h1>Pourquoi la présentation Lea Verou avec Landslide</h1></header>
+		  <header><h1>Pourquoi la présentation CSSS avec Landslide</h1></header>
          
          <p>Dans le but de réaliser une application de présentation qui pourrait remplacer des applications
-classiques comme MS Powerpoint ou OO Impress, j'ai rechercher des présentations qui serait visualisables
+classiques comme MS Powerpoint ou OO Impress, j'ai recherché des présentations qui seraient visualisables
 par un navigateur.</p>
 <p>J'ai trouvé cette présentation (et d'autre aussi disponible) basée sur HTML5/CSS3.
-Cette présentation est assez simple a utiliser pour quelqu'un qui sait un peu coder en HTML. 
+Cette présentation est assez simple à utiliser pour quelqu'un qui sait un peu coder en HTML. 
 Néanmoins, pour un novice ou une personne réticente à la programmation, j'ai cherché une meilleure
 solution pour composer les diapositives d'une présentation. </p>
-<p>Après avoir fait différents essais et recherches, j'ai tester avec bonheur l'application landslide.
+<p>Après avoir fait différents essais et recherches, j'ai testé avec bonheur l'application landslide.
 C'est réellement l'application qu'il me fallait pour mener à bien ma réalisation. </p>
-<p>Le reste est un peu d'adaptation et de codage pour présenter une application simple, facile a utiliser
-et réfléchir à quelques améliorations.</p>
+<p>Le reste est un peu d'adaptation et de codage pour présenter une application simple, facile à utiliser
+et pour réfléchir à quelques améliorations.</p>
+		</section>
+	  
+      
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>Quelques adaptations et améliorations</h1></header>
+         
+         <ul>
+<li>J'ai fait quelques adaptations du modèle de base CSSS afin qu'il corresponde visuellement à 
+un résultat plus conforme à mes attentes.</li>
+<li>La table des matières présente dans le modèle google a été reportée dans le modèle CSSS. 
+Pour la faire apparaître et disparaître, utilisez MAJ+t.</li>
+<li>A venir : une temporisation pour permettre un défilement automatique des diapositives.</li>
+</ul>
 		</section>
 	  
       
@@ -156,7 +173,7 @@ des instructions plus détaillées.</li>
 <p>Vous pouvez aussi insérer !lelangage avant la première ligne de code.</p>
 <p>Premier bloc de code (!python):</p>
 <div class="highlight"><pre><span class="lineno">1</span> <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-<span class="lineno">2</span>     <span class="k">print</span> <span class="s">&quot;Everything&#39;s gonna be allright&quot;</span>
+<span class="lineno">2</span>     <span class="k">print</span> <span class="s">&quot;Tout va bien !&quot;</span>
 </pre></div>
 
 <p>Second bloc de code (!php):</p>
@@ -176,9 +193,9 @@ des instructions plus détaillées.</li>
          <p>Un hyperlien est facilement réalisé en mettant le texte du lien entre crochets ([ et ]) suivi
 de l'adresse de l'URL entre parenthèses () . </p>
 <p>Par exemple : </p>
-<p>[MySafeKey vous aide a sécuriser votre PC](http://www.mysafekey.org) donne : </p>
-<p><a href="http://www.mysafekey.org">MySafeKey vous aide a sécuriser votre PC</a>.</p>
-<p>En suivant ce principe et en précédent d'un ! on peut aussi facilement insérer une image :</p>
+<p>[MySafeKey vous aide à sécuriser votre PC](http://www.mysafekey.org) donne : </p>
+<p><a href="http://www.mysafekey.org">MySafeKey vous aide à sécuriser votre PC</a>.</p>
+<p>En suivant ce principe et en précédant d'un ! on peut aussi facilement insérer une image :</p>
 <p>Par exemple :
 ![MySafeKey ](././img/logomysafekey3.png) donne : <img alt="MySafeKey" src="././img/logomysafekey3.png" /></p>
 		</section>
@@ -197,7 +214,7 @@ Par exemple :</p>
 <pre><code>- Elément 1
 - Elément 2
     - Sous élément 2.1 (4 caractères espace à gauche de la marque)
-        - Sous élément 2.1.1 (8 caractères espace à gauche de la marque)
+        - Sous sous élément 2.1.1 (8 caractères espace à gauche de la marque)
 - Elément 3 (retour au début de ligne)
 </code></pre>
 <p>apparait :</p>
@@ -205,7 +222,7 @@ Par exemple :</p>
 <li>Elément 1</li>
 <li>Elément 2<ul>
 <li>Sous élément 2.1 (4 caractères espace à gauche de la marque)<ul>
-<li>Sous élément 2.1.1 (8 caractères espace à gauche de la marque)</li>
+<li>Sous sous élément 2.1.1 (8 caractères espace à gauche de la marque)</li>
 </ul>
 </li>
 </ul>
@@ -222,7 +239,7 @@ Par exemple :</p>
 		 
 		  <header><h1>Les listes avec Markdown - 2</h1></header>
          
-         <h2>Un ajout des styles Lea Verou</h2>
+         <h2>Un ajout des styles de CSSS</h2>
 <p>Les éléments apparaissent l'un après l'autre :</p>
 <ul>
 <li class="delayed">Elément<ul>
@@ -258,9 +275,9 @@ la liste des extensions de <a href="http://packages.python.org/Markdown/extensio
 <p>devient</p>
 <pre><code>&lt;p id="un_id" class="une_class"&gt;Ceci est un paragraphe.&lt;/p&gt;
 </code></pre>
-<p>C'est grâce à cette option que la classe "delayed" de Lea Verou vue dans la diapo précédente ou que la 
-classe "attribution" de la page de titre de présentation sont utilisées.</p>
-<p>Bien d'autres extensions sont possibles, vous ouvez vous reporter à la page précédemment citée.</p>
+<p>C'est grâce à cette option que la classe "delayed" de CSSS vue dans la diapo précédente ou que la 
+classe "attribution" de la page titre de présentation sont utilisées.</p>
+<p>Bien d'autres extensions sont possibles, vous pouvez vous reporter à la page précédemment citée.</p>
 		</section>
 	  
       
@@ -274,7 +291,7 @@ classe "attribution" de la page de titre de présentation sont utilisées.</p>
       <caption>Table of Contents</caption>
       
       <tr id="toc-row-1">
-        <th><a href="#slide1">Présentation de Landslide <br/> avec le modèle Lea Verou</a></th>
+        <th><a href="#slide1">Présentation de Landslide <br/> avec le modèle CSSS de Lea Verou</a></th>
         <td><a href="#slide1">1</a></td>
       </tr>
       
@@ -286,56 +303,62 @@ classe "attribution" de la page de titre de présentation sont utilisées.</p>
       
       
       <tr id="toc-row-3">
-        <th><a href="#slide3">Pourquoi utiliser la présentation Lea Verou ?</a></th>
+        <th><a href="#slide3">Pourquoi utiliser la présentation CSSS de Lea Verou ?</a></th>
         <td><a href="#slide3">3</a></td>
       </tr>
       
       
       <tr id="toc-row-4">
-        <th><a href="#slide4">Pourquoi la présentation Lea Verou avec Landslide</a></th>
+        <th><a href="#slide4">Pourquoi la présentation CSSS avec Landslide</a></th>
         <td><a href="#slide4">4</a></td>
       </tr>
       
       
       <tr id="toc-row-5">
-        <th><a href="#slide5">Instructions pour le formatage Markdown</a></th>
+        <th><a href="#slide5">Quelques adaptations et améliorations</a></th>
         <td><a href="#slide5">5</a></td>
       </tr>
       
       
       <tr id="toc-row-6">
-        <th><a href="#slide6">Instructions pour le formatage Markdown - 2</a></th>
+        <th><a href="#slide6">Instructions pour le formatage Markdown</a></th>
         <td><a href="#slide6">6</a></td>
       </tr>
       
       
       <tr id="toc-row-7">
-        <th><a href="#slide7">Instructions pour le formatage Markdown - 3</a></th>
+        <th><a href="#slide7">Instructions pour le formatage Markdown - 2</a></th>
         <td><a href="#slide7">7</a></td>
       </tr>
       
       
       <tr id="toc-row-8">
-        <th><a href="#slide8">Les liens avec Markdown</a></th>
+        <th><a href="#slide8">Instructions pour le formatage Markdown - 3</a></th>
         <td><a href="#slide8">8</a></td>
       </tr>
       
       
       <tr id="toc-row-9">
-        <th><a href="#slide9">Les listes avec Markdown</a></th>
+        <th><a href="#slide9">Les liens avec Markdown</a></th>
         <td><a href="#slide9">9</a></td>
       </tr>
       
       
       <tr id="toc-row-10">
-        <th><a href="#slide10">Les listes avec Markdown - 2</a></th>
+        <th><a href="#slide10">Les listes avec Markdown</a></th>
         <td><a href="#slide10">10</a></td>
       </tr>
       
       
       <tr id="toc-row-11">
-        <th><a href="#slide11">Markdown est magique !</a></th>
+        <th><a href="#slide11">Les listes avec Markdown - 2</a></th>
         <td><a href="#slide11">11</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-12">
+        <th><a href="#slide12">Markdown est magique !</a></th>
+        <td><a href="#slide12">12</a></td>
       </tr>
       
       
