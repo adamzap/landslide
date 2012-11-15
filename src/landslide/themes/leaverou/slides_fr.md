@@ -47,7 +47,7 @@ Dans le but de réaliser une application de présentation qui pourrait remplacer
 classiques comme MS Powerpoint ou OO Impress, j'ai recherché des présentations qui seraient visualisables
 par un navigateur.
 
-J'ai trouvé cette présentation (et d'autre aussi disponible) basée sur HTML5/CSS3.
+J'ai trouvé cette présentation (et d'autres aussi disponibles) basée sur HTML5/CSS3.
 Cette présentation est assez simple à utiliser pour quelqu'un qui sait un peu coder en HTML. 
 Néanmoins, pour un novice ou une personne réticente à la programmation, j'ai cherché une meilleure
 solution pour composer les diapositives d'une présentation. 

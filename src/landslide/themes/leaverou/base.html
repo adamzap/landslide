@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+{# I'm not find the good method to have a multilanguage toc title.
+So I propose to set it here. If someone has a better idea !! #}
+{% set toctitle='Table des matières' %}
 <head>
     <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -77,9 +80,9 @@
   
   {% if toc %}
   <div id="toc" class="sidebar hidden">
-    <h2>Table of Contents</h2>
+    <h2>{{ toctitle }}</h2>
     <table>
-      <caption>Table of Contents</caption>
+      <caption>{{ toctitle }}</caption>
       {% for section in toc %}
       <tr id="toc-row-{{ section.number }}">
         <th><a href="#slide{{ section.number }}">{{ section.title }}</a></th>

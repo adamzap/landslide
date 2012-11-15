@@ -47,7 +47,7 @@ the deposit GitHub.
 In order to make a presentation application that could replace conventional applications 
 such as MS PowerPoint or Impress OO I looked for presentations that can be viewable by a browser.
 
-I found this presentation (and also other available) based on HTML5/CSS3.
+I found this presentation (and also others availables) based on HTML5/CSS3.
 This presentation is quite simple to use for someone who knows a little coding to HTML.
 However, for a novice or a person reluctant to programming, I looked for a better 
 solution to compose the presentation slides.
