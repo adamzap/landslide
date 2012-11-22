@@ -1,7 +1,10 @@
-#Landslide presentation <br/> with Lea Verou's CSSS model
-Jean-Philippe ZIMMER - IUT Dijon-Auxerre
-{: .attribution}
+#Landslide presentation <br/> with Lea Verou's CSSS model{: #theheader}
 
+Jean-Philippe ZIMMER - IUT Dijon-Auxerre
+{: .attribution #thefooter}
+
+Interesting conference - Auxerre - 22/11/2012
+{: .situation}
 ---
 
 # Landslide
@@ -66,6 +69,8 @@ application and to think about some improvements.
  result more visually according to my expectations.
 - The table of contents within the Google model has been reported in the CSSS model.
 To make it appear and disappear, use SHIFT+t.
+- A class situation that marks where the presentation takes place.
+- A header and footer, which include the texts of the title page.
 - Coming soon: a timer to allow automatic scrolling slides.
 
 ---

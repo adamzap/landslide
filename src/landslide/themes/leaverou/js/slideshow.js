@@ -29,6 +29,7 @@ var documentTitle = document.title + '';
 
 // Addings JP Zimmer
 var tocOpened = false;
+var nonecontent="NONE";
 
 var self = window.SlideShow = function(slide) {
 	var me = this;
@@ -64,10 +65,33 @@ var self = window.SlideShow = function(slide) {
 	}
 	
 	// Create slide indicator
-	this.indicator = document.createElement('div');
-	
+	this.indicator = document.createElement('div');	
 	this.indicator.id = 'indicator';
 	body.appendChild(this.indicator);
+	
+	// Create Slide header
+	this.myheader = document.createElement('div');
+	this.myheader.id = 'myheader';
+	body.appendChild(this.myheader);
+	this.myheader.textContent=nonecontent;
+	// Find the element to fill the header
+	if (document.getElementById('theheader'))
+	{
+		var slideheader=document.getElementById('theheader');
+		this.myheader.textContent=slideheader.textContent.trim();
+	}
+	
+	// Create Slide footer
+	this.myfooter = document.createElement('div');
+	this.myfooter.id = 'myfooter';
+	body.appendChild(this.myfooter);
+	this.myfooter.textContent=nonecontent;
+	// Find the element to fill the footer
+	if (document.getElementById('thefooter'))
+	{
+		var slidefooter=document.getElementById('thefooter');
+		this.myfooter.textContent=slidefooter.textContent.trim();
+	}
 	
 	// Get the slide elements into an array
 	this.slides = $$('.slide', body);
@@ -447,6 +471,23 @@ self.prototype = {
 		setTimeout(function() {
 			addEventListener('hashchange', me, false);
 		}, 1000);
+		
+		if (this.index==0)
+		{
+			this.myheader.setAttribute('class','nodisplay');
+			this.myfooter.setAttribute('class','nodisplay');			
+		}
+		else
+		{
+			if (this.myheader.textContent!="NONE")
+			{
+				this.myheader.removeAttribute('class');
+			}
+			if (this.myfooter.textContent!="NONE")
+			{
+				this.myfooter.removeAttribute('class');
+			}
+		}
 	},
 	
 	gotoItem: function(which) {

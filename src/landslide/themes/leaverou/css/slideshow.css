@@ -74,6 +74,52 @@
   	box-sizing: border-box;
   	border-radius: 999px;
 }
+/**
+ * Slides headers
+ */
+#myheader{
+	position: absolute;
+  	top: .05in;
+	width: 50%;
+  	z-index: 1010;
+  	
+  	font-size: .20in;
+  	color: white;
+  	background: rgba(0,0,255,.50);
+  	font-weight: 900;
+  	text-shadow: .15em .15em .1em black;
+  	text-align: center;
+  	
+  	margin-right: 10%;
+  	margin-left: 15%;
+  	padding-left: 10%;
+  	padding-right: 10%;
+  	box-sizing: content-box;
+  	border-radius: 999px;
+}
+/**
+ * Slides footers
+ */
+#myfooter{
+	position: absolute;
+  	bottom: .05in;
+	width: 50%;
+  	z-index: 1010;
+  	
+  	font-size: .20in;
+  	color: white;
+  	background: rgba(0,0,255,.50);
+  	font-weight: 900;
+  	text-shadow: .15em .15em .1em black;
+  	text-align: center;
+  	
+  	margin-right: 10%;
+  	margin-left: 15%;
+  	padding-left: 10%;
+  	padding-right: 10%;
+  	box-sizing: content-box;
+  	border-radius: 999px;
+}
 
 /* If there's nothing selected, show the first */
 .slide:first-child {

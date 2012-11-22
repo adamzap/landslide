@@ -1,7 +1,10 @@
-#Présentation de Landslide <br/> avec le modèle CSSS de Lea Verou
-Jean-Philippe ZIMMER - IUT Dijon-Auxerre
-{: .attribution}
+#Présentation de Landslide <br/> avec le modèle CSSS de Lea Verou{: #theheader}
 
+Jean-Philippe ZIMMER - IUT Dijon-Auxerre
+{: .attribution #thefooter}
+
+Conférence intéressante - Auxerre - 22/11/2012
+{: .situation}
 ---
 
 # Landslide
@@ -66,6 +69,8 @@ et pour réfléchir à quelques améliorations.
 un résultat plus conforme à mes attentes.
 - La table des matières présente dans le modèle google a été reportée dans le modèle CSSS. 
 Pour la faire apparaître et disparaître, utilisez MAJ+t.
+- Une classe situation qui marque où se déroule la présentation.
+- Un en-tête et un pied de page, qui reprennent les textes de la page de titre.
 - A venir : une temporisation pour permettre un défilement automatique des diapositives.
 
 ---

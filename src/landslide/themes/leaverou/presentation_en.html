@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+
+
 <head>
     <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -25,9 +27,10 @@
 	 
 	  
 	   
-        <header class="slide" id="intro"><h1>Landslide presentation <br/> with Lea Verou's CSSS model</h1>
+        <header class="slide" id="intro"><h1 id="theheader">Landslide presentation <br/> with Lea Verou's CSSS model</h1>
         
-        <p class="attribution">Jean-Philippe ZIMMER - IUT Dijon-Auxerre</p>
+        <p class="attribution" id="thefooter">Jean-Philippe ZIMMER - IUT Dijon-Auxerre</p>
+<p class="situation">Interesting conference - Auxerre - 22/11/2012</p>
         
         </header>
 		
@@ -90,7 +93,7 @@ the deposit GitHub.</p>
          
          <p>In order to make a presentation application that could replace conventional applications 
 such as MS PowerPoint or Impress OO I looked for presentations that can be viewable by a browser.</p>
-<p>I found this presentation (and also other available) based on HTML5/CSS3.
+<p>I found this presentation (and also others availables) based on HTML5/CSS3.
 This presentation is quite simple to use for someone who knows a little coding to HTML.
 However, for a novice or a person reluctant to programming, I looked for a better 
 solution to compose the presentation slides.</p>
@@ -113,6 +116,8 @@ application and to think about some improvements.</p>
  result more visually according to my expectations.</li>
 <li>The table of contents within the Google model has been reported in the CSSS model.
 To make it appear and disappear, use SHIFT+t.</li>
+<li>A class situation that marks where the presentation takes place.</li>
+<li>A header and footer, which include the texts of the title page.</li>
 <li>Coming soon: a timer to allow automatic scrolling slides.</li>
 </ul>
 		</section>
@@ -133,7 +138,7 @@ more detailed instructions.</li>
 <li>Other slides can have a title (it is better to set one).</li>
 </ul>
 </li>
-<li>The main titles are marked with one #, with the secondary with ##, ... </li>
+<li>The main titles are marked with one #, with the secondaries with ##, ... </li>
 </ul>
 		</section>
 	  
@@ -239,7 +244,7 @@ For example :</p>
 		 
 		  <header><h1>The lists with Markdown - 2</h1></header>
          
-         <h2>Addings a Lea Verou's style</h2>
+         <h2>Addings a CSSS style</h2>
 <p>Items appear one after the other:</p>
 <ul>
 <li class="delayed">Item<ul>
@@ -274,7 +279,7 @@ list of <a href="http://packages.python.org/Markdown/extensions/index.html">Mark
 <p>gives</p>
 <pre><code>&lt;p id="one_id" class="one_class"&gt;This is a paragraph.&lt;/p&gt;
 </code></pre>
-<p>It is through this option that the class called "delayed" presents in the previous slide or the
+<p>It is through this option that the CSSS class called "delayed" presents in the previous slide or the
 class "allocation" of the title page of presentation are used.</p>
 <p>Many other extensions are possible, you can refer to the page mentioned above.</p>
 		</section>
@@ -285,9 +290,9 @@ class "allocation" of the title page of presentation are used.</p>
   
   
   <div id="toc" class="sidebar hidden">
-    <h2>Table of Contents</h2>
+    <h2>Table des matières</h2>
     <table>
-      <caption>Table of Contents</caption>
+      <caption>Table des matières</caption>
       
       <tr id="toc-row-1">
         <th><a href="#slide1">Landslide presentation <br/> with Lea Verou's CSSS model</a></th>
@@ -364,52 +369,7 @@ class "allocation" of the title page of presentation are used.</p>
     </table>
   </div>
   
-  <div id="help" class="sidebar hidden">
-    <h2>Help</h2>
-    <table>
-      <caption>Help</caption>
-      <tr>
-        <th>Table of Contents</th>
-        <td>t</td>
-      </tr>
-      <tr>
-        <th>Exposé</th>
-        <td>ESC</td>
-      </tr>
-      <tr>
-        <th>Full screen slides</th>
-        <td>e</td>
-      </tr>
-      <tr>
-        <th>Presenter View</th>
-        <td>p</td>
-      </tr>
-      <tr>
-        <th>Source Files</th>
-        <td>s</td>
-      </tr>
-      <tr>
-        <th>Slide Numbers</th>
-        <td>n</td>
-      </tr>
-      <tr>
-        <th>Toggle screen blanking</th>
-        <td>b</td>
-      </tr>
-      <tr>
-        <th>Show/hide slide context</th>
-        <td>c</td>
-      </tr>
-      <tr>
-        <th>Notes</th>
-        <td>2</td>
-      </tr>
-      <tr>
-        <th>Help</th>
-        <td>h</td>
-      </tr>
-    </table>
-  </div>
+  
 	<script src="./js/slideshow.js"></script>
 	<script src="./js/plugins/css-edit.js"></script>
 	<script src="./js/plugins/css-snippets.js"></script>
