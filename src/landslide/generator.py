@@ -111,6 +111,7 @@ class Generator(object):
                 self.DEFAULT_DESTINATION)
             self.embed = config.get('embed', False)
             self.relative = config.get('relative', False)
+            self.copy_theme = config.get('copy_theme', False)
             self.extensions = config.get('extensions', '')
             self.theme = config.get('theme', 'default')
             self.add_user_css(config.get('css', []))
@@ -454,10 +455,9 @@ class Generator(object):
             config['destination'] = raw_config.get('landslide', 'destination')
         if raw_config.has_option('landslide', 'linenos'):
             config['linenos'] = raw_config.get('landslide', 'linenos')
-        if raw_config.has_option('landslide', 'embed'):
-            config['embed'] = raw_config.getboolean('landslide', 'embed')
-        if raw_config.has_option('landslide', 'relative'):
-            config['relative'] = raw_config.getboolean('landslide', 'relative')
+        for boolopt in ('embed', 'relative', 'copy_theme'):
+            if raw_config.has_option('landslide', boolopt):
+                config[boolopt] = raw_config.getboolean('landslide', boolopt)
         if raw_config.has_option('landslide', 'extensions'):
             config['extensions'] = ",".join(raw_config.get('landslide', 'extensions')\
                 .replace('\r', '').split('\n'))
