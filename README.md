@@ -74,8 +74,8 @@ If you want to stay on the edge:
 
 ## Markdown
 
-- Your Markdown source files must be suffixed by `.md`, `.markdn`, `.mdown` or
-  `.markdown`
+- Your Markdown source files must be suffixed by `.md`, `.markdn`, `.mdwn`,
+  `.mdown` or `.markdown`
 - To create a title slide, render a single `h1` element (eg. `# My Title`)
 - Separate your slides with a horizontal rule (`---` in markdown) except at the
   end of md files
