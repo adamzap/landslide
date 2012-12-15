@@ -2,6 +2,8 @@
 
 A log of changes to Landslide that are worth mentioning
 
+- It is not possible to have Presenter Notes in slides with no heading (regebro)
+
 ## v1.1.1
 
 ### Fixes

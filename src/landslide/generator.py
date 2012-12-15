@@ -356,9 +356,17 @@ class Generator(object):
         """ Computes a single slide template vars from its html source code.
             Also extracts slide informations for the table of contents.
         """
+        presenter_notes = None
+        find = re.search(r'<h\d[^>]*>presenter notes</h\d>', slide_src,
+                         re.DOTALL | re.UNICODE | re.IGNORECASE)
+
+        if find:
+            if self.presenter_notes:
+                presenter_notes = slide_src[find.end():].strip()
+            slide_src = slide_src[:find.start()]
+            
         find = re.search(r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
-        presenter_notes = None
 
         if not find:
             header = level = title = None
@@ -376,14 +384,6 @@ class Generator(object):
 
         if content:
             content, slide_classes = self.process_macros(content, source)
-
-            find = re.search(r'<h\d[^>]*>presenter notes</h\d>', content,
-                             re.DOTALL | re.UNICODE | re.IGNORECASE)
-
-            if find:
-                if self.presenter_notes:
-                    presenter_notes = content[find.end():].strip()
-                content = content[:find.start()]
 
         source_dict = {}
 
