@@ -17,7 +17,7 @@
 import re
 
 SUPPORTED_FORMATS = {
-    'markdown':         ['.mdown', '.markdown', '.markdn', '.md', '.mdn'],
+    'markdown':         ['.mdown', '.markdown', '.markdn', '.md', '.mdn', '.mdwn'],
     'restructuredtext': ['.rst', '.rest'],
     'textile':          ['.textile'],
 }
