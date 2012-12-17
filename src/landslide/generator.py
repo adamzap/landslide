@@ -34,7 +34,34 @@ BASE_DIR = os.path.dirname(__file__)
 THEMES_DIR = os.path.join(BASE_DIR, 'themes')
 TOC_MAX_LEVEL = 2
 VALID_LINENOS = ('no', 'inline', 'table')
-
+    
+def _copytree(src_dir, dest_dir, visited=None):
+    if visited is None:
+        visited = [] # This is used to avoid circular copying
+        
+    src_dir = os.path.normpath(src_dir)
+    dest_dir = os.path.normpath(dest_dir)
+    if not os.path.exists(dest_dir):
+        os.mkdir(dest_dir)
+    for filename in os.listdir(src_dir):
+        if filename[0] == '.':
+            # Don't copy special files
+            continue 
+                
+        src_path = os.path.normpath(os.path.join(src_dir, filename))
+        dest_path = os.path.join(dest_dir, filename)
+        
+        if os.path.isdir(src_path):
+            if src_path in visited:
+                # This directory has already been copied
+                continue
+            visited.append(src_path)
+            _copytree(src_path, dest_path, visited)
+        
+        if os.path.exists(dest_path):
+            if os.stat(src_path).st_mtime - os.stat(dest_path).st_mtime <= 0:
+                continue
+        shutil.copy2(src_path, dest_path)
 
 class Generator(object):
     """The Generator class takes and processes presentation source as a file, a
@@ -111,6 +138,7 @@ class Generator(object):
                 self.DEFAULT_DESTINATION)
             self.embed = config.get('embed', False)
             self.relative = config.get('relative', False)
+            self.copy_theme = config.get('copy-theme', False)
             self.extensions = config.get('extensions', '')
             self.theme = config.get('theme', 'default')
             self.add_user_css(config.get('css', []))
@@ -293,15 +321,14 @@ class Generator(object):
         if copy_theme or os.path.exists(target_theme_dir):
             self.log(u'Copying %s theme directory to %s'
                      % (theme, target_theme_dir))
-            if not os.path.exists(target_theme_dir):
-                try:
-                    shutil.copytree(self.theme_dir, target_theme_dir)
-                except Exception, e:
-                    self.log(u"Skipped copy of theme folder: %s" % e)
-                    pass
+            try:
+                _copytree(self.theme_dir, target_theme_dir)
+            except Exception, e:
+                self.log(u"Skipped copy of theme folder: %s" % e)
+                pass
             self.theme_dir = target_theme_dir
         return self.theme_dir
-
+    
     def get_css(self):
         """ Fetches and returns stylesheet file path or contents, for both
             print and screen contexts, depending if we want a standalone
@@ -458,6 +485,8 @@ class Generator(object):
             config['embed'] = raw_config.getboolean('landslide', 'embed')
         if raw_config.has_option('landslide', 'relative'):
             config['relative'] = raw_config.getboolean('landslide', 'relative')
+            if raw_config.has_option('landslide', 'copy-theme'):
+                config['copy-theme'] = raw_config.getboolean('landslide', 'copy-theme')
         if raw_config.has_option('landslide', 'extensions'):
             config['extensions'] = ",".join(raw_config.get('landslide', 'extensions')\
                 .replace('\r', '').split('\n'))
