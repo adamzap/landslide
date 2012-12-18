@@ -446,7 +446,8 @@ class Generator(object):
         return {'head_title': head_title, 'num_slides': str(self.num_slides),
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,
                 'css': self.get_css(), 'js': self.get_js(),
-                'user_css': self.user_css, 'user_js': self.user_js}
+                'user_css': self.user_css, 'user_js': self.user_js, 
+                'theme_dir': utils.get_path_url(self.theme_dir, self.relative)}
 
     def linenos_check(self, value):
         """ Checks and returns a valid value for the ``linenos`` option.

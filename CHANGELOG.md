@@ -8,6 +8,8 @@ A log of changes to Landslide that are worth mentioning
 
 - With --copy-theme modified files from the theme will now be copied even if
   the theme target already exists.
+  
+- Added theme_dir as a template variable.
 
 ## v1.1.1
 
