@@ -34,7 +34,34 @@ BASE_DIR = os.path.dirname(__file__)
 THEMES_DIR = os.path.join(BASE_DIR, 'themes')
 TOC_MAX_LEVEL = 2
 VALID_LINENOS = ('no', 'inline', 'table')
-
+    
+def _copytree(src_dir, dest_dir, visited=None):
+    if visited is None:
+        visited = [] # This is used to avoid circular copying
+        
+    src_dir = os.path.normpath(src_dir)
+    dest_dir = os.path.normpath(dest_dir)
+    if not os.path.exists(dest_dir):
+        os.mkdir(dest_dir)
+    for filename in os.listdir(src_dir):
+        if filename[0] == '.':
+            # Don't copy special files
+            continue 
+                
+        src_path = os.path.normpath(os.path.join(src_dir, filename))
+        dest_path = os.path.join(dest_dir, filename)
+        
+        if os.path.isdir(src_path):
+            if src_path in visited:
+                # This directory has already been copied
+                continue
+            visited.append(src_path)
+            _copytree(src_path, dest_path, visited)
+        
+        if os.path.exists(dest_path):
+            if os.stat(src_path).st_mtime - os.stat(dest_path).st_mtime <= 0:
+                continue
+        shutil.copy2(src_path, dest_path)
 
 class Generator(object):
     """The Generator class takes and processes presentation source as a file, a
@@ -111,6 +138,7 @@ class Generator(object):
                 self.DEFAULT_DESTINATION)
             self.embed = config.get('embed', False)
             self.relative = config.get('relative', False)
+            self.copy_theme = config.get('copy-theme', False)
             self.extensions = config.get('extensions', '')
             self.theme = config.get('theme', 'default')
             self.add_user_css(config.get('css', []))
@@ -293,15 +321,14 @@ class Generator(object):
         if copy_theme or os.path.exists(target_theme_dir):
             self.log(u'Copying %s theme directory to %s'
                      % (theme, target_theme_dir))
-            if not os.path.exists(target_theme_dir):
-                try:
-                    shutil.copytree(self.theme_dir, target_theme_dir)
-                except Exception, e:
-                    self.log(u"Skipped copy of theme folder: %s" % e)
-                    pass
+            try:
+                _copytree(self.theme_dir, target_theme_dir)
+            except Exception, e:
+                self.log(u"Skipped copy of theme folder: %s" % e)
+                pass
             self.theme_dir = target_theme_dir
         return self.theme_dir
-
+    
     def get_css(self):
         """ Fetches and returns stylesheet file path or contents, for both
             print and screen contexts, depending if we want a standalone
@@ -356,9 +383,17 @@ class Generator(object):
         """ Computes a single slide template vars from its html source code.
             Also extracts slide informations for the table of contents.
         """
+        presenter_notes = None
+        find = re.search(r'<h\d[^>]*>presenter notes</h\d>', slide_src,
+                         re.DOTALL | re.UNICODE | re.IGNORECASE)
+
+        if find:
+            if self.presenter_notes:
+                presenter_notes = slide_src[find.end():].strip()
+            slide_src = slide_src[:find.start()]
+            
         find = re.search(r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
-        presenter_notes = None
 
         if not find:
             header = level = title = None
@@ -376,14 +411,6 @@ class Generator(object):
 
         if content:
             content, slide_classes = self.process_macros(content, source)
-
-            find = re.search(r'<h\d[^>]*>presenter notes</h\d>', content,
-                             re.DOTALL | re.UNICODE | re.IGNORECASE)
-
-            if find:
-                if self.presenter_notes:
-                    presenter_notes = content[find.end():].strip()
-                content = content[:find.start()]
 
         source_dict = {}
 
@@ -419,7 +446,8 @@ class Generator(object):
         return {'head_title': head_title, 'num_slides': str(self.num_slides),
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,
                 'css': self.get_css(), 'js': self.get_js(),
-                'user_css': self.user_css, 'user_js': self.user_js}
+                'user_css': self.user_css, 'user_js': self.user_js, 
+                'theme_dir': utils.get_path_url(self.theme_dir, self.relative)}
 
     def linenos_check(self, value):
         """ Checks and returns a valid value for the ``linenos`` option.
@@ -458,6 +486,8 @@ class Generator(object):
             config['embed'] = raw_config.getboolean('landslide', 'embed')
         if raw_config.has_option('landslide', 'relative'):
             config['relative'] = raw_config.getboolean('landslide', 'relative')
+            if raw_config.has_option('landslide', 'copy-theme'):
+                config['copy-theme'] = raw_config.getboolean('landslide', 'copy-theme')
         if raw_config.has_option('landslide', 'extensions'):
             config['extensions'] = ",".join(raw_config.get('landslide', 'extensions')\
                 .replace('\r', '').split('\n'))

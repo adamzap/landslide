@@ -2,6 +2,15 @@
 
 A log of changes to Landslide that are worth mentioning
 
+- It is not possible to have Presenter Notes in slides with no heading (regebro)
+
+- Added support for having a copy-theme setting in .cfg files.
+
+- With --copy-theme modified files from the theme will now be copied even if
+  the theme target already exists.
+  
+- Added theme_dir as a template variable.
+
 ## v1.1.1
 
 ### Fixes
