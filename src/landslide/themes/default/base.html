@@ -65,6 +65,9 @@
       <script type="text/javascript" src="{{ js.path_url }}"></script>
       {% endif %}
     {% endfor %}
+    {% if math_output %}
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    {% endif %}
     <!-- /Javascripts -->
 </head>
 <body>
