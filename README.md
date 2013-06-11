@@ -159,6 +159,7 @@ Several options are available using the command line:
                           auto-regenerate the presentation
     -x EXTENSIONS, --extensions=EXTENSIONS
                           Comma-separated list of extensions for Markdown
+    -m, --math-output     Enable mathematical output using mathjax
 
 # Presentation Configuration
 
@@ -274,6 +275,14 @@ This will render any slide as below:
 ## Exporting to PDF
 
     $ landslide slides.md -d presentation.pdf
+
+## Enabling mathematical notation
+
+    Note that this require writing the slides in ReST format as well as
+    using Docutils 0.8 or newer.
+
+    $ landslide slides.rst -m
+
 
 # Theming
 
