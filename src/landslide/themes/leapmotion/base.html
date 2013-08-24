@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2010 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  Original slides: Marcin Wichary (mwichary@google.com)
+  Modifications: Ernest Delgado (ernestd@google.com)
+                 Alex Russell (slightlyoff@chromium.org)
+
+  landslide modifications: Adam Zapletal (adamzap@gmail.com)
+                           Nicolas Perriault (nperriault@gmail.com)
+-->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>{{ head_title }}</title>
+    <!-- Styles -->
+    {% if embed %}
+    <style type="text/css" media="print">
+      {{ css.print.contents }}
+    </style>
+    <style type="text/css" media="screen, projection">
+      {{ css.screen.contents }}
+    </style>
+    {% else %}
+    <link rel="stylesheet" media="print" href="{{ css.print.path_url }}">
+    <link rel="stylesheet" media="screen, projection" href="{{ css.screen.path_url }}">
+    {% endif %}
+    {% for css in user_css %}
+      {% if embed %}
+      <style type="text/css" media="screen, projection">
+        {{ css.contents }}
+      </style>
+      {% else %}
+      <link rel="stylesheet" href="{{ css.path_url }}">
+      {% endif %}
+    {% endfor %}
+    <!-- /Styles -->
+    <!-- Javascripts -->
+    <script type="text/javascript" src="http://js.leapmotion.com/0.2.0-beta6/leap.min.js"></script>
+    {% if embed %}
+    <script>
+      {{ js.contents }}
+    </script>
+    {% else %}
+    <script type="text/javascript" src="{{ js.path_url }}"></script>
+    {% endif %}
+    {% for js in user_js %}
+      {% if embed %}
+      <script>
+        {{ js.contents }}
+      </script>
+      {% else %}
+      <script type="text/javascript" src="{{ js.path_url }}"></script>
+      {% endif %}
+    {% endfor %}
+    <!-- /Javascripts -->
+</head>
+<body>
+  <div id="blank"></div>
+  <div class="presentation">
+    <div id="current_presenter_notes">
+      <div id="presenter_note"></div>
+    </div>
+    <div class="slides">
+      {% for slide in slides %}
+      <!-- slide source: {% if slide.source %}{{ slide.source.rel_path }}{% endif %} -->
+      <div class="slide-wrapper">
+        <div class="slide{% if slide.classes %}{% for class in slide.classes %} {{ class }}{% endfor %}{% endif %}">
+          <div class="inner">
+            {% if slide.header %}
+            <header>{{ slide.header }}</header>
+            {% endif %}
+            {% if slide.content %}
+            <section>{{ slide.content }}</section>
+            {% endif %}
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            {% if slide.presenter_notes %}
+              {{ slide.presenter_notes }}
+            {% endif %}
+            </section>
+          </div>
+          <footer>
+            {% if slide.source %}
+            <aside class="source">
+              Source: <a href="{{ slide.source.rel_path }}">{{ slide.source.rel_path }}</a>
+            </aside>
+            {% endif %}
+            <aside class="page_number">
+              {{ slide.number }}/{{ num_slides }}
+            </aside>
+          </footer>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% if toc %}
+  <div id="toc" class="sidebar hidden">
+    <h2>Table of Contents</h2>
+    <table>
+      <caption>Table of Contents</caption>
+      {% for section in toc %}
+      <tr id="toc-row-{{ section.number }}">
+        <th><a href="#slide{{ section.number }}">{{ section.title }}</a></th>
+        <td><a href="#slide{{ section.number }}">{{ section.number }}</a></td>
+      </tr>
+      {% if section.sub %}
+        {% for subsection in section.sub %}
+        <tr id="toc-row-{{ subsection.number }}" class="sub">
+          <th><a href="#slide{{ subsection.number }}">{{ subsection.title }}</a></th>
+          <td><a href="#slide{{ subsection.number }}">{{ subsection.number }}</a></td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+      {% endfor %}
+    </table>
+  </div>
+  {% endif %}
+  <div id="help" class="sidebar hidden">
+    <h2>Help</h2>
+    <table>
+      <caption>Help</caption>
+      <tr>
+        <th>Table of Contents</th>
+        <td>t</td>
+      </tr>
+      <tr>
+        <th>Exposé</th>
+        <td>ESC</td>
+      </tr>
+      <tr>
+        <th>Full screen slides</th>
+        <td>e</td>
+      </tr>
+      <tr>
+        <th>Presenter View</th>
+        <td>p</td>
+      </tr>
+      <tr>
+        <th>Source Files</th>
+        <td>s</td>
+      </tr>
+      <tr>
+        <th>Slide Numbers</th>
+        <td>n</td>
+      </tr>
+      <tr>
+        <th>Toggle screen blanking</th>
+        <td>b</td>
+      </tr>
+      <tr>
+        <th>Show/hide slide context</th>
+        <td>c</td>
+      </tr>
+      <tr>
+        <th>Notes</th>
+        <td>2</td>
+      </tr>
+      <tr>
+        <th>Help</th>
+        <td>h</td>
+      </tr>
+    </table>
+  </div>
+  <script>main()</script>
+</body>
+</html>
