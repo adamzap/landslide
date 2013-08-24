@@ -150,7 +150,7 @@ def _parse_options():
         "-m", "--math-output",
         action="store_true",
         dest="math_output",
-        help="Enable mathematical output using mathjax",
+        help="Enable mathematical output using MathJax",
         default=False
     )
 
