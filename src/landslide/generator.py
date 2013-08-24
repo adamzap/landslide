@@ -86,6 +86,7 @@ class Generator(object):
         self.verbose = kwargs.get('verbose', False)
         self.linenos = self.linenos_check(kwargs.get('linenos'))
         self.watch = kwargs.get('watch', False)
+        self.math_output = kwargs.get('math_output', False)
         self.num_slides = 0
         self.__toc = []
 
@@ -394,7 +395,8 @@ class Generator(object):
         if header or content:
             return {'header': header, 'title': title, 'level': level,
                     'content': content, 'classes': slide_classes,
-                    'source': source_dict, 'presenter_notes': presenter_notes}
+                    'source': source_dict, 'presenter_notes': presenter_notes,
+                    'math_output': self.math_output}
 
     def get_template_vars(self, slides):
         """ Computes template vars from slides html source code.
@@ -419,7 +421,8 @@ class Generator(object):
         return {'head_title': head_title, 'num_slides': str(self.num_slides),
                 'slides': slides, 'toc': self.toc, 'embed': self.embed,
                 'css': self.get_css(), 'js': self.get_js(),
-                'user_css': self.user_css, 'user_js': self.user_js}
+                'user_css': self.user_css, 'user_js': self.user_js,
+                'math_output': self.math_output}
 
     def linenos_check(self, value):
         """ Checks and returns a valid value for the ``linenos`` option.

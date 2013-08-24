@@ -146,6 +146,14 @@ def _parse_options():
         default=False
     )
 
+    parser.add_option(
+        "-m", "--math-output",
+        action="store_true",
+        dest="math_output",
+        help="Enable mathematical output using mathjax",
+        default=False
+    )
+
     (options, args) = parser.parse_args()
 
     if not args:
