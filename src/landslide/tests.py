@@ -141,6 +141,13 @@ class GeneratorTest(BaseTestCase):
                                  "<h1>Presenter Notes</h1>\n<p>bar</p>\n")
         self.assertEquals(svars['presenter_notes'], "<p>bar</p>")
 
+        # Check that presenter notes work even if the slide has no heading.
+        # For example, if it is only an image:
+
+        g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
+        svars = g.get_slide_vars("<p>foo</p>\n"
+                                 "<h1>Presenter Notes</h1>\n<p>bar</p>\n")
+
     def test_skip_presenter_notes(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'),
                 presenter_notes=False)

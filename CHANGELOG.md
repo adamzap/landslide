@@ -2,6 +2,10 @@
 
 A log of changes to Landslide that are worth mentioning
 
+## Master
+
+- Allow presenter notes in slides with no heading in RST files (#141) (regebro)
+
 ## v1.1.1
 
 ### Fixes
