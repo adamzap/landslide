@@ -57,7 +57,7 @@
     <script type="text/javascript" src="{{ js.path_url }}"></script>
     {% endif %}
     {% for js in user_js %}
-      {% if embed %}
+      {% if embed and js.contents %}
       <script>
         {{ js.contents }}
       </script>
