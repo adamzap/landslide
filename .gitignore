@@ -13,3 +13,5 @@ dist/
 landslide.sublime-project
 docs/_build
 venv
+slides.html
+slides_without_hr.html
