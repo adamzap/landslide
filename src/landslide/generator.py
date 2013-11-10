@@ -32,7 +32,7 @@ from parser import Parser
 
 BASE_DIR = os.path.dirname(__file__)
 THEMES_DIR = os.path.join(BASE_DIR, 'themes')
-TOC_MAX_LEVEL = 2
+TOC_MAX_LEVEL = 4
 VALID_LINENOS = ('no', 'inline', 'table')
 
 
@@ -414,6 +414,7 @@ class Generator(object):
                 continue
             self.num_slides += 1
             slide_number = slide_vars['number'] = self.num_slides
+            #print slide_vars['title'], slide_vars['level'], slide_number
             if slide_vars['level'] and slide_vars['level'] <= TOC_MAX_LEVEL:
                 self.add_toc_entry(slide_vars['title'], slide_vars['level'],
                                    slide_number)
@@ -508,7 +509,6 @@ class Generator(object):
         template = jinja2.Template(template_src.read())
         slides = self.fetch_contents(self.source)
         context = self.get_template_vars(slides)
-
         html = template.render(context)
 
         if self.embed:
