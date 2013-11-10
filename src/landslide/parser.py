@@ -36,9 +36,15 @@ class Parser(object):
             (r'<p class="system-message-\w+">.*?</p>', r'', re.UNICODE),
             (r'Document or section may not begin with a transition\.',
              r'', re.UNICODE),
+    ]
+    RST_REPLACEMENTS_WITH_HR = [
             (r'<h(\d+?).*?>', r'<h\1>', re.DOTALL | re.UNICODE),
             (r'<hr.*?>\n', r'<hr />\n', re.DOTALL | re.UNICODE),
     ]
+    RST_REPLACEMENTS_WITHOUT_HR = [
+            (r'<h(\d+?).*?>', r'<hr />\n<h\1>', re.DOTALL | re.UNICODE),
+    ]
+
     md_extensions = ''
 
     def __init__(self, extension, encoding='utf8', md_extensions=''):
@@ -76,8 +82,14 @@ class Parser(object):
                 raise RuntimeError(u"Looks like docutils are not installed")
             html = html_body(text, input_encoding=self.encoding)
             # RST generates pretty much markup to be removed in our case
-            for (pattern, replacement, mode) in self.RST_REPLACEMENTS:
-                html = re.sub(re.compile(pattern, mode), replacement, html, 0)
+            if re.search('<hr.*?>', html): #writing with Manual hr
+                for (pattern, replacement, mode) in self.RST_REPLACEMENTS+self.RST_REPLACEMENTS_WITH_HR:
+                    html = re.sub(re.compile(pattern, mode), replacement, html, 0)
+            else: # we add hr before every <hx>
+                for (pattern, replacement, mode) in self.RST_REPLACEMENTS+self.RST_REPLACEMENTS_WITHOUT_HR:
+                    html = re.sub(re.compile(pattern, mode), replacement, html, 0)
+                html = re.sub('<hr />', '', html, 1) # replace the first one
+
             return html.strip()
         elif self.format == 'textile':
             try:
