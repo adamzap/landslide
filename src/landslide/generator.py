@@ -21,13 +21,14 @@ import inspect
 import jinja2
 import shutil
 import tempfile
-import utils
-import ConfigParser
+from landslide import utils
+from six.moves import configparser
+from six import string_types
 
 from subprocess import Popen
 
-import macro as macro_module
-from parser import Parser
+from landslide import macro as macro_module
+from landslide.parser import Parser
 
 
 BASE_DIR = os.path.dirname(__file__)
@@ -147,27 +148,26 @@ class Generator(object):
 
     def add_user_css(self, css_list):
         """ Adds supplementary user css files to the presentation. The
-            ``css_list`` arg can be either a ``list`` or a ``basestring``
-            instance.
+            ``css_list`` arg can be either a ``list`` or a string.
         """
-        if isinstance(css_list, basestring):
+        if isinstance(css_list, string_types):
             css_list = [css_list]
         for css_path in css_list:
             if css_path and not css_path in self.user_css:
                 if not os.path.exists(css_path):
                     raise IOError('%s user css file not found' % (css_path,))
-                self.user_css.append({
-                    'path_url': utils.get_path_url(css_path, self.relative),
-                    'contents': codecs.open(css_path,
-                                            encoding=self.encoding).read(),
-                })
+                with codecs.open(css_path, encoding=self.encoding) as css_file:
+                    self.user_css.append({
+                        'path_url': utils.get_path_url(css_path,
+                                                       self.relative),
+                        'contents': css_file.read(),
+                    })
 
     def add_user_js(self, js_list):
         """ Adds supplementary user javascript files to the presentation. The
-            ``js_list`` arg can be either a ``list`` or a ``basestring``
-            instance.
+            ``js_list`` arg can be either a ``list`` or a string.
         """
-        if isinstance(js_list, basestring):
+        if isinstance(js_list, string_types):
             js_list = [js_list]
         for js_path in js_list:
             if js_path and not js_path in self.user_js:
@@ -179,11 +179,13 @@ class Generator(object):
                 elif not os.path.exists(js_path):
                     raise IOError('%s user js file not found' % (js_path,))
                 else:
-                    self.user_js.append({
-                        'path_url': utils.get_path_url(js_path, self.relative),
-                        'contents': codecs.open(js_path,
-                            encoding=self.encoding).read(),
-                    })
+                    with codecs.open(js_path,
+                                     encoding=self.encoding) as js_file:
+                        self.user_js.append({
+                            'path_url': utils.get_path_url(js_path,
+                                                           self.relative),
+                            'contents': js_file.read(),
+                        })
 
     def add_toc_entry(self, title, level, slide_number):
         """ Adds a new entry to current presentation Table of Contents.
@@ -214,12 +216,12 @@ class Generator(object):
                 raise IOError(u"Direct output mode is not available for PDF "
                                "export")
             else:
-                print self.render().encode(self.encoding)
+                print(self.render().encode(self.encoding))
         else:
             self.write_and_log()
 
             if self.watch:
-                from watcher import watch
+                from landslide.watcher import watch
 
                 self.log(u"Watching %s\n" % self.watch_dir)
 
@@ -267,8 +269,8 @@ class Generator(object):
             self.log(u"Adding   %s (%s)" % (source, parser.format))
 
             try:
-                file = codecs.open(source, encoding=self.encoding)
-                file_contents = file.read()
+                with codecs.open(source, encoding=self.encoding) as file:
+                    file_contents = file.read()
             except UnicodeDecodeError:
                 self.log(u"Unable to decode source %s: skipping" % source,
                          'warning')
@@ -298,7 +300,7 @@ class Generator(object):
             if not os.path.exists(target_theme_dir):
                 try:
                     shutil.copytree(self.theme_dir, target_theme_dir)
-                except Exception, e:
+                except Exception as e:
                     self.log(u"Skipped copy of theme folder: %s" % e)
                     pass
             self.theme_dir = target_theme_dir
@@ -319,18 +321,19 @@ class Generator(object):
             if not os.path.exists(print_css):
                 raise IOError(u"Cannot find css/print.css in default theme")
 
-        css['print'] = {
-            'path_url': utils.get_path_url(print_css, self.relative),
-            'contents': codecs.open(print_css, encoding=self.encoding).read(),
-        }
+        with codecs.open(print_css, encoding=self.encoding) as css_file:
+            css['print'] = {
+                'path_url': utils.get_path_url(print_css, self.relative),
+                'contents': css_file.read(),
+            }
 
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
         if (os.path.exists(screen_css)):
-            css['screen'] = {
-                'path_url': utils.get_path_url(screen_css, self.relative),
-                'contents': codecs.open(screen_css,
-                                        encoding=self.encoding).read(),
-            }
+            with codecs.open(screen_css, encoding=self.encoding) as css_file:
+                css['screen'] = {
+                    'path_url': utils.get_path_url(screen_css, self.relative),
+                    'contents': css_file.read(),
+                }
         else:
             self.log(u"No screen stylesheet provided in current theme",
                       'warning')
@@ -348,11 +351,11 @@ class Generator(object):
 
             if not os.path.exists(js_file):
                 raise IOError(u"Cannot find slides.js in default theme")
-
-        return {
-            'path_url': utils.get_path_url(js_file, self.relative),
-            'contents': codecs.open(js_file, encoding=self.encoding).read(),
-        }
+        with codecs.open(js_file, encoding=self.encoding) as js_file_obj:
+            return {
+                'path_url': utils.get_path_url(js_file, self.relative),
+                'contents': js_file_obj.read(),
+            }
 
     def get_slide_vars(self, slide_src, source=None):
         """ Computes a single slide template vars from its html source code.
@@ -446,9 +449,9 @@ class Generator(object):
         """
         self.log(u"Config   %s" % config_source)
         try:
-            raw_config = ConfigParser.RawConfigParser()
+            raw_config = configparser.RawConfigParser()
             raw_config.read(config_source)
-        except Exception, e:
+        except Exception as e:
             raise RuntimeError(u"Invalid configuration file: %s" % e)
         config = {}
         config['source'] = raw_config.get('landslide', 'source')\
@@ -486,7 +489,7 @@ class Generator(object):
                 content, add_classes = macro.process(content, source)
                 if add_classes:
                     classes += add_classes
-            except Exception, e:
+            except Exception as e:
                 self.log(u"%s processing failed in %s: %s"
                          % (macro, source, e))
         return content, classes
@@ -504,8 +507,8 @@ class Generator(object):
     def render(self):
         """ Returns generated html code.
         """
-        template_src = codecs.open(self.template_file, encoding=self.encoding)
-        template = jinja2.Template(template_src.read())
+        with codecs.open(self.template_file, encoding=self.encoding) as template_src:
+            template = jinja2.Template(template_src.read())
         slides = self.fetch_contents(self.source)
         context = self.get_template_vars(slides)
 
@@ -557,8 +560,9 @@ class Generator(object):
         if self.file_type == 'pdf':
             self.write_pdf(html)
         else:
-            outfile = codecs.open(self.destination_file, 'w', encoding='utf_8')
-            outfile.write(html)
+            with codecs.open(self.destination_file, 'w',
+                             encoding='utf_8') as outfile:
+                outfile.write(html)
 
     def write_pdf(self, html):
         """ Tries to write a PDF export from the command line using PrinceXML

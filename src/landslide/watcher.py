@@ -5,8 +5,8 @@ try:
     from watchdog.observers import Observer
     from watchdog.events import FileSystemEventHandler, DirModifiedEvent
 except ImportError:
-    print 'Error: The watchdog module must be installed to use the -w option'
-    print 'Exiting...'
+    print('Error: The watchdog module must be installed to use the -w option')
+    print('Exiting...')
     sys.exit(1)
 
 

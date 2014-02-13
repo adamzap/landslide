@@ -186,7 +186,7 @@ def main():
     else:
         try:
             run(input_file, options)
-        except Exception, e:
+        except Exception as e:
             sys.stderr.write("Error: %s\n" % e)
             sys.exit(1)
 
