@@ -13,3 +13,4 @@ dist/
 landslide.sublime-project
 docs/_build
 venv
+.tox

@@ -56,21 +56,22 @@ def encode_image_from_url(url, source_path):
     real_path = url if os.path.isabs(url) else os.path.join(source_path, url)
 
     if not os.path.exists(real_path):
-        print '%s was not found, skipping' % url
+        print('%s was not found, skipping' % url)
         return False
 
     mime_type, encoding = mimetypes.guess_type(real_path)
 
     if not mime_type:
-        print 'Unrecognized mime type for %s, skipping' % url
+        print('Unrecognized mime type for %s, skipping' % url)
         return False
 
     try:
-        image_contents = open(real_path, 'rb').read()
-        encoded_image = base64.b64encode(image_contents)
+        with open(real_path, 'rb') as image_file:
+            image_contents = image_file.read()
+            encoded_image = base64.b64encode(image_contents)
     except IOError:
         return False
     except Exception:
         return False
 
-    return u"data:%s;base64,%s" % (mime_type, encoded_image)
+    return u"data:%s;base64,%s" % (mime_type, encoded_image.decode())

@@ -83,7 +83,7 @@ def html_parts(input_string, source_path=None, destination_path=None,
         'input_encoding': input_encoding,
         'doctitle_xform': doctitle,
         'initial_header_level': initial_header_level,
-        'report_level': 'quiet'
+        'report_level': 5
     }
 
     parts = core.publish_parts(

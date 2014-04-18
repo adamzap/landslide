@@ -16,10 +16,10 @@
 
 import os
 import re
-import htmlentitydefs
+from six.moves import html_entities
 import pygments
 import sys
-import utils
+from landslide import utils
 
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
@@ -58,7 +58,7 @@ class CodeHighlightingMacro(Macro):
     def descape(self, string, defs=None):
         """Decodes html entities from a given string"""
         if defs is None:
-            defs = htmlentitydefs.entitydefs
+            defs = html_entities.entitydefs
         f = lambda m: defs[m.group(1)] if len(m.groups()) > 0 else m.group(0)
         return self.html_entity_re.sub(f, string)
 

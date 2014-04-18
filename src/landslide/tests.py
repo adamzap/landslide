@@ -14,14 +14,15 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import macro
+from landslide import macro
 import os
 import re
 import unittest
 import codecs
+import base64
 
-from generator import Generator
-from parser import Parser
+from landslide.generator import Generator
+from landslide.parser import Parser
 
 
 SAMPLES_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'samples')
@@ -47,8 +48,8 @@ class GeneratorTest(BaseTestCase):
         g = Generator(base_dir, logger=self.logtest)
         g.add_user_css(os.path.join(SAMPLES_DIR, 'test.css'))
         g.add_user_js(os.path.join(SAMPLES_DIR, 'test.js'))
-        self.assertEquals(g.user_css[0]['contents'], '* {color: red;}')
-        self.assertEquals(g.user_js[0]['contents'], "alert('foo');")
+        self.assertEqual(g.user_css[0]['contents'], '* {color: red;}')
+        self.assertEqual(g.user_js[0]['contents'], "alert('foo');")
 
     def test_get_toc(self):
         base_dir = os.path.join(SAMPLES_DIR, 'example1', 'slides.md')
@@ -60,31 +61,31 @@ class GeneratorTest(BaseTestCase):
         g.add_toc_entry('Section 2.1', 2, 5)
         g.add_toc_entry('Section 3', 1, 6)
         toc = g.toc
-        self.assertEquals(len(toc), 3)
-        self.assertEquals(toc[0]['title'], 'Section 1')
-        self.assertEquals(len(toc[0]['sub']), 2)
-        self.assertEquals(toc[0]['sub'][1]['title'], 'Section 1.2')
-        self.assertEquals(toc[1]['title'], 'Section 2')
-        self.assertEquals(len(toc[1]['sub']), 1)
-        self.assertEquals(toc[2]['title'], 'Section 3')
-        self.assertEquals(len(toc[2]['sub']), 0)
+        self.assertEqual(len(toc), 3)
+        self.assertEqual(toc[0]['title'], 'Section 1')
+        self.assertEqual(len(toc[0]['sub']), 2)
+        self.assertEqual(toc[0]['sub'][1]['title'], 'Section 1.2')
+        self.assertEqual(toc[1]['title'], 'Section 2')
+        self.assertEqual(len(toc[1]['sub']), 1)
+        self.assertEqual(toc[2]['title'], 'Section 3')
+        self.assertEqual(len(toc[2]['sub']), 0)
 
     def test_get_slide_vars(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
         svars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n<p>bar</p>\n")
-        self.assertEquals(svars['title'], 'heading')
-        self.assertEquals(svars['level'], 1)
-        self.assertEquals(svars['header'], '<h1>heading</h1>')
-        self.assertEquals(svars['content'], '<p>foo</p>\n<p>bar</p>')
-        self.assertEquals(svars['source'], {})
-        self.assertEquals(svars['classes'], [])
+        self.assertEqual(svars['title'], 'heading')
+        self.assertEqual(svars['level'], 1)
+        self.assertEqual(svars['header'], '<h1>heading</h1>')
+        self.assertEqual(svars['content'], '<p>foo</p>\n<p>bar</p>')
+        self.assertEqual(svars['source'], {})
+        self.assertEqual(svars['classes'], [])
 
     def test_unicode(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example3', 'slides.rst'))
         g.execute()
         s = g.render()
         self.assertTrue(s.find('<pre>') != -1)
-        self.assertEquals(len(re.findall('<pre><span', s)), 3)
+        self.assertEqual(len(re.findall('<pre><span', s)), 3)
 
     def test_inputencoding(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example3',
@@ -94,8 +95,8 @@ class GeneratorTest(BaseTestCase):
         self.assertTrue(re.findall(u'русский', content,
             flags=re.UNICODE))
         g.execute()
-        file_contents = codecs.open(g.destination_file, encoding='utf_8')\
-            .read()
+        with codecs.open(g.destination_file, encoding='utf_8') as file_object:
+            file_contents = file_object.read()
         # check that the file was properly encoded in utf_8
         self.assertTrue(re.findall(u'русский', file_contents,
             flags=re.UNICODE))
@@ -106,20 +107,20 @@ class GeneratorTest(BaseTestCase):
                                      {'title': "slide2", 'level': 1},
                                      {'title': None, 'level': 1},
                                     ])
-        self.assertEquals(svars['head_title'], 'slide1')
+        self.assertEqual(svars['head_title'], 'slide1')
 
     def test_process_macros(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
         # Notes
         r = g.process_macros('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
-        self.assertEquals(r[0].find('<p class="notes">bar</p>'), 11)
-        self.assertEquals(r[1], [u'has_notes'])
+        self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
+        self.assertEqual(r[1], [u'has_notes'])
         # FXs
         content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
         r = g.process_macros(content)
-        self.assertEquals(r[0], '<p>foo</p>\n<p>baz</p>')
-        self.assertEquals(r[1][0], 'blah')
-        self.assertEquals(r[1][1], 'blob')
+        self.assertEqual(r[0], '<p>foo</p>\n<p>baz</p>')
+        self.assertEqual(r[1][0], 'blah')
+        self.assertEqual(r[1][1], 'blob')
 
     def test_register_macro(self):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
@@ -139,7 +140,7 @@ class GeneratorTest(BaseTestCase):
         g = Generator(os.path.join(SAMPLES_DIR, 'example1', 'slides.md'))
         svars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n"
                                  "<h1>Presenter Notes</h1>\n<p>bar</p>\n")
-        self.assertEquals(svars['presenter_notes'], "<p>bar</p>")
+        self.assertEqual(svars['presenter_notes'], "<p>bar</p>")
 
         # Check that presenter notes work even if the slide has no heading.
         # For example, if it is only an image:
@@ -153,7 +154,7 @@ class GeneratorTest(BaseTestCase):
                 presenter_notes=False)
         svars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n"
                                  "<h1>Presenter Notes</h1>\n<p>bar</p>\n")
-        self.assertEquals(svars['presenter_notes'], None)
+        self.assertEqual(svars['presenter_notes'], None)
 
 
 class CodeHighlightingMacroTest(BaseTestCase):
@@ -184,31 +185,31 @@ echo $bar;
     def test_parsing_code_blocks(self):
         m = macro.CodeHighlightingMacro(self.logtest)
         blocks = m.code_blocks_re.findall(self.sample_html)
-        self.assertEquals(len(blocks), 3)
-        self.assertEquals(blocks[0][2], 'python')
+        self.assertEqual(len(blocks), 3)
+        self.assertEqual(blocks[0][2], 'python')
         self.assertTrue(blocks[0][3].startswith('def foo():'))
-        self.assertEquals(blocks[1][2], 'php')
+        self.assertEqual(blocks[1][2], 'php')
         self.assertTrue(blocks[1][3].startswith('<?php'))
-        self.assertEquals(blocks[2][2], 'xml')
+        self.assertEqual(blocks[2][2], 'xml')
         self.assertTrue(blocks[2][3].startswith('<foo>'))
 
     def test_descape(self):
         m = macro.CodeHighlightingMacro(self.logtest)
-        self.assertEquals(m.descape('foo'), 'foo')
-        self.assertEquals(m.descape('&gt;'), '>')
-        self.assertEquals(m.descape('&lt;'), '<')
-        self.assertEquals(m.descape('&amp;lt;'), '&lt;')
-        self.assertEquals(m.descape('&lt;span&gt;'), '<span>')
-        self.assertEquals(m.descape('&lt;spam&amp;eggs&gt;'), '<spam&eggs>')
+        self.assertEqual(m.descape('foo'), 'foo')
+        self.assertEqual(m.descape('&gt;'), '>')
+        self.assertEqual(m.descape('&lt;'), '<')
+        self.assertEqual(m.descape('&amp;lt;'), '&lt;')
+        self.assertEqual(m.descape('&lt;span&gt;'), '<span>')
+        self.assertEqual(m.descape('&lt;spam&amp;eggs&gt;'), '<spam&eggs>')
 
     def test_process(self):
         m = macro.CodeHighlightingMacro(self.logtest)
         hl = m.process("<pre><code>!php\n$foo;</code></pre>")
         self.assertTrue(hl[0].startswith('<div class="highlight"><pre'))
-        self.assertEquals(hl[1][0], u'has_code')
+        self.assertEqual(hl[1][0], u'has_code')
         input = "<p>Nothing to declare</p>"
-        self.assertEquals(m.process(input)[0], input)
-        self.assertEquals(m.process(input)[1], [])
+        self.assertEqual(m.process(input)[0], input)
+        self.assertEqual(m.process(input)[1], [])
 
     def test_process_rst_code_blocks(self):
         m = macro.CodeHighlightingMacro(self.logtest)
@@ -217,7 +218,7 @@ echo $bar;
         self.assertTrue(hl[0].find('<p>Then this one') > 0)
         self.assertTrue(hl[0].find('<p>Then this other one') > 0)
         self.assertTrue(hl[0].find('<div class="highlight"><pre') > 0)
-        self.assertEquals(hl[1][0], u'has_code')
+        self.assertEqual(hl[1][0], u'has_code')
 
 
 class EmbedImagesMacroTest(BaseTestCase):
@@ -227,8 +228,9 @@ class EmbedImagesMacroTest(BaseTestCase):
         self.assertRaises(WarningMessage, m.process,
                           '<img src="toto.jpg"/>', '.')
         content, classes = m.process('<img src="monkey.jpg"/>', base_dir)
-        self.assertTrue(re.match(r'<img src="data:image/jpeg;base64,(.+?)"/>',
-                        content))
+        match = re.search(r'<img src="data:image/jpeg;base64,(.+?)"/>',
+                          content)
+        self.assertTrue(base64.b64decode(match.group(1)))
 
 
 class FixImagePathsMacroTest(BaseTestCase):
@@ -245,24 +247,24 @@ class FxMacroTest(BaseTestCase):
         m = macro.FxMacro(self.logtest)
         content = '<p>foo</p>\n<p>.fx: blah blob</p>\n<p>baz</p>'
         r = m.process(content)
-        self.assertEquals(r[0], '<p>foo</p>\n<p>baz</p>')
-        self.assertEquals(r[1][0], 'blah')
-        self.assertEquals(r[1][1], 'blob')
+        self.assertEqual(r[0], '<p>foo</p>\n<p>baz</p>')
+        self.assertEqual(r[1][0], 'blah')
+        self.assertEqual(r[1][1], 'blob')
 
 
 class NotesMacroTest(BaseTestCase):
     def test_process(self):
         m = macro.NotesMacro(self.logtest)
         r = m.process('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
-        self.assertEquals(r[0].find('<p class="notes">bar</p>'), 11)
-        self.assertEquals(r[1], [u'has_notes'])
+        self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
+        self.assertEqual(r[1], [u'has_notes'])
 
 
 class ParserTest(BaseTestCase):
     def test___init__(self):
-        self.assertEquals(Parser('.md').format, 'markdown')
-        self.assertEquals(Parser('.markdown').format, 'markdown')
-        self.assertEquals(Parser('.rst').format, 'restructuredtext')
+        self.assertEqual(Parser('.md').format, 'markdown')
+        self.assertEqual(Parser('.markdown').format, 'markdown')
+        self.assertEqual(Parser('.rst').format, 'restructuredtext')
         self.assertRaises(NotImplementedError, Parser, '.txt')
 
 
