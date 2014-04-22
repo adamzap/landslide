@@ -7,12 +7,12 @@ import inspect
 import jinja2
 import shutil
 import tempfile
-from landslide import utils
-from six.moves import configparser
-from six import string_types
 
 from subprocess import Popen
+from six import string_types
+from six.moves import configparser
 
+from landslide import utils
 from landslide import macro as macro_module
 from landslide.parser import Parser
 
@@ -138,8 +138,9 @@ class Generator(object):
         """
         if isinstance(css_list, string_types):
             css_list = [css_list]
+
         for css_path in css_list:
-            if css_path and not css_path in self.user_css:
+            if css_path and css_path not in self.user_css:
                 if not os.path.exists(css_path):
                     raise IOError('%s user css file not found' % (css_path,))
                 with codecs.open(css_path, encoding=self.encoding) as css_file:
@@ -156,7 +157,7 @@ class Generator(object):
         if isinstance(js_list, string_types):
             js_list = [js_list]
         for js_path in js_list:
-            if js_path and not js_path in self.user_js:
+            if js_path and js_path not in self.user_js:
                 if js_path.startswith("http:"):
                     self.user_js.append({
                         'path_url': js_path,
@@ -300,6 +301,7 @@ class Generator(object):
         css = {}
 
         print_css = os.path.join(self.theme_dir, 'css', 'print.css')
+
         if not os.path.exists(print_css):
             # Fall back to default theme
             print_css = os.path.join(THEMES_DIR, 'default', 'css', 'print.css')
@@ -314,6 +316,7 @@ class Generator(object):
             }
 
         screen_css = os.path.join(self.theme_dir, 'css', 'screen.css')
+
         if (os.path.exists(screen_css)):
             with codecs.open(screen_css, encoding=self.encoding) as css_file:
                 css['screen'] = {
@@ -520,21 +523,19 @@ class Generator(object):
                     found = False
                     for css_entry in context['user_css']:
                         directory = os.path.dirname(css_entry['path_url'])
-                        if not directory: 
+                        if not directory:
                             directory = "."
 
                         encoded_url = utils.encode_image_from_url(img_url, directory)
-                            
+
                         if encoded_url:
                             found = True
                             html = html.replace(img_url, encoded_url, 1)
                             self.log("Embedded theme image %s from directory %s" % (img_url, directory))
-                    
+
                     if not found:
-                        #Missing image file, etc...
+                        # Missing image file, etc...
                         self.log(u"Failed to embed theme image %s" % img_url)
-
-
 
         return html
 

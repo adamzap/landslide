@@ -74,12 +74,12 @@ class GeneratorTest(BaseTestCase):
         self.assertEqual(len(re.findall('<pre><span', s)), 3)
 
     def test_inputencoding(self):
-        g = Generator(os.path.join(SAMPLES_DIR, 'example3',
-            'slides.koi8_r.rst'), encoding='koi8_r')
+        path = os.path.join(SAMPLES_DIR, 'example3', 'slides.koi8_r.rst')
+        g = Generator(path, encoding='koi8_r')
         content = g.render()
+
         # check that the string is utf_8
-        self.assertTrue(re.findall(u'русский', content,
-            flags=re.UNICODE))
+        self.assertTrue(re.findall(u'русский', content, flags=re.UNICODE))
         g.execute()
         with codecs.open(g.destination_file, encoding='utf_8') as file_object:
             file_contents = file_object.read()
@@ -92,7 +92,7 @@ class GeneratorTest(BaseTestCase):
         svars = g.get_template_vars([{'title': "slide1", 'level': 1},
                                      {'title': "slide2", 'level': 1},
                                      {'title': None, 'level': 1},
-                                    ])
+        ])
         self.assertEqual(svars['head_title'], 'slide1')
 
     def test_process_macros(self):

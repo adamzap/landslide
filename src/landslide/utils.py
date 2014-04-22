@@ -4,6 +4,7 @@ import os
 import base64
 import mimetypes
 
+
 def get_abs_path_url(path):
     """ Returns the absolute url for a given local path.
     """
@@ -31,6 +32,7 @@ def get_rel_path_url(path, base_path=os.getcwd()):
             return path_url
     except (IndexError, TypeError):
         return path
+
 
 def encode_image_from_url(url, source_path):
     if not url or url.startswith('data:') or url.startswith('file://'):

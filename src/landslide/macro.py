@@ -115,11 +115,13 @@ class FixImagePathsMacro(Macro):
 
         if self.embed:
             return content, classes
+
         base_path = utils.get_path_url(source, self.options.get('relative'))
         base_url = os.path.split(base_path)[0]
 
-        images = re.findall(r'<img.*?src="(?!http://)(.*?)".*/?>', content,
-            re.DOTALL | re.UNICODE)
+        regex = r'<img.*?src="(?!http://)(.*?)".*/?>'
+
+        images = re.findall(regex, content, re.DOTALL | re.UNICODE)
 
         for image in images:
             full_path = os.path.join(base_url, image)
