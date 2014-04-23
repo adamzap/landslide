@@ -3,12 +3,9 @@
 
 import sys
 
-try:
-    from landslide import generator
-except ImportError:
-    import generator
-
 from optparse import OptionParser
+
+from landslide import generator
 
 
 def _parse_options():
