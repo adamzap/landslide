@@ -1,8 +1,6 @@
 Slides in ReStructuredText
 ==========================
 
-----
-
 Here we Go
 ----------
 
@@ -19,10 +17,48 @@ This is ünicô∂e
 
 ----
 
-Middle Title Slide
-==================
+My Slides
+=========
+
+My First
+--------
+
+I want an image here:
+
+.. image:: monkey.jpg
 
 ----
+
+My Second
+---------
+
+I want a video here:
+
+.. video:: test.webm
+
+----
+
+My Third
+--------
+
+I want audio here:
+
+.. audio:: test.ogg
+
+----
+
+My Fourth
+---------
+
+I want a youtube video here:
+
+.. youtube:: H9kXPTwIO08
+
+----
+
+
+Middle Title Slide
+==================
 
 Here we Go Again
 ----------------
@@ -76,3 +112,4 @@ Then this other one with the ``code-block`` directive:
     def batman():
         "foobar"
         return robin
+
