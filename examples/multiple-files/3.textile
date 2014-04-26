@@ -1,0 +1,19 @@
+h1. Images
+
+!.../_assets/landscape.jpg(Landscape)!
+
+<hr />
+
+h1. View Presenter Notes
+
+This slide has presenter notes. Press `p` to view them.
+
+h1. Presenter Notes
+
+Hello from presenter notes
+
+<hr />
+
+h1. Other features
+
+View other features in the help sidebar by pressing `h`
