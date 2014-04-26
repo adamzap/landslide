@@ -11,10 +11,10 @@ from landslide.generator import Generator
 from landslide.parser import Parser
 
 
-EXAMPLES_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'examples')
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'test-data')
 
-if (not os.path.exists(EXAMPLES_DIR)):
-    raise IOError('Example source files not found, cannot run tests')
+if (not os.path.exists(DATA_DIR)):
+    raise IOError('Test data not found, cannot run tests')
 
 
 class BaseTestCase(unittest.TestCase):
@@ -31,15 +31,15 @@ class GeneratorTest(BaseTestCase):
         self.assertRaises(IOError, Generator, 'foo.md')
 
     def test_add_user_assets(self):
-        base_dir = os.path.join(EXAMPLES_DIR, 'example1', 'slides.md')
+        base_dir = os.path.join(DATA_DIR, 'test.md')
         g = Generator(base_dir, logger=self.logtest)
-        g.add_user_css(os.path.join(EXAMPLES_DIR, 'test.css'))
-        g.add_user_js(os.path.join(EXAMPLES_DIR, 'test.js'))
+        g.add_user_css(os.path.join(DATA_DIR, 'test.css'))
+        g.add_user_js(os.path.join(DATA_DIR, 'test.js'))
         self.assertEqual(g.user_css[0]['contents'], '* {color: red;}')
         self.assertEqual(g.user_js[0]['contents'], "alert('foo');")
 
     def test_get_toc(self):
-        base_dir = os.path.join(EXAMPLES_DIR, 'example1', 'slides.md')
+        base_dir = os.path.join(DATA_DIR, 'test.md')
         g = Generator(base_dir, logger=self.logtest)
         g.add_toc_entry('Section 1', 1, 1)
         g.add_toc_entry('Section 1.1', 2, 2)
@@ -58,7 +58,7 @@ class GeneratorTest(BaseTestCase):
         self.assertEqual(len(toc[2]['sub']), 0)
 
     def test_get_slide_vars(self):
-        g = Generator(os.path.join(EXAMPLES_DIR, 'example1', 'slides.md'))
+        g = Generator(os.path.join(DATA_DIR, 'test.md'))
         svars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n<p>bar</p>\n")
         self.assertEqual(svars['title'], 'heading')
         self.assertEqual(svars['level'], 1)
@@ -68,14 +68,14 @@ class GeneratorTest(BaseTestCase):
         self.assertEqual(svars['classes'], [])
 
     def test_unicode(self):
-        g = Generator(os.path.join(EXAMPLES_DIR, 'example3', 'slides.rst'))
+        g = Generator(os.path.join(DATA_DIR, 'test.md'))
         g.execute()
         s = g.render()
         self.assertTrue(s.find('<pre>') != -1)
         self.assertEqual(len(re.findall('<pre><span', s)), 3)
 
     def test_inputencoding(self):
-        path = os.path.join(EXAMPLES_DIR, 'example3', 'slides.koi8_r.rst')
+        path = os.path.join(DATA_DIR, 'encoding.rst')
         g = Generator(path, encoding='koi8_r')
         content = g.render()
 
@@ -89,7 +89,7 @@ class GeneratorTest(BaseTestCase):
             flags=re.UNICODE))
 
     def test_get_template_vars(self):
-        g = Generator(os.path.join(EXAMPLES_DIR, 'example1', 'slides.md'))
+        g = Generator(os.path.join(DATA_DIR, 'test.md'))
         svars = g.get_template_vars([{'title': "slide1", 'level': 1},
                                      {'title': "slide2", 'level': 1},
                                      {'title': None, 'level': 1},
@@ -97,7 +97,7 @@ class GeneratorTest(BaseTestCase):
         self.assertEqual(svars['head_title'], 'slide1')
 
     def test_process_macros(self):
-        g = Generator(os.path.join(EXAMPLES_DIR, 'example1', 'slides.md'))
+        g = Generator(os.path.join(DATA_DIR, 'test.md'))
         # Notes
         r = g.process_macros('<p>foo</p>\n<p>.notes: bar</p>\n<p>baz</p>')
         self.assertEqual(r[0].find('<p class="notes">bar</p>'), 11)
@@ -110,7 +110,7 @@ class GeneratorTest(BaseTestCase):
         self.assertEqual(r[1][1], 'blob')
 
     def test_register_macro(self):
-        g = Generator(os.path.join(EXAMPLES_DIR, 'example1', 'slides.md'))
+        g = Generator(os.path.join(DATA_DIR, 'test.md'))
 
         class SampleMacro(macro.Macro):
             pass
@@ -124,7 +124,7 @@ class GeneratorTest(BaseTestCase):
         self.assertRaises(TypeError, g.register_macro, plop)
 
     def test_presenter_notes(self):
-        g = Generator(os.path.join(EXAMPLES_DIR, 'example1', 'slides.md'))
+        g = Generator(os.path.join(DATA_DIR, 'test.md'))
         svars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n"
                                  "<h1>Presenter Notes</h1>\n<p>bar</p>\n")
         self.assertEqual(svars['presenter_notes'], "<p>bar</p>")
@@ -132,12 +132,12 @@ class GeneratorTest(BaseTestCase):
         # Check that presenter notes work even if the slide has no heading.
         # For example, if it is only an image:
 
-        g = Generator(os.path.join(EXAMPLES_DIR, 'example1', 'slides.md'))
+        g = Generator(os.path.join(DATA_DIR, 'test.md'))
         svars = g.get_slide_vars("<p>foo</p>\n"
                                  "<h1>Presenter Notes</h1>\n<p>bar</p>\n")
 
     def test_skip_presenter_notes(self):
-        g = Generator(os.path.join(EXAMPLES_DIR, 'example1', 'slides.md'),
+        g = Generator(os.path.join(DATA_DIR, 'test.md'),
                 presenter_notes=False)
         svars = g.get_slide_vars("<h1>heading</h1>\n<p>foo</p>\n"
                                  "<h1>Presenter Notes</h1>\n<p>bar</p>\n")
@@ -210,22 +210,22 @@ echo $bar;
 
 class EmbedImagesMacroTest(BaseTestCase):
     def test_process(self):
-        base_dir = os.path.join(EXAMPLES_DIR, 'example1', 'slides.md')
+        base_dir = os.path.join(DATA_DIR, 'test.md')
         m = macro.EmbedImagesMacro(self.logtest, True)
         self.assertRaises(WarningMessage, m.process,
-                          '<img src="toto.jpg"/>', '.')
-        content, classes = m.process('<img src="monkey.jpg"/>', base_dir)
-        match = re.search(r'<img src="data:image/jpeg;base64,(.+?)"/>',
+                          '<img src="img.png"/>', '.')
+        content, classes = m.process('<img src="img.png"/>', base_dir)
+        match = re.search(r'<img src="data:image/png;base64,(.+?)"/>',
                           content)
         self.assertTrue(base64.b64decode(match.group(1)))
 
 
 class FixImagePathsMacroTest(BaseTestCase):
     def test_process(self):
-        base_dir = os.path.join(EXAMPLES_DIR, 'example1', 'slides.md')
+        base_dir = os.path.join(DATA_DIR, 'test.md')
         m = macro.FixImagePathsMacro(self.logtest, False)
-        content, classes = m.process('<img src="monkey.jpg"/>', base_dir)
-        self.assertTrue(re.match(r'<img src="file://.*?/monkey.jpg" */>',
+        content, classes = m.process('<img src="img.png"/>', base_dir)
+        self.assertTrue(re.match(r'<img src="file://.*?/img.png" */>',
                                  content))
 
 
