@@ -54,7 +54,17 @@ class CodeHighlightingMacro(Macro):
             return content, []
 
         classes = []
-        for block, void1, lang, code, void2 in code_blocks:
+        for block, void1, langopt, code, void2 in code_blocks:
+            # Added options after `language` part.
+            # For example: !python,linenos=table,linenostart=10
+            options = langopt.split(',')
+            lang = options[0]         
+            del options[0]
+            options = {k: v for k,v in [s.split('=') for s in options]}
+            if options.get('linenos')=='no':
+                options['linenos'] = False
+            if 'linenostart' in options:
+                options['linenostart'] = int(options['linenostart'])
             try:
                 lexer = get_lexer_by_name(lang, startinline=True)
             except Exception:
@@ -64,9 +74,10 @@ class CodeHighlightingMacro(Macro):
 
             if 'linenos' not in self.options or self.options['linenos'] =='no':
                 self.options['linenos'] = False
+            if 'linenos' not in options:
+                options['linenos'] = self.options['linenos']
 
-            formatter = HtmlFormatter(linenos=self.options['linenos'],
-                                      nobackground=True)
+            formatter = HtmlFormatter(nobackground=True, **options)
             pretty_code = pygments.highlight(self.descape(code), lexer,
                                              formatter)
             content = content.replace(block, pretty_code, 1)
