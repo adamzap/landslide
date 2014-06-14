@@ -124,8 +124,6 @@ function main() {
 
         highlightCurrentTocLink();
 
-        processContext();
-
         document.getElementsByTagName('title')[0].innerText = getSlideTitle(currentSlideNo);
 
         updatePresenterNotes();
@@ -233,12 +231,13 @@ function main() {
         if (isPresenterView) { return; }
 
         if (showingPresenterView) {
-            presenterViewWin.close();
+            if (presenterViewWin)
+                presenterViewWin.close();
             presenterViewWin = null;
             showingPresenterView = false;
         } else {
             presenterViewWin = open(window.location.pathname + "#presenter" + currentSlideNo, 'presenter_notes',
-                                                                    'directories=no,location=no,toolbar=no,menubar=no,copyhistory=no');
+                                    'directories=no,location=no,toolbar=no,menubar=no,copyhistory=no');
             showingPresenterView = true;
         }
     };
@@ -300,7 +299,7 @@ function main() {
         var cSlide = document.getElementsByClassName('current')[0];
         var sx = cSlide.clientWidth / window.innerWidth;
         var sy = cSlide.clientHeight / window.innerHeight;
-        return 1 / Math.max(sx, sy);
+        return 1 / Math.max(sy, sx);
     };
 
     var setScale = function(scale) {
@@ -321,37 +320,35 @@ function main() {
             setScale(1);
             expanded = false;
         } else {
-            scale = computeScale();
-            setScale(scale);
-            expanded = true;
+            setExpanded();
         }
+    };
+    var setExpanded = function() {
+        scale = computeScale();
+        setScale(scale);
+        expanded = true;
+        hideContext();
     };
 
     var showContext = function() {
-        try {
-            var presentation = document.getElementsByClassName('slides')[0];
-            removeClass(presentation, 'nocontext');
-        } catch (e) {}
+        var presentation = document.getElementsByClassName('slides')[0];
+        removeClass(presentation, 'nocontext');
+        hiddenContext = true;
     };
 
     var hideContext = function() {
-        try {
-            var presentation = document.getElementsByClassName('slides')[0];
-            addClass(presentation, 'nocontext');
-        } catch (e) {}
+        if (isPresenterView) { return; }
+        var presentation = document.getElementsByClassName('slides')[0];
+        addClass(presentation, 'nocontext');
+        hiddenContext = false;
     };
 
-    var processContext = function() {
+    var toggleContext = function() {
         if (hiddenContext) {
             hideContext();
         } else {
             showContext();
         }
-    };
-
-    var toggleContext = function() {
-        hiddenContext = !hiddenContext;
-        processContext();
     };
 
     var toggleBlank = function() {
@@ -389,6 +386,9 @@ function main() {
     };
 
     var handleBodyKeyDown = function(event) {
+        if (modifierKeyDown) {
+            return
+        }
         switch (event.keyCode) {
             case 13: // Enter
                 if (overviewActive) {
@@ -410,29 +410,27 @@ function main() {
                 nextSlide();
                 break;
             case 50: // 2
-                if (!modifierKeyDown) {
-                        showNotes();
-                }
+                showNotes();
                 break;
             case 51: // 3
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     switch3D();
                 }
                 break;
             case 190: // .
             case 48: // 0
             case 66: // b
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     toggleBlank();
                 }
                 break;
             case 67: // c
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     toggleContext();
                 }
                 break;
             case 69: // e
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     expandSlides();
                 }
                 break;
@@ -440,17 +438,17 @@ function main() {
                 showHelp();
                 break;
             case 78: // n
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     showSlideNumbers();
                 }
                 break;
             case 80: // p
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     showPresenterView();
                 }
                 break;
             case 83: // s
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     showSlideSources();
                 }
                 break;
@@ -558,10 +556,25 @@ function main() {
         document.addEventListener('keyup', checkModifierKeyUp, false);
         document.addEventListener('keydown', handleBodyKeyDown, false);
         document.addEventListener('keydown', checkModifierKeyDown, false);
+        document.addEventListener('visibilitychange', function(event) {
+            if (document.hidden) {
+                modifierKeyDown = false;
+            }
+        }, false);
+        setInterval(function() {
+            if (!document.hasFocus()) {
+                modifierKeyDown = false;
+            }
+        }, 100);
+
         document.addEventListener('DOMMouseScroll', handleWheel, false);
 
         window.onmousewheel = document.onmousewheel = handleWheel;
-        window.onresize = expandSlides;
+        window.onresize = function(){
+            if (!expanded) {
+                setExpanded();
+            }
+        }
 
         for (var i = 0, el; el = slides[i]; i++) {
             addClass(el, 'slide far-future');
@@ -570,11 +583,8 @@ function main() {
 
         // add support for finger events (filter it by property detection?)
         addTouchListeners();
-
         addTocLinksListeners();
-
         addSlideClickListeners();
-
         addRemoteWindowControls();
     })();
 }
