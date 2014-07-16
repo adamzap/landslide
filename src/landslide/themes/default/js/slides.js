@@ -264,7 +264,6 @@ function main() {
                 setScale(scale);    // restore scale
             }
         }
-        processContext();
         updateOverview();
     };
 
