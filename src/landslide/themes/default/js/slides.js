@@ -108,7 +108,7 @@ function main() {
     };
 
     var updateSlideClasses = function(updateOther) {
-        window.location.hash = (isPresenterView ? "presenter" : "slide") + currentSlideNo;
+        window.location.hash = (isPresenterView ? "presenter:" : "slide:") + currentSlideNo;
 
         for (var i=1; i<currentSlideNo-1; i++) {
             changeSlideElClass(i, 'far-past');
@@ -236,7 +236,7 @@ function main() {
             presenterViewWin = null;
             showingPresenterView = false;
         } else {
-            presenterViewWin = open(window.location.pathname + "#presenter" + currentSlideNo, 'presenter_notes',
+            presenterViewWin = open(window.location.pathname + "#presenter:" + currentSlideNo, 'presenter_notes',
                                     'directories=no,location=no,toolbar=no,menubar=no,copyhistory=no');
             showingPresenterView = true;
         }
@@ -317,6 +317,7 @@ function main() {
         }
         if (expanded) {
             setScale(1);
+            showContext();
             expanded = false;
         } else {
             setExpanded();
@@ -529,7 +530,7 @@ function main() {
             var tocLinks = toc.getElementsByTagName('a');
             for (var i=0; i < tocLinks.length; i++) {
                 tocLinks.item(i).addEventListener('click', function(e) {
-                    currentSlideNo = Number(this.attributes['href'].value.replace('#slide', ''));
+                    currentSlideNo = Number(this.attributes['href'].value.replace('#slide:', ''));
                     updateSlideClasses(true);
                     e.preventDefault();
                 }, true);
@@ -542,14 +543,14 @@ function main() {
     (function() {
         if (window.location.hash == "") {
             currentSlideNo = 1;
-        } else if (window.location.hash.indexOf("#presenter") != -1) {
-            currentSlideNo = Number(window.location.hash.replace('#presenter', ''));
+        } else if (window.location.hash.indexOf("#presenter:") != -1) {
+            currentSlideNo = Number(window.location.hash.replace('#presenter:', ''));
             isPresenterView = true;
             showingPresenterView = true;
             presenterViewWin = window;
             addClass(document.body, 'presenter_view');
         } else {
-            currentSlideNo = Number(window.location.hash.replace('#slide', ''));
+            currentSlideNo = Number(window.location.hash.replace('#slide:', '')) || 0;
         }
 
         document.addEventListener('keyup', checkModifierKeyUp, false);
@@ -570,9 +571,7 @@ function main() {
 
         window.onmousewheel = document.onmousewheel = handleWheel;
         window.onresize = function(){
-            if (!expanded) {
-                setExpanded();
-            }
+            setScale(expanded ? scale = computeScale() : 1);
         }
 
         for (var i = 0, el; el = slides[i]; i++) {
