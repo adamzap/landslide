@@ -550,7 +550,7 @@ function main() {
             presenterViewWin = window;
             addClass(document.body, 'presenter_view');
         } else {
-            currentSlideNo = Number(window.location.hash.replace('#slide:', '')) || 0;
+            currentSlideNo = Number(window.location.hash.replace('#slide:', '')) || 1;
         }
 
         document.addEventListener('keyup', checkModifierKeyUp, false);
