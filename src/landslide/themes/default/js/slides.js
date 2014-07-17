@@ -567,7 +567,8 @@ function main() {
             }
         }, 100);
 
-        window.onmousewheel = handleWheel;
+        window.addEventListener("mousewheel", handleWheel, false);
+	window.addEventListener("DOMMouseScroll", handleWheel, false);
         window.onresize = function(){
             setScale(expanded ? scale = computeScale() : 1);
         }
