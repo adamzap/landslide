@@ -504,7 +504,7 @@ class Generator(object):
         html = template.render(context)
 
         if self.embed:
-            images = re.findall(r'\s+background(?:-image)?:\surl\((.+?)\).+;',
+            images = re.findall(r'\s+background(?:-image)?:\surl\((.+?)\)[^;]+;',
                             html, re.DOTALL | re.UNICODE)
 
             for img_url in images:
