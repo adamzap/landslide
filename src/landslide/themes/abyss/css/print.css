@@ -44,3 +44,6 @@ div.slides {
 div.slide {
   padding: 2em 0 !important;
 }
+section {
+  display: flex !important;
+}
