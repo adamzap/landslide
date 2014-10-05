@@ -102,7 +102,7 @@ function main() {
     var changeSlideElClass = function(slideNo, className) {
         var el = getSlideEl(slideNo);
         if (el) {
-            removeClass(el, 'far-past past current future far-future');
+            removeClass(el, 'far-past past current future far-future none');
             addClass(el, className);
         }
     };
@@ -117,9 +117,11 @@ function main() {
         changeSlideElClass(currentSlideNo - 1, 'past');
         changeSlideElClass(currentSlideNo, 'current');
         changeSlideElClass(currentSlideNo + 1, 'future');
+        changeSlideElClass(currentSlideNo + 2, 'far-future');
 
-        for (i=currentSlideNo+2; i<slides.length+1; i++) {
-            changeSlideElClass(i, 'far-future');
+        for (i=currentSlideNo+3; i<slides.length+1; i++) {
+            console.log(i);
+            changeSlideElClass(i, 'none');
         }
 
         highlightCurrentTocLink();

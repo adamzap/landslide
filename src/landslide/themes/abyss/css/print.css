@@ -1,0 +1,46 @@
+@page {
+  size: landscape;
+  background: black;
+}
+
+div.slide {
+  min-width: 1024px;
+  min-height: 768px;
+  page-break-after: always;
+  border: 1px solid black;
+  border-radius: 20px;
+}
+div.slide-wrapper:last-of-type .slide {
+  page-break-after: avoid;
+}
+
+div.slide div.inner {
+  width: 1024px;
+  height: 768px;
+  margin: unset;
+}
+
+div.slide,
+section,
+div.slides,
+body,
+div.slide.current,
+header:not(:only-child),
+div.presentation {
+  position: relative !important;
+  width: auto !important;
+  height: auto !important;
+  display: block !important;
+  overflow: visible !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  margin: auto !important;
+}
+div.slides {
+  margin: 0 5em !important;
+}
+div.slide {
+  padding: 2em 0 !important;
+}
