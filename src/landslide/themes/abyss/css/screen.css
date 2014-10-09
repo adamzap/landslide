@@ -172,7 +172,7 @@ pre, code, tt {
 }
 
 pre, .gist .gist-file .gist-data {
-  font-size: 18px;
+  font-size: 24px;
   max-height: 485px;
   padding-top: 0.25em !important;
   padding-right: 0.5em !important;
