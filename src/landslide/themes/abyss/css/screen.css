@@ -605,8 +605,8 @@ blockquote {
 tt.docutils.literal {
   display: inline-block;
   padding: 0.2ex 0.3em;
-  background: rgba(128, 128, 128, 0.15);
-  border: 1px solid #333;
+  background: rgba(128, 128, 128, 0.09);
+  border: 1px solid #0e0e0e;
   border-radius: 3px;
 }
 p {
