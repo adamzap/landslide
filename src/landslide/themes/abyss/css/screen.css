@@ -435,17 +435,18 @@ body.presenter_view .slide.none {
 body.presenter_view div#current_presenter_notes {
   visibility: visible;
   display: block;
-  position: absolute;
+  position: fixed;
   overflow: auto;
   vertical-align: middle;
   left: 50%;
-  top: 37%;
+  top: 50%;
+  bottom: 0;
   margin-left: -475px;
-  margin-top: 100px;
+  margin-top: 20px;
   z-index: 2;
   width: 950px;
   border-style: solid;
-  height: 46%;
+  margin-bottom: 20px;
   background-color: silver;
 }
 
