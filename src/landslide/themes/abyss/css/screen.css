@@ -68,6 +68,12 @@ div.slide {
 div.slide p {
   font-size: 20px;
 }
+p.hr {
+  height: 0px;
+  font-size: 0px !important;
+  display: block;
+  border-bottom: 1px solid #fff;
+}
 
 .slide.far-past {
   display: block;
