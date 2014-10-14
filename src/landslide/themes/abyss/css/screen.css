@@ -199,12 +199,6 @@ pre, .gist .gist-file .gist-data {
   background: #dedede;
 }
 
-blockquote {
-  border-left: solid 8px #FFF;
-  padding: .1ex 1ex;
-  font-style: italic;
-}
-
 li {
   padding: 10px 0;
   font-size: 20px;
@@ -606,8 +600,14 @@ pre {
   overflow: visible;
   margin: 0;
 }
-blockquote {
+blockquote.epigraph {
   border-left: solid 8px #666;
+  font-style: italic;
+}
+blockquote {
+  padding: 0 0 2ex 1em;
+  margin-left: 0;
+  border-left: solid 2em #333;
 }
 tt.docutils.literal {
   display: inline-block;
