@@ -120,7 +120,6 @@ function main() {
         changeSlideElClass(currentSlideNo + 2, 'far-future');
 
         for (i=currentSlideNo+3; i<slides.length+1; i++) {
-            console.log(i);
             changeSlideElClass(i, 'none');
         }
 
