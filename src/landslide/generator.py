@@ -361,7 +361,7 @@ class Generator(object):
 
             slide_src = slide_src[:find.start()]
 
-        find = re.search(r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', slide_src,
+        find = re.search(r'^\s+(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', slide_src,
                          re.DOTALL | re.UNICODE)
 
         if not find:
