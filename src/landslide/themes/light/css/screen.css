@@ -27,7 +27,7 @@ div.slides, body.expose div.slides.nocontext {
 
 
 div.slides.nocontext {
-  width: 900px;
+  max-width: 900px;
   margin: 0 auto;
   overflow: hidden;
   position: relative;
@@ -336,7 +336,7 @@ body.expose div.slide {
   margin: 10px !important;
   -webkit-transition: none;
   -moz-transition: none;
-  -o-transition: none;  
+  -o-transition: none;
   -moz-transform: scale(.33, .33);
   -moz-transform-origin: 0 0;
   -webkit-transform: scale(.33, .33);
@@ -382,11 +382,8 @@ body.expose .slide.current {
   background: -moz-linear-gradient(bottom, #ddb, #fff);
   border: 16px solid #fff;
   -moz-transform: scale(.315, .315);
-  -moz-transform-origin: 0 0;
   -webkit-transform: scale(.315, .315);
-  -webkit-transform-origin: 0 0;
   -o-transform: scale(.315, .315);
-  -o-transform-origin: 0 0;
 }
 
 /* Pygments default theme */

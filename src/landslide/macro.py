@@ -84,22 +84,26 @@ class EmbedImagesMacro(Macro):
         if not self.embed:
             return content, classes
 
-        images = re.findall(r'<img\s.*?src="(.+?)"\s?.*?/?>', content,
-                            re.DOTALL | re.UNICODE)
+        images = re.findall(r'<img\s.*?src="(.+?)"\s?.*?/?>|<object[^<>]+?data="(.*?)"[^<>]+?type="image/svg\+xml"',
+                            content, re.DOTALL | re.UNICODE)
 
         source_dir = os.path.dirname(source)
 
-        for image_url in images:
-            encoded_url = utils.encode_image_from_url(image_url, source_dir)
+        for image_url, data_url in images:
+            encoded_url = utils.encode_image_from_url(image_url or data_url, source_dir)
 
             if not encoded_url:
                 self.logger(u"Failed to embed image \"%s\"" % image_url, 'warning')
                 return content, classes
 
-            content = content.replace(u"src=\"" + image_url,
-                                      u"src=\"" + encoded_url, 1)
+            if image_url:
+                content = content.replace(u"src=\"" + image_url,
+                                          u"src=\"" + encoded_url, 1)
+            else:
+                content = content.replace(u"data=\"" + data_url,
+                                          u"data=\"" + encoded_url, 1)
 
-            self.logger(u"Embedded image %s" % image_url, 'notice')
+            self.logger(u"Embedded image %s" % (image_url or data_url), 'notice')
 
         return content, classes
 
@@ -119,15 +123,15 @@ class FixImagePathsMacro(Macro):
         base_path = utils.get_path_url(source, self.options.get('relative'))
         base_url = os.path.split(base_path)[0]
 
-        regex = r'<img.*?src="(?!http://)(.*?)".*/?>'
+        regex = r'<img.*?src="(?!http://)(.*?)".*/?>|<object[^<>]+?data="(?!http://)(.*?)"[^<>]+?type="image/svg\+xml"'
 
         images = re.findall(regex, content, re.DOTALL | re.UNICODE)
 
-        for image in images:
-            full_path = os.path.join(base_url, image)
-
-            content = content.replace(image, full_path)
-
+        for matches in images:
+            for image in matches:
+                if image:
+                    full_path = os.path.join(base_url, image)
+                    content = content.replace(image, full_path)
         return content, classes
 
 

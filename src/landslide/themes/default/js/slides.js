@@ -102,13 +102,13 @@ function main() {
     var changeSlideElClass = function(slideNo, className) {
         var el = getSlideEl(slideNo);
         if (el) {
-            removeClass(el, 'far-past past current future far-future');
+            removeClass(el, 'far-past past current future far-future none');
             addClass(el, className);
         }
     };
 
     var updateSlideClasses = function(updateOther) {
-        window.location.hash = (isPresenterView ? "presenter" : "slide") + currentSlideNo;
+        window.location.hash = (isPresenterView ? "presenter:" : "slide:") + currentSlideNo;
 
         for (var i=1; i<currentSlideNo-1; i++) {
             changeSlideElClass(i, 'far-past');
@@ -117,14 +117,13 @@ function main() {
         changeSlideElClass(currentSlideNo - 1, 'past');
         changeSlideElClass(currentSlideNo, 'current');
         changeSlideElClass(currentSlideNo + 1, 'future');
+        changeSlideElClass(currentSlideNo + 2, 'far-future');
 
-        for (i=currentSlideNo+2; i<slides.length+1; i++) {
-            changeSlideElClass(i, 'far-future');
+        for (i=currentSlideNo+3; i<slides.length+1; i++) {
+            changeSlideElClass(i, 'none');
         }
 
         highlightCurrentTocLink();
-
-        processContext();
 
         document.getElementsByTagName('title')[0].innerText = getSlideTitle(currentSlideNo);
 
@@ -233,12 +232,13 @@ function main() {
         if (isPresenterView) { return; }
 
         if (showingPresenterView) {
-            presenterViewWin.close();
+            if (presenterViewWin)
+                presenterViewWin.close();
             presenterViewWin = null;
             showingPresenterView = false;
         } else {
-            presenterViewWin = open(window.location.pathname + "#presenter" + currentSlideNo, 'presenter_notes',
-                                                                    'directories=no,location=no,toolbar=no,menubar=no,copyhistory=no');
+            presenterViewWin = open(window.location.pathname + "#presenter:" + currentSlideNo, 'presenter_notes',
+                                    'directories=no,location=no,toolbar=no,menubar=no,copyhistory=no');
             showingPresenterView = true;
         }
     };
@@ -265,7 +265,6 @@ function main() {
                 setScale(scale);    // restore scale
             }
         }
-        processContext();
         updateOverview();
     };
 
@@ -300,7 +299,7 @@ function main() {
         var cSlide = document.getElementsByClassName('current')[0];
         var sx = cSlide.clientWidth / window.innerWidth;
         var sy = cSlide.clientHeight / window.innerHeight;
-        return 1 / Math.max(sx, sy);
+        return 1 / Math.max(sy, sx);
     };
 
     var setScale = function(scale) {
@@ -319,39 +318,38 @@ function main() {
         }
         if (expanded) {
             setScale(1);
+            showContext();
             expanded = false;
         } else {
-            scale = computeScale();
-            setScale(scale);
-            expanded = true;
+            setExpanded();
         }
+    };
+    var setExpanded = function() {
+        scale = computeScale();
+        setScale(scale);
+        expanded = true;
+        hideContext();
     };
 
     var showContext = function() {
-        try {
-            var presentation = document.getElementsByClassName('slides')[0];
-            removeClass(presentation, 'nocontext');
-        } catch (e) {}
+        var presentation = document.getElementsByClassName('slides')[0];
+        removeClass(presentation, 'nocontext');
+        hiddenContext = true;
     };
 
     var hideContext = function() {
-        try {
-            var presentation = document.getElementsByClassName('slides')[0];
-            addClass(presentation, 'nocontext');
-        } catch (e) {}
+        if (isPresenterView) { return; }
+        var presentation = document.getElementsByClassName('slides')[0];
+        addClass(presentation, 'nocontext');
+        hiddenContext = false;
     };
 
-    var processContext = function() {
+    var toggleContext = function() {
         if (hiddenContext) {
             hideContext();
         } else {
             showContext();
         }
-    };
-
-    var toggleContext = function() {
-        hiddenContext = !hiddenContext;
-        processContext();
     };
 
     var toggleBlank = function() {
@@ -389,6 +387,9 @@ function main() {
     };
 
     var handleBodyKeyDown = function(event) {
+        if (modifierKeyDown) {
+            return
+        }
         switch (event.keyCode) {
             case 13: // Enter
                 if (overviewActive) {
@@ -410,29 +411,27 @@ function main() {
                 nextSlide();
                 break;
             case 50: // 2
-                if (!modifierKeyDown) {
-                        showNotes();
-                }
+                showNotes();
                 break;
             case 51: // 3
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     switch3D();
                 }
                 break;
             case 190: // .
             case 48: // 0
             case 66: // b
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     toggleBlank();
                 }
                 break;
             case 67: // c
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     toggleContext();
                 }
                 break;
             case 69: // e
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     expandSlides();
                 }
                 break;
@@ -440,17 +439,17 @@ function main() {
                 showHelp();
                 break;
             case 78: // n
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     showSlideNumbers();
                 }
                 break;
             case 80: // p
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     showPresenterView();
                 }
                 break;
             case 83: // s
-                if (!modifierKeyDown && !overviewActive) {
+                if (!overviewActive) {
                     showSlideSources();
                 }
                 break;
@@ -532,7 +531,7 @@ function main() {
             var tocLinks = toc.getElementsByTagName('a');
             for (var i=0; i < tocLinks.length; i++) {
                 tocLinks.item(i).addEventListener('click', function(e) {
-                    currentSlideNo = Number(this.attributes['href'].value.replace('#slide', ''));
+                    currentSlideNo = Number(this.attributes['href'].value.replace('#slide:', ''));
                     updateSlideClasses(true);
                     e.preventDefault();
                 }, true);
@@ -545,23 +544,35 @@ function main() {
     (function() {
         if (window.location.hash == "") {
             currentSlideNo = 1;
-        } else if (window.location.hash.indexOf("#presenter") != -1) {
-            currentSlideNo = Number(window.location.hash.replace('#presenter', ''));
+        } else if (window.location.hash.indexOf("#presenter:") != -1) {
+            currentSlideNo = Number(window.location.hash.replace('#presenter:', ''));
             isPresenterView = true;
             showingPresenterView = true;
             presenterViewWin = window;
             addClass(document.body, 'presenter_view');
         } else {
-            currentSlideNo = Number(window.location.hash.replace('#slide', ''));
+            currentSlideNo = Number(window.location.hash.replace('#slide:', '')) || 1;
         }
 
         document.addEventListener('keyup', checkModifierKeyUp, false);
         document.addEventListener('keydown', handleBodyKeyDown, false);
         document.addEventListener('keydown', checkModifierKeyDown, false);
-        document.addEventListener('DOMMouseScroll', handleWheel, false);
+        document.addEventListener('visibilitychange', function(event) {
+            if (document.hidden) {
+                modifierKeyDown = false;
+            }
+        }, false);
+        setInterval(function() {
+            if (!document.hasFocus()) {
+                modifierKeyDown = false;
+            }
+        }, 100);
 
-        window.onmousewheel = document.onmousewheel = handleWheel;
-        window.onresize = expandSlides;
+        window.addEventListener("mousewheel", handleWheel, false);
+	window.addEventListener("DOMMouseScroll", handleWheel, false);
+        window.onresize = function(){
+            setScale(expanded ? scale = computeScale() : 1);
+        }
 
         for (var i = 0, el; el = slides[i]; i++) {
             addClass(el, 'slide far-future');
@@ -570,11 +581,8 @@ function main() {
 
         // add support for finger events (filter it by property detection?)
         addTouchListeners();
-
         addTocLinksListeners();
-
         addSlideClickListeners();
-
         addRemoteWindowControls();
     })();
 }
