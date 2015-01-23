@@ -309,7 +309,7 @@ section, .slide header:only-child h1 {
   overflow: hidden;
 }
 
-img { display: block; margin: auto; }
+img { display: block; margin: auto; max-width: 100%; height: auto; width: expression(this.width > 600 ? "600px" : this.width); }
 
 section img.align-center {
   display: block;
