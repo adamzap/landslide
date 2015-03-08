@@ -1,13 +1,13 @@
 # Changelog
 
-A log of changes to Landslide that are worth mentioning
+## v1.1.2
 
-## Master
-
+- Add support for Python 3
 - Allow support for copy_theme argument in CFG files (#139) (syscomet)
 - Improve MathJax rendering for Markdown files
 - Support math output (#144) (davidedelvento)
 - Allow presenter notes in slides with no heading in RST files (#141) (regebro)
+- And more...
 
 ## v1.1.1
 
