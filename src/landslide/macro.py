@@ -119,12 +119,13 @@ class FixImagePathsMacro(Macro):
         base_path = utils.get_path_url(source, self.options.get('relative'))
         base_url = os.path.split(base_path)[0]
 
-        regex = r'<img.*?src="(?!http://)(.*?)".*/?>'
+        regex = r'<img.*?src="(?!https?://|file://)(.*?)".*?/?>'
 
         images = re.findall(regex, content, re.DOTALL | re.UNICODE)
 
-        for image in images:
-            full_path = os.path.join(base_url, image)
+        for image in list(set(images)):
+            full_path = '"' + os.path.join(base_url, image) + '"'
+            image = '"' + image + '"'
 
             content = content.replace(image, full_path)
 
