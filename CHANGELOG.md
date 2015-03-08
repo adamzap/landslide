@@ -1,5 +1,9 @@
 # Changelog
 
+## Master
+
+- Improve image path regex and replacement (#177)
+
 ## v1.1.2
 
 - Add support for Python 3
