@@ -212,6 +212,12 @@ Some other macros are also available by default: `.fx: foo bar` will add the
 `foo` and `bar` classes to the corresponding slide `<div>` element, easing
 styling of your presentation using CSS.
 
+## QR Codes
+
+Add a QR Code to your presentation by using the `.qr` keyword:
+
+    .qr: 450|http://github.com/adamzap/landslide
+
 # Presenter Notes
 
 You can also add presenter notes to each slide by following the slide content
