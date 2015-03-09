@@ -289,6 +289,12 @@ This will render any slide as below:
 
     $ landslide slides.rst -m
 
+## Enabling Markdown Extensions
+
+See documentation on available Markdown extensions
+[here](https://pythonhosted.org/Markdown/extensions/index.html):
+
+    $ landslide slides.md -x abbr
 
 # Theming
 
