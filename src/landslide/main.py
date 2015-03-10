@@ -7,6 +7,8 @@ from optparse import OptionParser
 
 from landslide import generator
 
+from . import __version__
+
 
 def _parse_options():
     """ Parses ``landslide`` args options.
@@ -17,7 +19,8 @@ def _parse_options():
         description="Generates an HTML5 or PDF "
                     "slideshow from Markdown or other formats",
         epilog="Note: PDF export requires the `prince` program: "
-               "http://princexml.com/")
+               "http://princexml.com/",
+        version="%prog " + __version__)
 
     parser.add_option(
         "-c", "--copy-theme",
