@@ -78,6 +78,8 @@ class Parser(object):
             except ImportError:
                 raise RuntimeError(u"Looks like textile is not installed")
 
+            text = text.replace('\n---\n', '\n<hr />\n')
+
             return textile.textile(text, encoding=self.encoding)
         else:
             raise NotImplementedError(u"Unsupported format %s, cannot parse"

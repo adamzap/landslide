@@ -93,8 +93,7 @@ If you want to stay on the edge:
 
 ## Textile
 
-- Textile cannot generate `<hr />`, so you must insert those manually to separate
-  slides
+- Separate your slides using `---`, just like in markdown
 
 # Rendering
 

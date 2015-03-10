@@ -1,6 +1,6 @@
 h1. Title Slide
 
-<hr />
+---
 
 h1. Paragraphs
 
@@ -14,7 +14,7 @@ Nullam eu molestie sapien. Curabitur imperdiet, ligula id blandit sagittis,
 libero quam consectetur felis, ac pharetra metus lectus vitae leo. Mauris
 lacinia fermentum augue.
 
-<hr />
+---
 
 h1. Blockquotes
 
@@ -23,7 +23,7 @@ tempus ultricies. Ut porta scelerisque viverra. Pellentesque aliquam metus
 scelerisque dui ultricies, auctor dictum erat aliquet. Integer vehicula nunc
 elit, vel iaculis lorem facilisis non.
 
-<hr />
+---
 
 h1. Subheadings and Emphasis
 
@@ -35,7 +35,7 @@ h2. Bold
 
 *Lorem ipsum dolor sit amet*
 
-<hr />
+---
 
 h1. Lists
 
@@ -51,11 +51,11 @@ h2. Ordered List
 # JavaScript
 # HTML5
 
-<hr />
+---
 
 h1. Second Title Slide
 
-<hr />
+---
 
 h1. Code
 
@@ -82,13 +82,13 @@ bc. <!doctype html>
       <body></body>
     </html>
 
-<hr />
+---
 
 h1. Images
 
 !.../_assets/landscape.jpg(Landscape)!
 
-<hr />
+---
 
 h1. View Presenter Notes
 
@@ -98,7 +98,7 @@ h1. Presenter Notes
 
 Hello from presenter notes
 
-<hr />
+---
 
 h1. Other features
 
