@@ -2,6 +2,10 @@
 
 ## Master
 
+- Fix relative path generation (#147)
+- Add command line option for print version (#135)
+- Add use of '---' as a slide separator to textile files (#163)
+- README improvements (#88 and #101)
 - Improve image path regex and replacement (#177)
 
 ## v1.1.2
