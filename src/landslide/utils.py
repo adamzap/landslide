@@ -22,16 +22,8 @@ def get_path_url(abs_path, relative=False):
 
 def get_rel_path_url(path, base_path=os.getcwd()):
     """ Returns a relative path from the absolute one passed as argument.
-        Silently returns originally provided path on failure.
     """
-    try:
-        path_url = path.split(base_path)[1]
-        if path_url.startswith('/'):
-            return path_url[1:]
-        else:
-            return path_url
-    except (IndexError, TypeError):
-        return path
+    return os.path.relpath(path)
 
 
 def encode_image_from_url(url, source_path):
