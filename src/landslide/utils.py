@@ -5,25 +5,13 @@ import base64
 import mimetypes
 
 
-def get_abs_path_url(path):
-    """ Returns the absolute url for a given local path.
-    """
-    return "file://%s" % os.path.abspath(path)
-
-
-def get_path_url(abs_path, relative=False):
-    """ Returns an absolute or relative path url from an absolute path.
+def get_path_url(path, relative=False):
+    """ Returns an absolute or relative path url given a path
     """
     if relative:
-        return get_rel_path_url(abs_path)
+        return os.path.relpath(path)
     else:
-        return get_abs_path_url(abs_path)
-
-
-def get_rel_path_url(path, base_path=os.getcwd()):
-    """ Returns a relative path from the absolute one passed as argument.
-    """
-    return os.path.relpath(path)
+        return 'file://%s' % os.path.abspath(path)
 
 
 def encode_image_from_url(url, source_path):
