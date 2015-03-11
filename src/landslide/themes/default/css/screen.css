@@ -561,3 +561,7 @@ aside {
   z-index: 64;
   display: none;
 }
+
+.image-reference {
+  display: inline;
+}

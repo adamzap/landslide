@@ -570,3 +570,7 @@ div.slide div.presenter_notes {
   z-index: 64;
   display: none;
 }
+
+.image-reference {
+  display: inline;
+}

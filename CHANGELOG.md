@@ -2,6 +2,7 @@
 
 ## Master
 
+- Fix display of RST image target links (#87)
 - Fix relative path generation (#147)
 - Add command line option for print version (#135)
 - Add use of '---' as a slide separator to textile files (#163)
