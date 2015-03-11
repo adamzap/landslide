@@ -2,6 +2,7 @@
 
 ## Master
 
+- Fix blockquote font size for rst (#161)
 - Fix display of RST image target links (#87)
 - Fix relative path generation (#147)
 - Add command line option for print version (#135)

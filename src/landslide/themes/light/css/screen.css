@@ -197,6 +197,7 @@ blockquote {
   border-left: solid 8px #FFF;
   padding: .1ex 1ex;
   font-style: italic;
+  font-size: 20px;
 }
 
 li {
