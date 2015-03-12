@@ -1,6 +1,6 @@
 # Changelog
 
-## Master
+## v1.1.3
 
 - Identify each slide by a numbered class (#171) (dkg)
 - Fix theme image embedding regex to grab all images (#170)
