@@ -2,6 +2,7 @@
 
 ## Master
 
+- Identify each slide by a numbered class (#171) (dkg)
 - Fix theme image embedding regex to grab all images (#170)
 - Fix blockquote font size for rst (#161)
 - Fix display of RST image target links (#87)
