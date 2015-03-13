@@ -38,25 +38,25 @@ The following markdown produces [this slideshow][sample].
 [html5slides]: http://code.google.com/p/html5slides/
 [sample]: http://adamzap.com/misc/presentation.html
 
-# Requirements
+## Requirements
 
 `python` and the following modules:
 
 - `jinja2`
 - `pygments` for code blocks syntax coloration
 
-### Markup Conversion
+#### Markup Conversion
 
 - `markdown` if you use Markdown syntax for your slide contents
 - `docutils` if you use ReStructuredText syntax for your slide contents
 - `textile` for textile support
 
-### Optional
+#### Optional
 
 - `watchdog` for watching/auto-regeneration with the `-w` flag
 - [PrinceXML](http://www.princexml.com/) for PDF export
 
-# Installation
+## Installation
 
 Install the latest stable version of Landslide with a python package manager
 like `pip`:
@@ -70,9 +70,9 @@ If you want to stay on the edge:
     $ python setup.py build
     $ sudo python setup.py install
 
-# Formatting
+## Formatting
 
-## Markdown
+#### Markdown
 
 - Your Markdown source files must be suffixed by `.md`, `.markdn`, `.mdwn`,
   `.mdown` or `.markdown`
@@ -83,7 +83,7 @@ If you want to stay on the edge:
 - To highlight blocks of code, put `!lang` where `lang` is the pygment
   supported language identifier as the first indented line
 
-## ReStructuredText
+### ReStructuredText
 
 - Your ReST source files must be suffixed by `.rst` or `.rest` (**`.txt` is not
   supported**)
@@ -91,11 +91,11 @@ If you want to stay on the edge:
 - Separate your slides using an horizontal rule (`----` in RST) except at the
   end of RST files
 
-## Textile
+### Textile
 
 - Separate your slides using `---`, just like in markdown
 
-# Rendering
+## Rendering
 
 - Run `landslide slides.md` or `landslide slides.rst`
 - Enjoy your newly generated `presentation.html`
@@ -106,7 +106,7 @@ system:
     $ landslide README.md -d readme.pdf
     $ open readme.pdf
 
-# Viewing
+## Viewing
 
 - Press `h` to toggle display of help
 - Press `left arrow` and `right arrow` to navigate
@@ -123,7 +123,7 @@ system:
 - Press '3' to toggle pseudo-3D display (experimental)
 - Browser zooming is supported
 
-# Commandline Options
+## Commandline Options
 
 Several options are available using the command line:
 
@@ -160,7 +160,7 @@ Several options are available using the command line:
                           Comma-separated list of extensions for Markdown
     -m, --math-output     Enable mathematical output using mathjax
 
-# Presentation Configuration
+## Presentation Configuration
 
 Landslide allows to configure your presentation using a `cfg` configuration
 file, therefore easing the aggregation of source directories and the reuse of
@@ -191,11 +191,11 @@ To generate the presentation as configured, just run:
     $ cd /path/to/my/presentation/sources
     $ landslide config.cfg
 
-# Macros
+## Macros
 
 You can use macros to enhance your presentation:
 
-## Notes
+#### Notes
 
 Add notes to your slides using the `.notes:` keyword, eg.:
 
@@ -211,19 +211,19 @@ Some other macros are also available by default: `.fx: foo bar` will add the
 `foo` and `bar` classes to the corresponding slide `<div>` element, easing
 styling of your presentation using CSS.
 
-## QR Codes
+#### QR Codes
 
 Add a QR Code to your presentation by using the `.qr` keyword:
 
     .qr: 450|http://github.com/adamzap/landslide
 
-# Presenter Notes
+## Presenter Notes
 
 You can also add presenter notes to each slide by following the slide content
 with a heading entitled "Presenter Notes". Press the 'p' key to open the
 presenter view.
 
-# Registering Macros
+## Registering Macros
 
 Macros are used to transform the HTML contents of your slide.
 
@@ -254,48 +254,48 @@ This will render any slide as below:
       </section>
     </div>
 
-# Advanced Usage
+## Advanced Usage
 
-## Setting Custom Destination File
+#### Setting Custom Destination File
 
     $ landslide slides.md -d ~/MyPresentations/presentation.html
 
-## Working with Directories
+#### Working with Directories
 
     $ landslide slides/
 
-## Working with Direct Output
+#### Working with Direct Output
 
     $ landslide slides.md -o | tidy
 
-## Using an Alternate Landslide Theme
+#### Using an Alternate Landslide Theme
 
     $ landslide slides.md -t mytheme
     $ landslide slides.md -t /path/to/theme/dir
 
-## Embedding Base-64-Encoded Images
+#### Embedding Base-64-Encoded Images
 
     $ landslide slides.md -i
 
-## Exporting to PDF
+#### Exporting to PDF
 
     $ landslide slides.md -d presentation.pdf
 
-## Enabling mathematical notation
+#### Enabling mathematical notation
 
     Note that this require writing the slides in ReST format as well as
     using Docutils 0.8 or newer.
 
     $ landslide slides.rst -m
 
-## Enabling Markdown Extensions
+#### Enabling Markdown Extensions
 
 See documentation on available Markdown extensions
 [here](https://pythonhosted.org/Markdown/extensions/index.html):
 
     $ landslide slides.md -x abbr
 
-# Theming
+## Theming
 
 A Landslide theme is a directory following this simple structure:
 
@@ -315,7 +315,7 @@ passing the `--copy-theme` option to the `landslide` command:
 
     $ landslide slides.md -t /path/to/some/theme --copy-theme
 
-# User stylesheets and Javascripts
+## User stylesheets and Javascripts
 
 If you don't want to bother making your own theme, you can include your own
 user css and js files to the generated presentation.
@@ -337,7 +337,7 @@ file.
 **NOTE:** Paths to the css and js files must be relative to the directory
 you're running the ``landslide`` command from.
 
-# Publishing your Presentation Online
+## Publishing your Presentation Online
 
 If you intend to publish your HTML presentation online, you'll have to use the
 `--relative` option, as well as the `--copy-theme` one to have all asset links
@@ -353,7 +353,7 @@ webserver (like Apache) is required to host a landslide presentation.
 
 [akei-pres]: http://www.akei.com/presentations/2011-Djangocong/index.html
 
-# Theme Variables
+## Theme Variables
 
 The `base.html` must be a [Jinja2 template file][jinja-docs] where you can
 harness the following template variables:
@@ -379,27 +379,27 @@ harness the following template variables:
 
 [jinja-docs]: http://jinja.pocoo.org/2/documentation/templates
 
-# Styles Scope
+## Styles Scope
 
 - To change HTML5 presentation styles, tweak the `css/screen.css` stylesheet
   bundled with the theme you are using
 - For PDF, modify the `css/print.css`
 
-# Authors
+## Authors
 
-## Original Author and Development Lead
+#### Original Author and Development Lead
 
 - Adam Zapletal (adamzap@gmail.com)
 
-## Co-Author
+#### Co-Author
 
 - Nicolas Perriault (nperriault@gmail.com)
 
-## Contributors
+#### Contributors
 
 See https://github.com/adamzap/landslide/contributors
 
-## Base Template Authors and Contributors (html5-slides)
+#### Base Template Authors and Contributors (html5-slides)
 
 - Marcin Wichary (mwichary@google.com)
 - Ernest Delgado (ernestd@google.com)
