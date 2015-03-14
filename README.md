@@ -47,9 +47,9 @@ The following markdown produces [this slideshow][sample].
 
 #### Markup Conversion
 
-- `markdown` if you use Markdown syntax for your slide contents
-- `docutils` if you use ReStructuredText syntax for your slide contents
-- `textile` for textile support
+- `markdown` for [Markdown](http://en.wikipedia.org/wiki/Markdown)
+- `docutils` for [reStructured Text](http://en.wikipedia.org/wiki/ReStructuredText)
+- `textile` for [Textile](http://en.wikipedia.org/wiki/Textile_(markup_language))
 
 #### Optional
 
