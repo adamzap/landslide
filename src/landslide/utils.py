@@ -25,12 +25,14 @@ def encode_image_from_url(url, source_path):
 
     if not os.path.exists(real_path):
         print('%s was not found, skipping' % url)
+
         return False
 
     mime_type, encoding = mimetypes.guess_type(real_path)
 
     if not mime_type:
         print('Unrecognized mime type for %s, skipping' % url)
+
         return False
 
     try:
