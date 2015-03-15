@@ -39,7 +39,5 @@ def encode_image_from_url(url, source_path):
             encoded_image = base64.b64encode(image_contents)
     except IOError:
         return False
-    except Exception:
-        return False
 
     return u"data:%s;base64,%s" % (mime_type, encoded_image.decode())
