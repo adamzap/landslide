@@ -12,10 +12,8 @@ from pygments.formatters import HtmlFormatter
 
 
 class Macro(object):
-    """Base class for Macros. A Macro aims to analyse, process and eventually
-       alter some provided HTML contents and to provide supplementary
-       informations to the slide context.
-    """
+    """Base class for altering slide HTML during presentation generation"""
+
     options = {}
 
     def __init__(self, logger=sys.stdout, embed=False, options=None):
@@ -32,9 +30,8 @@ class Macro(object):
 
 
 class CodeHighlightingMacro(Macro):
-    """This Macro performs syntax coloration in slide code blocks using
-       Pygments.
-    """
+    """Performs syntax coloration in slide code blocks using Pygments"""
+
     code_blocks_re = re.compile(
         r'(<pre.+?>(<code>)?\s?!(\S+?)\n(.*?)(</code>)?</pre>)',
         re.UNICODE | re.MULTILINE | re.DOTALL)
@@ -75,9 +72,8 @@ class CodeHighlightingMacro(Macro):
 
 
 class EmbedImagesMacro(Macro):
-    """This Macro extracts images url and embed them using the base64
-       algorithm.
-    """
+    """Encodes images in base64 for embedding in image:data"""
+
     def process(self, content, source=None):
         classes = []
 
@@ -105,9 +101,8 @@ class EmbedImagesMacro(Macro):
 
 
 class FixImagePathsMacro(Macro):
-    """This Macro replaces html image paths with fully qualified absolute
-       urls.
-    """
+    """Replaces html image paths with fully qualified absolute urls"""
+
     relative = False
 
     def process(self, content, source=None):
@@ -133,9 +128,8 @@ class FixImagePathsMacro(Macro):
 
 
 class FxMacro(Macro):
-    """This Macro processes fx directives, ie adds specific css classes
-       named after what the parser found in them.
-    """
+    """Adds custom CSS class to slides"""
+
     def process(self, content, source=None):
         classes = []
 
@@ -149,7 +143,8 @@ class FxMacro(Macro):
 
 
 class NotesMacro(Macro):
-    """This Macro processes Notes."""
+    """Adds toggleable notes to slides"""
+
     def process(self, content, source=None):
         classes = []
 
@@ -163,7 +158,8 @@ class NotesMacro(Macro):
 
 
 class QRMacro(Macro):
-    """This Macro generates a QR Code with Google Chart API."""
+    """Generates a QR code in a slide"""
+
     def process(self, content, source=None):
         classes = []
 

@@ -11,8 +11,7 @@ from . import __version__
 
 
 def _parse_options():
-    """ Parses ``landslide`` args options.
-    """
+    """Parses landslide's command line options"""
 
     parser = OptionParser(
         usage="%prog [options] input.md ...",
@@ -150,21 +149,21 @@ def _parse_options():
 
 
 def log(message, type):
-    """Basic logger, print output directly to stdout and errors to stderr.
-    """
+    """Log notices to stdout and errors to stderr"""
+
     (sys.stdout if type == 'notice' else sys.stderr).write(message + "\n")
 
 
 def run(input_file, options):
-    """ Runs the Generator using parsed options.
-    """
+    """Runs the Generator using parsed options."""
+
     options.logger = log
     generator.Generator(input_file, **options.__dict__).execute()
 
 
 def main():
-    """ Main program entry point.
-    """
+    """Main program entry point"""
+
     options, input_file = _parse_options()
 
     if (options.debug):
