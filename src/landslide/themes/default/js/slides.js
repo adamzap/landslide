@@ -3,7 +3,9 @@ function main() {
     // other IE only stuff we won't try to run JS for IE.
     // It will run though when using Google Chrome Frame
     if (document.all) { return; }
-
+    document.body.addEventListener('ontouchmove', function(event) {
+        event.preventDefault();
+    }, false);
     var currentSlideNo;
     var notesOn = false;
     var expanded = false;
