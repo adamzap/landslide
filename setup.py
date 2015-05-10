@@ -36,7 +36,7 @@ setup(
     ],
     long_description="""\
 Landslide takes your Markdown, ReST, or Textile file(s) and generates fancy
-HTML5 slideshow like `this <http://adamzap.com/random/landslide.html>`_.
+HTML5 slideshow like `this <http://adamzap.com/misc/presentation.html>`_.
 
 Read the `README <http://github.com/adamzap/landslide/blob/master/README.md>`_
 for formatting instructions and more information.
