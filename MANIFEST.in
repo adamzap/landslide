@@ -1,1 +1,7 @@
-graft landslide/themes
+include CHANGELOG.md
+include LICENSE
+include README.md
+include tests.py
+include tox.ini
+recursive-include examples *
+recursive-include test-data *
