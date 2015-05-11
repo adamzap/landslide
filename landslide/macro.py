@@ -5,7 +5,7 @@ import re
 from six.moves import html_entities
 import pygments
 import sys
-from landslide import utils
+from . import utils
 
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter

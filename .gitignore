@@ -6,7 +6,7 @@ presentation.html
 *.pdf
 examples/.DS_Store
 *.swp
-src/landslide.egg-info/
+landslide.egg-info
 dist/
 *.komodoproject
 .komodotools

@@ -12,9 +12,9 @@ from subprocess import Popen
 from six import string_types
 from six.moves import configparser
 
-from landslide import utils
-from landslide import macro as macro_module
-from landslide.parser import Parser
+from . import utils
+from . import macro as macro_module
+from .parser import Parser
 
 
 BASE_DIR = os.path.dirname(__file__)

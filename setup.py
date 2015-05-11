@@ -1,11 +1,10 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name='landslide',
     version='1.1.3',
     description='Lightweight markup language-based html5 slideshow generator',
-    packages=find_packages('src'),
-    package_dir = {'': 'src'},
+    packages=['landslide'],
     include_package_data=True,
     zip_safe=False,
     author='Adam Zapletal',
