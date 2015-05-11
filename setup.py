@@ -1,16 +1,18 @@
 from setuptools import setup
 
+import landslide
+
 setup(
-    name='landslide',
-    version='1.1.3',
+    name=landslide.__title__,
+    version=landslide.__version__,
     description='Lightweight markup language-based html5 slideshow generator',
     packages=['landslide'],
     include_package_data=True,
     zip_safe=False,
-    author='Adam Zapletal',
-    author_email='adamzap@gmail.com',
+    author=landslide.__author__,
+    author_email=landslide.__author_email__,
     url='http://github.com/adamzap/landslide',
-    license='Apache 2.0',
+    license=landslide.__license__,
     platforms=['any'],
     keywords=[
         'markdown',
