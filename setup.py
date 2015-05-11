@@ -5,7 +5,7 @@ import landslide
 setup(
     name=landslide.__title__,
     version=landslide.__version__,
-    description='Lightweight markup language-based html5 slideshow generator',
+    description='HTML5 slideshow generator for Markdown, ReST, and Textile',
     packages=['landslide'],
     include_package_data=True,
     zip_safe=False,
