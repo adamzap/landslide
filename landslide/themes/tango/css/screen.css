@@ -1,19 +1,19 @@
 h1, h2, h3, h4, h5, h6, p, ul, li {
-    font-family: sans-serif !important;
+  font-family: sans-serif !important;
 }
 
 p, ul, li {
-    color: #555753 !important;
-    font-size: 120% !important;
+  color: #555753 !important;
+  font-size: 120% !important;
 }
 
 header h1, header h2, header h3, header h4, header h5, header h6 {
-    color: #204a87 !important;
-    font-weight: bold !important;
+  color: #204a87 !important;
+  font-weight: bold !important;
 }
 
 section h1, section h2, section h3, section h4, section h5, section h6 {
-    color: #3465a4 !important;
+  color: #3465a4 !important;
 }
 
 img { display: block; margin: auto; }
@@ -310,18 +310,20 @@ li pre { margin-left: 0em; }
 aside {
   display: none;
 }
-  aside.source {
-    position: absolute;
-    bottom: 6px;
-    left: 10px;
-    text-indent: 10px;
-  }
-  aside.page_number {
-    position: absolute;
-    bottom: 6px;
-    right: 10px;
-    text-indent: 10px;
-  }
+
+aside.source {
+  position: absolute;
+  bottom: 6px;
+  left: 10px;
+  text-indent: 10px;
+}
+
+aside.page_number {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  text-indent: 10px;
+}
 
 .notes {
   display: none;
@@ -331,8 +333,9 @@ aside {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
 }
-  div.slide p.notes {
-    font-size: 90%;
+
+div.slide p.notes {
+  font-size: 90%;
 }
 
 /* Expose */
