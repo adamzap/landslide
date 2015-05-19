@@ -83,37 +83,37 @@
     </div>
     <div class="slides">
       {% for slide in slides %}
-      <!-- slide source: {% if slide.source %}{{ slide.source.rel_path }}{% endif %} -->
-      <div class="slide-wrapper">
-        <div class="slide{% if slide.classes %}{% for class in slide.classes %} {{ class }}{% endfor %}{% endif %} slide-{{slide.number}}">
-          <div class="inner">
-            {% if slide.header %}
-            <header>{{ slide.header }}</header>
-            {% endif %}
-            {% if slide.content %}
-            <section>{{ slide.content }}</section>
-            {% endif %}
+        <!-- slide source: {% if slide.source %}{{ slide.source.rel_path }}{% endif %} -->
+        <div class="slide-wrapper">
+          <div class="slide{% if slide.classes %}{% for class in slide.classes %} {{ class }}{% endfor %}{% endif %} slide-{{slide.number}}">
+            <div class="inner">
+              {% if slide.header %}
+                <header>{{ slide.header }}</header>
+              {% endif %}
+              {% if slide.content %}
+                <section>{{ slide.content }}</section>
+              {% endif %}
+            </div>
+            <div class="presenter_notes">
+              <header><h1>Presenter Notes</h1></header>
+              <section>
+                {% if slide.presenter_notes %}
+                  {{ slide.presenter_notes }}
+                {% endif %}
+              </section>
+            </div>
+            <footer>
+              {% if slide.source %}
+                <aside class="source">
+                  Source: <a href="{{ slide.source.rel_path }}">{{ slide.source.rel_path }}</a>
+                </aside>
+              {% endif %}
+              <aside class="page_number">
+                {{ slide.number }}/{{ num_slides }}
+              </aside>
+            </footer>
           </div>
-          <div class="presenter_notes">
-            <header><h1>Presenter Notes</h1></header>
-            <section>
-            {% if slide.presenter_notes %}
-              {{ slide.presenter_notes }}
-            {% endif %}
-            </section>
-          </div>
-          <footer>
-            {% if slide.source %}
-            <aside class="source">
-              Source: <a href="{{ slide.source.rel_path }}">{{ slide.source.rel_path }}</a>
-            </aside>
-            {% endif %}
-            <aside class="page_number">
-              {{ slide.number }}/{{ num_slides }}
-            </aside>
-          </footer>
         </div>
-      </div>
       {% endfor %}
     </div>
   </div>
@@ -123,24 +123,25 @@
     <table>
       <caption>Table of Contents</caption>
       {% for section in toc %}
-      <tr id="toc-row-{{ section.number }}">
-        <th><a href="#slide{{ section.number }}">{{ section.title }}</a></th>
-        <td><a href="#slide{{ section.number }}">{{ section.number }}</a></td>
-      </tr>
-      {% if section.sub %}
-        {% for subsection in section.sub %}
-        <tr id="toc-row-{{ subsection.number }}" class="sub">
-          <th><a href="#slide{{ subsection.number }}">{{ subsection.title }}</a></th>
-          <td><a href="#slide{{ subsection.number }}">{{ subsection.number }}</a></td>
+        <tr id="toc-row-{{ section.number }}">
+          <th><a href="#slide{{ section.number }}">{{ section.title }}</a></th>
+          <td><a href="#slide{{ section.number }}">{{ section.number }}</a></td>
         </tr>
-        {% endfor %}
-      {% endif %}
+        {% if section.sub %}
+          {% for subsection in section.sub %}
+            <tr id="toc-row-{{ subsection.number }}" class="sub">
+              <th><a href="#slide{{ subsection.number }}">{{ subsection.title }}</a></th>
+              <td><a href="#slide{{ subsection.number }}">{{ subsection.number }}</a></td>
+            </tr>
+          {% endfor %}
+        {% endif %}
       {% endfor %}
     </table>
   </div>
   {% endif %}
   <div id="help" class="sidebar hidden">
     <h2>Help</h2>
+
     <table>
       <caption>Help</caption>
       <tr>
@@ -185,6 +186,7 @@
       </tr>
     </table>
   </div>
+
   <script>main()</script>
 </body>
 </html>
