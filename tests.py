@@ -14,6 +14,7 @@ class LandslideTestCase(unittest.TestCase):
     def get_options(self, s):
         return Options(docopt(cli.__doc__, s.split(' ')))
 
+
 class OptionsTestCase(LandslideTestCase):
 
     def get_option(self, switch, name):
