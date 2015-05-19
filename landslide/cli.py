@@ -51,6 +51,4 @@ if __name__ == '__main__':
 
     options = Options(arguments)
 
-    print options.__dict__
-
-    #Presentation(options)
+    Presentation(options)
