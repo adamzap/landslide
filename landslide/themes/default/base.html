@@ -28,41 +28,43 @@
     <title>{{ head_title }}</title>
     <!-- Styles -->
     {% if embed %}
-    <style type="text/css" media="print">
-      {{ css.print.contents }}
-    </style>
-    <style type="text/css" media="screen, projection">
-      {{ css.screen.contents }}
-    </style>
+      <style type="text/css" media="print">
+        {{ css.print.contents }}
+      </style>
+      <style type="text/css" media="screen, projection">
+        {{ css.screen.contents }}
+      </style>
     {% else %}
-    <link rel="stylesheet" media="print" href="{{ css.print.path_url }}">
-    <link rel="stylesheet" media="screen, projection" href="{{ css.screen.path_url }}">
+      <link rel="stylesheet" media="print" href="{{ css.print.path_url }}">
+      <link rel="stylesheet" media="screen, projection" href="{{ css.screen.path_url }}">
     {% endif %}
+
     {% for css in user_css %}
       {% if embed %}
-      <style type="text/css" media="screen, projection">
-        {{ css.contents }}
-      </style>
+        <style type="text/css" media="screen, projection">
+          {{ css.contents }}
+        </style>
       {% else %}
-      <link rel="stylesheet" href="{{ css.path_url }}">
+        <link rel="stylesheet" href="{{ css.path_url }}">
       {% endif %}
     {% endfor %}
     <!-- /Styles -->
     <!-- Javascripts -->
     {% if embed %}
-    <script>
-      {{ js.contents }}
-    </script>
+      <script>
+        {{ js.contents }}
+      </script>
     {% else %}
-    <script type="text/javascript" src="{{ js.path_url }}"></script>
+      <script type="text/javascript" src="{{ js.path_url }}"></script>
     {% endif %}
+
     {% for js in user_js %}
       {% if embed %}
       <script>
         {{ js.contents }}
       </script>
       {% else %}
-      <script type="text/javascript" src="{{ js.path_url }}"></script>
+        <script type="text/javascript" src="{{ js.path_url }}"></script>
       {% endif %}
     {% endfor %}
     {% if math_output %}
