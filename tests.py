@@ -1,32 +1,36 @@
 #!/usr/bin/env python
 
+import os
 import unittest
 
 from docopt import docopt
 
 from landslide import cli
 from landslide.options import Options
+from landslide.presentation import Presentation
 
 
-class OptionsTestCase(unittest.TestCase):
-    def call(self, s):
+class LandslideTestCase(unittest.TestCase):
+    def get_options(self, s):
         return Options(docopt(cli.__doc__, s.split(' ')))
 
+class OptionsTestCase(LandslideTestCase):
+
     def get_option(self, switch, name):
-        return getattr(self.call('in.md %s' % switch), name)
+        return getattr(self.get_options('in.md %s' % switch), name)
 
     def test_single_source(self):
-        options = self.call('in.md')
+        options = self.get_options('in.md')
 
         self.assertEqual(options.sources, ['in.md'])
 
     def test_multiple_sources(self):
-        options = self.call('a.md b.md c.md d.md')
+        options = self.get_options('a.md b.md c.md d.md')
 
         self.assertEqual(options.sources, ['a.md', 'b.md', 'c.md', 'd.md'])
 
     def test_default_options(self):
-        options = self.call('in.md')
+        options = self.get_options('in.md')
 
         self.assertEqual(options.theme, 'default')
         self.assertEqual(options.linenos, 'inline')
@@ -46,7 +50,7 @@ class OptionsTestCase(unittest.TestCase):
         self.assertFalse(options.math_output)
 
     def test_all_options_config_file(self):
-        options = self.call('test-data/all-options.cfg')
+        options = self.get_options('test-data/all-options.cfg')
 
         self.assertEqual(options.sources, ['a.md', 'b-dir'])
         self.assertEqual(options.theme, '/path/to/theme')
@@ -67,7 +71,7 @@ class OptionsTestCase(unittest.TestCase):
         self.assertTrue(options.math_output)
 
     def test_source_only_config_file(self):
-        options = self.call('test-data/sources-only.cfg')
+        options = self.get_options('test-data/sources-only.cfg')
 
         self.assertEqual(options.theme, 'default')
         self.assertEqual(options.linenos, 'inline')
@@ -87,7 +91,7 @@ class OptionsTestCase(unittest.TestCase):
         self.assertFalse(options.math_output)
 
     def test_config_file_with_multiple_sources(self):
-        options = self.call('test-data/sources-only.cfg c.md')
+        options = self.get_options('test-data/sources-only.cfg c.md')
 
         self.assertEqual(options.sources, ['a.md', 'b-dir', 'c.md'])
 
@@ -154,6 +158,73 @@ class OptionsTestCase(unittest.TestCase):
     def test_match_output_cli_option(self):
         self.assertTrue(self.get_option('-m', 'math_output'))
         self.assertTrue(self.get_option('--math-output', 'math_output'))
+
+
+class PresentationTestCase(LandslideTestCase):
+    def tearDown(self):
+        try:
+            os.unlink('presentation.html')
+        except OSError:
+            pass
+
+    def test_single_source(self):
+        options = self.get_options('test-data/a.md')
+        presentation = Presentation(options)
+
+        self.assertEqual(presentation.sources, ['test-data/a.md'])
+
+    def test_multiple_sources(self):
+        options = self.get_options('test-data/a.md test-data/b.md')
+        presentation = Presentation(options)
+
+        sources = ['test-data/a.md', 'test-data/b.md']
+
+        self.assertEqual(presentation.sources, sources)
+
+    def test_shallow_dir_source(self):
+        options = self.get_options('test-data/shallow')
+        presentation = Presentation(options)
+
+        sources = ['test-data/shallow/c.md', 'test-data/shallow/d.md']
+
+        self.assertEqual(presentation.sources, sources)
+
+    def test_deep_dir_source(self):
+        options = self.get_options('test-data/deep')
+        presentation = Presentation(options)
+
+        sources = [
+            'test-data/deep/e-f/e.md',
+            'test-data/deep/e-f/f.md',
+            'test-data/deep/g-h/g.md',
+            'test-data/deep/g-h/h.md',
+        ]
+
+        self.assertEqual(presentation.sources, sources)
+
+    def test_crazy_source(self):
+        inputs = ' '.join([
+            'test-data/a.md',
+            'test-data/b.md',
+            'test-data/shallow',
+            'test-data/deep',
+        ])
+
+        options = self.get_options(inputs)
+        presentation = Presentation(options)
+
+        sources = [
+            'test-data/a.md',
+            'test-data/b.md',
+            'test-data/shallow/c.md',
+            'test-data/shallow/d.md',
+            'test-data/deep/e-f/e.md',
+            'test-data/deep/e-f/f.md',
+            'test-data/deep/g-h/g.md',
+            'test-data/deep/g-h/h.md',
+        ]
+
+        self.assertEqual(presentation.sources, sources)
 
 
 if __name__ == '__main__':
