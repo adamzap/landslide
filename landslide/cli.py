@@ -46,9 +46,13 @@ from options import Options
 from presentation import Presentation
 
 
-if __name__ == '__main__':
-    arguments = docopt(__doc__, version='Landslide v2.0.0')
+def main(argv=None):
+    arguments = docopt(__doc__, argv, version='Landslide v2.0.0')
 
     options = Options(arguments)
 
     Presentation(options)
+
+
+if __name__ == '__main__':
+    main()  # pragma: no cover

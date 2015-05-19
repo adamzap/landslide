@@ -15,8 +15,21 @@ class LandslideTestCase(unittest.TestCase):
         return Options(docopt(cli.__doc__, s.split(' ')))
 
 
-class OptionsTestCase(LandslideTestCase):
+class CliTestCase(LandslideTestCase):
+    def test_cli(self):
+        try:
+            os.unlink('presentation.html')
+        except OSError:
+            pass
 
+        cli.main(['test-data/a.md'])
+
+        self.assertTrue(os.path.exists('presentation.html'))
+
+        os.unlink('presentation.html')
+
+
+class OptionsTestCase(LandslideTestCase):
     def get_option(self, switch, name):
         return getattr(self.get_options('in.md %s' % switch), name)
 
