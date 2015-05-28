@@ -19,7 +19,7 @@ class Presentation(object):
         self.set_theme_dir()
 
         self.sources = []
-        self.raw_slides = []
+        self.slides = []
 
         for source in options.sources:
             self.add_source(source)
@@ -27,9 +27,8 @@ class Presentation(object):
         for source in self.sources:
             rendered_source = renderer.render(source)
 
-            self.raw_slides.extend(re.split('<hr.+>', rendered_source))
-
-        self.slides = [Slide(src) for src in self.raw_slides]
+            for html in re.split('<hr.+>', rendered_source):
+                self.slides.append(Slide(html, source))
 
         self.write()
 

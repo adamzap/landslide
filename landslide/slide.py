@@ -5,8 +5,9 @@ HEADER_RE = r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?'
 
 
 class Slide(object):
-    def __init__(self, html):
+    def __init__(self, html, source):
         self.html = html
+        self.source = source
 
         self.classes = []
 
