@@ -87,7 +87,7 @@
       {% for slide in slides %}
         <!-- slide source: {% if slide.source %}{{ slide.source.rel_path }}{% endif %} -->
         <div class="slide-wrapper">
-          <div class="slide{% if slide.classes %}{% for class in slide.classes %} {{ class }}{% endfor %}{% endif %} slide-{{ loop.index }}">
+          <div class="slide {{ slide.classes|join(' ') }} slide-{{ loop.index }}">
             <div class="inner">
               {% if slide.header %}
                 <header>{{ slide.header }}</header>
