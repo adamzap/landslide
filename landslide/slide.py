@@ -8,6 +8,8 @@ class Slide(object):
     def __init__(self, html):
         self.html = html
 
+        self.classes = []
+
         self.process_header()
 
     def process_header(self):
