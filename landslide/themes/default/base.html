@@ -119,28 +119,20 @@
       {% endfor %}
     </div>
   </div>
-  {% if toc %}
+
   <div id="toc" class="sidebar hidden">
     <h2>Table of Contents</h2>
     <table>
       <caption>Table of Contents</caption>
-      {% for section in toc %}
-        <tr id="toc-row-{{ section.number }}">
-          <th><a href="#slide{{ section.number }}">{{ section.title }}</a></th>
-          <td><a href="#slide{{ section.number }}">{{ section.number }}</a></td>
+      {% for slide in slides %}
+        <tr id="toc-row-{{ loop.index }}" class="{% if slide.level > 1 %}sub{% endif %}">
+          <th><a href="#slide{{ loop.index }}">{{ slide.title }}</a></th>
+          <td><a href="#slide{{ loop.index }}">{{ loop.index }}</a></td>
         </tr>
-        {% if section.sub %}
-          {% for subsection in section.sub %}
-            <tr id="toc-row-{{ subsection.number }}" class="sub">
-              <th><a href="#slide{{ subsection.number }}">{{ subsection.title }}</a></th>
-              <td><a href="#slide{{ subsection.number }}">{{ subsection.number }}</a></td>
-            </tr>
-          {% endfor %}
-        {% endif %}
       {% endfor %}
     </table>
   </div>
-  {% endif %}
+
   <div id="help" class="sidebar hidden">
     <h2>Help</h2>
 
