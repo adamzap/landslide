@@ -125,7 +125,7 @@
     <table>
       <caption>Table of Contents</caption>
       {% for slide in slides %}
-        <tr id="toc-row-{{ loop.index }}" class="{% if slide.level > 1 %}sub{% endif %}">
+        <tr id="toc-row-{{ loop.index }}" class="{% if slide.level|default(1) > 1 %}sub{% endif %}">
           <th><a href="#slide{{ loop.index }}">{{ slide.title|default('-') }}</a></th>
           <td><a href="#slide{{ loop.index }}">{{ loop.index }}</a></td>
         </tr>
