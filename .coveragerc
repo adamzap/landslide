@@ -3,3 +3,6 @@ include = landslide*
 
 [report]
 exclude_lines = if __name__ == '__main__':
+
+[html]
+title = Landslide - Coverage Report
