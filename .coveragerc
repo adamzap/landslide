@@ -1,2 +1,5 @@
+[run]
+include = landslide*
+
 [report]
 exclude_lines = if __name__ == '__main__':
