@@ -68,10 +68,18 @@ class Presentation(object):
             }
         }
 
+    def get_template_path(self):
+        theme_path = os.path.join(self.theme_dir, 'base.html')
+        default_path = os.path.join(THEMES_DIR, 'default', 'base.html')
+
+        return theme_path if os.path.exists(theme_path) else default_path
+
     def write(self):
         open = functools.partial(codecs.open, encoding=self.options.encoding)
 
-        with open(os.path.join(self.theme_dir, 'base.html')) as template_file:
+        template_path = self.get_template_path()
+
+        with open(template_path) as template_file:
             template = jinja2.Template(template_file.read())
 
         html = template.render(self.get_context())
