@@ -267,6 +267,36 @@ class PresentationTestCase(LandslideTestCase):
         with self.assertRaises(Exception):
             Presentation(options)
 
+    def test_get_css_files_default(self):
+        options = self.get_options('test-data/a.md')
+
+        presentation = Presentation(options)
+
+        path_end = 'landslide/themes/default/style.css'
+
+        self.assertEqual(len(presentation.css_files), 1)
+        self.assertTrue(presentation.css_files[0].endswith(path_end))
+
+    def test_get_css_files_custom(self):
+        options = self.get_options('test-data/a.md -t test-data/theme-all')
+
+        presentation = Presentation(options)
+
+        path = 'test-data/theme-all/style.css'
+
+        self.assertEqual(len(presentation.css_files), 1)
+        self.assertEqual(presentation.css_files[0], path)
+
+    def test_get_css_files_custom_missing(self):
+        options = self.get_options('test-data/a.md -t test-data/theme-no-css')
+
+        presentation = Presentation(options)
+
+        path_end = 'landslide/themes/default/style.css'
+
+        self.assertEqual(len(presentation.css_files), 1)
+        self.assertTrue(presentation.css_files[0].endswith(path_end))
+
 
 class SlideTestCase(LandslideTestCase):
     def test_process_header(self):
