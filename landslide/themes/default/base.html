@@ -89,8 +89,8 @@
         <div class="slide-wrapper">
           <div class="slide {{ slide.classes|join(' ') }} slide-{{ loop.index }}">
             <div class="inner">
-              {% if slide.header %}
-                <header>{{ slide.header }}</header>
+              {% if slide.header_source %}
+                <header>{{ slide.header_source }}</header>
               {% endif %}
               {% if slide.content %}
                 <section>{{ slide.content }}</section>
@@ -125,7 +125,7 @@
     <table>
       <caption>Table of Contents</caption>
       {% for slide in slides %}
-        <tr id="toc-row-{{ loop.index }}" class="{% if slide.level|default(1) > 1 %}sub{% endif %}">
+        <tr id="toc-row-{{ loop.index }}" class="{% if slide.header_level|default(1) > 1 %}sub{% endif %}">
           <th><a href="#slide{{ loop.index }}">{{ slide.title|default('-') }}</a></th>
           <td><a href="#slide{{ loop.index }}">{{ loop.index }}</a></td>
         </tr>
