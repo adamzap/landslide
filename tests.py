@@ -241,6 +241,32 @@ class PresentationTestCase(LandslideTestCase):
 
         self.assertEqual(presentation.sources, sources)
 
+    def test_set_theme_dir_custom(self):
+        options = self.get_options('test-data/a.md -t test-data/theme-all')
+
+        presentation = Presentation(options)
+
+        self.assertEqual(presentation.theme_dir, 'test-data/theme-all')
+
+    def test_set_theme_dir_built_in(self):
+        options = self.get_options('test-data/a.md')
+
+        presentation = Presentation(options)
+
+        self.assertTrue(presentation.theme_dir.endswith('themes/default'))
+
+        options = self.get_options('test-data/a.md -t light')
+
+        presentation = Presentation(options)
+
+        self.assertTrue(presentation.theme_dir.endswith('themes/light'))
+
+    def test_set_theme_dir_missing(self):
+        options = self.get_options('test-data/a.md -t missing')
+
+        with self.assertRaises(Exception):
+            Presentation(options)
+
 
 class SlideTestCase(LandslideTestCase):
     def test_process_header(self):
