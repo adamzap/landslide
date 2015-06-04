@@ -105,6 +105,12 @@ class OptionsTestCase(LandslideTestCase):
         self.assertFalse(options.watch)
         self.assertFalse(options.math_output)
 
+    def test_no_source_config_file(self):
+        options = self.get_options('test-data/no-source.cfg test-data/a.md')
+
+        self.assertEqual(options.sources, ['test-data/a.md'])
+        self.assertEqual(options.theme, 'tango')
+
     def test_config_file_with_multiple_sources(self):
         options = self.get_options('test-data/sources-only.cfg c.md')
 

@@ -39,7 +39,12 @@ class Options(object):
         config = dict(parser.items('landslide'))
         config = {k: v for k, v in config.items() if v}
 
-        self.sources = [s.strip() for s in config.get('source').split('\n')]
+        source = config.get('source')
+
+        if source:
+            self.sources = [s.strip() for s in source.split('\n')]
+        else:
+            self.sources = []
 
         self.theme = config.get('theme', self.theme)
         self.linenos = config.get('linenos', self.linenos)
