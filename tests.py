@@ -182,6 +182,9 @@ class OptionsTestCase(LandslideTestCase):
 
 
 class PresentationTestCase(LandslideTestCase):
+    def get_presentation(self, s):
+        return Presentation(self.get_options(s))
+
     def tearDown(self):
         try:
             os.unlink('presentation.html')
@@ -189,30 +192,26 @@ class PresentationTestCase(LandslideTestCase):
             pass
 
     def test_single_source(self):
-        options = self.get_options('test-data/a.md')
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/a.md')
 
-        self.assertEqual(presentation.sources, ['test-data/a.md'])
+        self.assertEqual(p.sources, ['test-data/a.md'])
 
     def test_multiple_sources(self):
-        options = self.get_options('test-data/a.md test-data/b.md')
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/a.md test-data/b.md')
 
         sources = ['test-data/a.md', 'test-data/b.md']
 
-        self.assertEqual(presentation.sources, sources)
+        self.assertEqual(p.sources, sources)
 
     def test_shallow_dir_source(self):
-        options = self.get_options('test-data/shallow')
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/shallow')
 
         sources = ['test-data/shallow/c.md', 'test-data/shallow/d.md']
 
-        self.assertEqual(presentation.sources, sources)
+        self.assertEqual(p.sources, sources)
 
     def test_deep_dir_source(self):
-        options = self.get_options('test-data/deep')
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/deep')
 
         sources = [
             'test-data/deep/e-f/e.md',
@@ -221,7 +220,7 @@ class PresentationTestCase(LandslideTestCase):
             'test-data/deep/g-h/h.md',
         ]
 
-        self.assertEqual(presentation.sources, sources)
+        self.assertEqual(p.sources, sources)
 
     def test_crazy_source(self):
         inputs = ' '.join([
@@ -231,8 +230,7 @@ class PresentationTestCase(LandslideTestCase):
             'test-data/deep',
         ])
 
-        options = self.get_options(inputs)
-        presentation = Presentation(options)
+        p = self.get_presentation(inputs)
 
         sources = [
             'test-data/a.md',
@@ -245,117 +243,93 @@ class PresentationTestCase(LandslideTestCase):
             'test-data/deep/g-h/h.md',
         ]
 
-        self.assertEqual(presentation.sources, sources)
+        self.assertEqual(p.sources, sources)
 
     def test_set_theme_dir_custom(self):
-        options = self.get_options('test-data/a.md -t test-data/theme-all')
+        p = self.get_presentation('test-data/a.md -t test-data/theme-all')
 
-        presentation = Presentation(options)
-
-        self.assertEqual(presentation.theme_dir, 'test-data/theme-all')
+        self.assertEqual(p.theme_dir, 'test-data/theme-all')
 
     def test_set_theme_dir_built_in(self):
-        options = self.get_options('test-data/a.md')
+        p = self.get_presentation('test-data/a.md')
 
-        presentation = Presentation(options)
+        self.assertTrue(p.theme_dir.endswith('themes/default'))
 
-        self.assertTrue(presentation.theme_dir.endswith('themes/default'))
+        p = self.get_presentation('test-data/a.md -t light')
 
-        options = self.get_options('test-data/a.md -t light')
-
-        presentation = Presentation(options)
-
-        self.assertTrue(presentation.theme_dir.endswith('themes/light'))
+        self.assertTrue(p.theme_dir.endswith('themes/light'))
 
     def test_set_theme_dir_missing(self):
-        options = self.get_options('test-data/a.md -t missing')
-
         with self.assertRaises(Exception):
-            Presentation(options)
+            self.get_presentation('test-data/a.md -t missing')
 
     def test_get_css_files_default(self):
-        options = self.get_options('test-data/a.md')
-
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/a.md')
 
         path_end = 'landslide/themes/default/style.css'
 
-        self.assertEqual(len(presentation.css_files), 1)
-        self.assertTrue(presentation.css_files[0].endswith(path_end))
+        self.assertEqual(len(p.css_files), 1)
+        self.assertTrue(p.css_files[0].endswith(path_end))
 
     def test_get_css_files_custom(self):
-        options = self.get_options('test-data/a.md -t test-data/theme-all')
-
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/a.md -t test-data/theme-all')
 
         path = 'test-data/theme-all/style.css'
 
-        self.assertEqual(len(presentation.css_files), 1)
-        self.assertEqual(presentation.css_files[0], path)
+        self.assertEqual(len(p.css_files), 1)
+        self.assertEqual(p.css_files[0], path)
 
     def test_get_css_files_custom_missing(self):
-        options = self.get_options('test-data/a.md -t test-data/theme-no-css')
-
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/a.md -t test-data/theme-no-css')
 
         path_end = 'landslide/themes/default/style.css'
 
-        self.assertEqual(len(presentation.css_files), 1)
-        self.assertTrue(presentation.css_files[0].endswith(path_end))
+        self.assertEqual(len(p.css_files), 1)
+        self.assertTrue(p.css_files[0].endswith(path_end))
 
     def test_get_js_files_default(self):
-        options = self.get_options('test-data/a.md')
-
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/a.md')
 
         path_end = 'landslide/themes/default/slides.js'
 
-        self.assertEqual(len(presentation.js_files), 1)
-        self.assertTrue(presentation.js_files[0].endswith(path_end))
+        self.assertEqual(len(p.js_files), 1)
+        self.assertTrue(p.js_files[0].endswith(path_end))
 
     def test_get_js_files_custom(self):
-        options = self.get_options('test-data/a.md -t test-data/theme-all')
-
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/a.md -t test-data/theme-all')
 
         path = 'test-data/theme-all/slides.js'
 
-        self.assertEqual(len(presentation.js_files), 1)
-        self.assertEqual(presentation.js_files[0], path)
+        self.assertEqual(len(p.js_files), 1)
+        self.assertEqual(p.js_files[0], path)
 
     def test_get_js_files_custom_missing(self):
-        options = self.get_options('test-data/a.md -t test-data/theme-no-js')
-
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/a.md -t test-data/theme-no-js')
 
         path_end = 'landslide/themes/default/slides.js'
 
-        self.assertEqual(len(presentation.js_files), 1)
-        self.assertTrue(presentation.js_files[0].endswith(path_end))
+        self.assertEqual(len(p.js_files), 1)
+        self.assertTrue(p.js_files[0].endswith(path_end))
 
     def test_get_css_files_extra_in_cfg(self):
-        options = self.get_options('test-data/css-js.cfg')
-
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/css-js.cfg')
 
         first_path_end = 'landslide/themes/default/style.css'
 
-        self.assertEqual(len(presentation.css_files), 3)
-        self.assertTrue(presentation.css_files[0].endswith(first_path_end))
-        self.assertEqual(presentation.css_files[1], 'style-1.css')
-        self.assertEqual(presentation.css_files[2], 'style-2.css')
+        self.assertEqual(len(p.css_files), 3)
+        self.assertTrue(p.css_files[0].endswith(first_path_end))
+        self.assertEqual(p.css_files[1], 'style-1.css')
+        self.assertEqual(p.css_files[2], 'style-2.css')
 
     def test_get_js_files_extra_in_cfg(self):
-        options = self.get_options('test-data/css-js.cfg')
-
-        presentation = Presentation(options)
+        p = self.get_presentation('test-data/css-js.cfg')
 
         first_path_end = 'landslide/themes/default/slides.js'
 
-        self.assertEqual(len(presentation.js_files), 3)
-        self.assertTrue(presentation.js_files[0].endswith(first_path_end))
-        self.assertEqual(presentation.js_files[1], 'js-1.js')
-        self.assertEqual(presentation.js_files[2], 'js-2.js')
+        self.assertEqual(len(p.js_files), 3)
+        self.assertTrue(p.js_files[0].endswith(first_path_end))
+        self.assertEqual(p.js_files[1], 'js-1.js')
+        self.assertEqual(p.js_files[2], 'js-2.js')
 
 
 class SlideTestCase(LandslideTestCase):
