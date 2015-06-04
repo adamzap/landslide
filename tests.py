@@ -6,6 +6,7 @@ import unittest
 from docopt import docopt
 
 from landslide import cli
+from landslide.slide import Slide
 from landslide.options import Options
 from landslide.presentation import Presentation
 
@@ -239,6 +240,31 @@ class PresentationTestCase(LandslideTestCase):
         ]
 
         self.assertEqual(presentation.sources, sources)
+
+
+class SlideTestCase(LandslideTestCase):
+    def test_process_header(self):
+        header = '<h1>title</h1>'
+        body = '<p>test</p>'
+
+        html = '\n'.join([header, body])
+
+        slide = Slide(html, 'test.md')
+
+        self.assertEqual(slide.header_source, header)
+        self.assertEqual(slide.header_level, 1)
+        self.assertEqual(slide.title, 'title')
+        self.assertEqual(slide.content, body)
+
+    def test_process_header_no_header(self):
+        html = '<p>test</p>'
+
+        slide = Slide(html, 'test.md')
+
+        self.assertIsNone(slide.header_source)
+        self.assertIsNone(slide.header_level)
+        self.assertIsNone(slide.title)
+        self.assertEqual(slide.content, html)
 
 
 if __name__ == '__main__':
