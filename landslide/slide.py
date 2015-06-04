@@ -20,6 +20,11 @@ class Slide(object):
             self.header_source = m.group(1)
             self.header_level = int(m.group(2))
             self.title = m.group(3)
-            self.content = m.group(4).strip() if m.group(4) else m.group(4)
+            self.content = m.group(4) if m.group(4) else ''
         else:
-            self.content = self.html.strip()
+            self.header_source = None
+            self.header_level = None
+            self.title = None
+            self.content = self.html
+
+        self.content = self.content.strip()
