@@ -333,6 +333,30 @@ class PresentationTestCase(LandslideTestCase):
         self.assertEqual(len(presentation.js_files), 1)
         self.assertTrue(presentation.js_files[0].endswith(path_end))
 
+    def test_get_css_files_extra_in_cfg(self):
+        options = self.get_options('test-data/css-js.cfg')
+
+        presentation = Presentation(options)
+
+        first_path_end = 'landslide/themes/default/style.css'
+
+        self.assertEqual(len(presentation.css_files), 3)
+        self.assertTrue(presentation.css_files[0].endswith(first_path_end))
+        self.assertEqual(presentation.css_files[1], 'style-1.css')
+        self.assertEqual(presentation.css_files[2], 'style-2.css')
+
+    def test_get_js_files_extra_in_cfg(self):
+        options = self.get_options('test-data/css-js.cfg')
+
+        presentation = Presentation(options)
+
+        first_path_end = 'landslide/themes/default/slides.js'
+
+        self.assertEqual(len(presentation.js_files), 3)
+        self.assertTrue(presentation.js_files[0].endswith(first_path_end))
+        self.assertEqual(presentation.js_files[1], 'js-1.js')
+        self.assertEqual(presentation.js_files[2], 'js-2.js')
+
 
 class SlideTestCase(LandslideTestCase):
     def test_process_header(self):

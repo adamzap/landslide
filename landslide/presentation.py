@@ -67,6 +67,8 @@ class Presentation(object):
 
             self.css_files.append(default_css_path)
 
+        self.css_files.extend(self.options.css)
+
     def get_js_files(self):
         self.js_files = []
 
@@ -79,6 +81,8 @@ class Presentation(object):
             default_js_path = os.path.join(THEMES_DIR, 'default', 'slides.js')
 
             self.js_files.append(default_js_path)
+
+        self.js_files.extend(self.options.js)
 
     def get_context(self):
         return {
