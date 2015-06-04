@@ -30,6 +30,9 @@ class Presentation(object):
             for html in re.split('<hr.+>', rendered_source):
                 self.slides.append(Slide(html, source))
 
+        self.get_css_files()
+        self.get_js_files()
+
         self.write()
 
     def set_theme_dir(self):
@@ -51,21 +54,37 @@ class Presentation(object):
         else:
             self.sources.append(path)
 
+    def get_css_files(self):
+        self.css_files = []
+
+        theme_css_path = os.path.join(self.theme_dir, 'style.css')
+
+        if os.path.exists(theme_css_path):
+            self.css_files.append(theme_css_path)
+
+        if not self.css_files:
+            default_css_path = os.path.join(THEMES_DIR, 'default', 'style.css')
+
+            self.css_files.append(default_css_path)
+
+    def get_js_files(self):
+        self.js_files = []
+
+        theme_js_path = os.path.join(self.theme_dir, 'slides.js')
+
+        if os.path.exists(theme_js_path):
+            self.js_files.append(theme_js_path)
+
+        if not self.js_files:
+            default_js_path = os.path.join(THEMES_DIR, 'default', 'slides.js')
+
+            self.js_files.append(default_js_path)
+
     def get_context(self):
-        # TODO: Refactor and flatten css and js variables in theme HTML
         return {
             'slides': self.slides,
-            'css': {
-                'print': {
-                    'path_url': os.path.join(self.theme_dir, 'css', 'print.css')
-                },
-                'screen': {
-                    'path_url': os.path.join(self.theme_dir, 'css', 'screen.css')
-                }
-            },
-            'js': {
-                'path_url': os.path.join(self.theme_dir, 'js', 'slides.js')
-            }
+            'css_files': self.css_files,
+            'js_files': self.js_files
         }
 
     def get_template_path(self):

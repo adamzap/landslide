@@ -26,47 +26,31 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>{{ head_title }}</title>
-    <!-- Styles -->
+
     {% if embed %}
-      <style type="text/css" media="print">
-        {{ css.print.contents }}
-      </style>
       <style type="text/css" media="screen, projection">
-        {{ css.screen.contents }}
+        {% for css_file in css_files %}
+          {{ css_file }}
+        {% endfor %}
       </style>
     {% else %}
-      <link rel="stylesheet" media="print" href="{{ css.print.path_url }}">
-      <link rel="stylesheet" media="screen, projection" href="{{ css.screen.path_url }}">
+      {% for css_file in css_files %}
+        <link rel="stylesheet" media="screen, projection" href="{{ css_file }}">
+      {% endfor %}
     {% endif %}
 
-    {% for css in user_css %}
-      {% if embed %}
-        <style type="text/css" media="screen, projection">
-          {{ css.contents }}
-        </style>
-      {% else %}
-        <link rel="stylesheet" href="{{ css.path_url }}">
-      {% endif %}
-    {% endfor %}
-    <!-- /Styles -->
-    <!-- Javascripts -->
     {% if embed %}
       <script>
-        {{ js.contents }}
+        {% for js_file in js_files %}
+          {{ js_file }}
+        {% endfor %}
       </script>
     {% else %}
-      <script type="text/javascript" src="{{ js.path_url }}"></script>
+      {% for js_file in js_files %}
+        <script type="text/javascript" src="{{ js_file }}"></script>
+      {% endfor %}
     {% endif %}
 
-    {% for js in user_js %}
-      {% if embed %}
-      <script>
-        {{ js.contents }}
-      </script>
-      {% else %}
-        <script type="text/javascript" src="{{ js.path_url }}"></script>
-      {% endif %}
-    {% endfor %}
     {% if math_output %}
       <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
@@ -75,7 +59,6 @@
       </script>
       <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     {% endif %}
-    <!-- /Javascripts -->
 </head>
 <body>
   <div id="blank"></div>
