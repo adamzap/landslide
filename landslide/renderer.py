@@ -25,8 +25,7 @@ def render(source):
     # TODO: Make codecs open helper?
     text = codecs.open(source, encoding='utf8').read()
 
-    if text.startswith(u'\ufeff'):  # check for unicode BOM
-        text = text[1:]
+    text = text.lstrip(unicode(codecs.BOM_UTF8, 'utf8'))
 
     if ext in EXTENSIONS['markdown']:
         return render_markdown(text)
