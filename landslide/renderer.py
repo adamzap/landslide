@@ -25,6 +25,9 @@ def render(source):
     # TODO: Make codecs open helper?
     text = codecs.open(source, encoding='utf8').read()
 
+    if text.startswith(u'\ufeff'):  # check for unicode BOM
+        text = text[1:]
+
     if ext in EXTENSIONS['markdown']:
         return render_markdown(text)
     elif ext in EXTENSIONS['restructured_text']:
@@ -41,10 +44,6 @@ def render_markdown(text):
         import markdown
     except ImportError:
         raise RenderingError('Could not import `markdown` module')
-
-    # TODO: Is this check needed?
-    if text.startswith(u'\ufeff'):  # check for unicode BOM
-        text = text[1:]
 
     return markdown.markdown(text, extensions=MARKDOWN_EXTENSIONS)
 
