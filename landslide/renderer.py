@@ -9,6 +9,11 @@ EXTENSIONS = {
 }
 
 
+MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.codehilite'
+]
+
+
 class RenderingError(Exception):
     pass
 
@@ -41,7 +46,7 @@ def render_markdown(text):
     if text.startswith(u'\ufeff'):  # check for unicode BOM
         text = text[1:]
 
-    return markdown.markdown(text)
+    return markdown.markdown(text, extensions=MARKDOWN_EXTENSIONS)
 
 
 def render_restructured_text(text):
