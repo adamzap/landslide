@@ -16,3 +16,5 @@ venv
 .tox
 htmlcov
 in.md
+in.rst
+in.textile
