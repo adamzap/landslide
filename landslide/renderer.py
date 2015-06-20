@@ -1,4 +1,5 @@
 import os
+import re
 import codecs
 
 
@@ -48,8 +49,26 @@ def render_markdown(text):
 
 
 def render_restructured_text(text):
-    # TODO: Support restructured_text
-    pass
+    try:
+        from docutils.core import publish_string
+    except ImportError:
+        raise RenderingError('Could not import `docutils` module')
+
+    opts = {
+        'embed_stylesheet': False,
+        'report_level': 5
+    }
+
+    html = publish_string(text, writer_name='html', settings_overrides=opts)
+
+    html = html.split('\n\n\n', 1)[1]
+    html = html.split('</div>\n</body>\n</html>')[0]
+    html = html.replace(' class="docutils"', '')
+    html = re.sub('<div class="section"(.+)?>\n', '', html)
+    html = html.replace('</div>\n', '')
+    html = html.replace('\n\n', '\n')
+
+    return html
 
 
 def render_textile(text):
