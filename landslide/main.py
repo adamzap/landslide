@@ -8,6 +8,8 @@ from optparse import OptionParser
 from . import generator
 from . import __version__
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 def _parse_options():
     """Parses landslide's command line options"""
@@ -105,7 +107,7 @@ def _parse_options():
     parser.add_option(
         "-t", "--theme",
         dest="theme",
-        help="A theme name, or path to a landlside theme directory",
+        help="A theme name, or path to a landslide theme directory",
         default='default')
 
     parser.add_option(
