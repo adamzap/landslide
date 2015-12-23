@@ -36,7 +36,7 @@ The following markdown produces [this slideshow][sample].
                 self.logger(message, level)
 
 [html5slides]: http://code.google.com/p/html5slides/
-[sample]: http://adamzap.com/misc/presentation.html
+[sample]: http://landslide.adamzap.com/
 
 ## Requirements
 
