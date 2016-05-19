@@ -59,7 +59,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertFalse(options.embed)
         self.assertFalse(options.no_presenter_notes)
         self.assertFalse(options.quiet)
-        self.assertFalse(options.relative)
         self.assertFalse(options.watch)
         self.assertFalse(options.math_output)
 
@@ -79,7 +78,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertTrue(options.embed)
         self.assertTrue(options.no_presenter_notes)
         self.assertTrue(options.quiet)
-        self.assertTrue(options.relative)
         self.assertTrue(options.watch)
         self.assertTrue(options.math_output)
 
@@ -98,7 +96,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertFalse(options.embed)
         self.assertFalse(options.no_presenter_notes)
         self.assertFalse(options.quiet)
-        self.assertFalse(options.relative)
         self.assertFalse(options.watch)
         self.assertFalse(options.math_output)
 
@@ -160,10 +157,6 @@ class OptionsTestCase(LandslideTestCase):
     def test_quiet_cli_option(self):
         self.assertTrue(self.get_option('-q', 'quiet'))
         self.assertTrue(self.get_option('--quiet', 'quiet'))
-
-    def test_relative_cli_option(self):
-        self.assertTrue(self.get_option('-r', 'relative'))
-        self.assertTrue(self.get_option('--relative', 'relative'))
 
     def test_watch_cli_option(self):
         self.assertTrue(self.get_option('-w', 'watch'))

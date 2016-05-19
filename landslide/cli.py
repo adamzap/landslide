@@ -21,9 +21,6 @@ Usage: landslide [options] <source-or-config-file> [<source-files>...]
 -P, --no-presenter-notes
                     Don't include presenter notes in the output
 -q, --quiet         Don't write anything to stdout
--r, --relative      Make your presentation asset links relative to the current
-                    directory; This may be useful if you intend to publish your
-                    html presentation online.
 -t THEME, --theme=THEME
                     A theme name or path to a landlside theme directory
 -x EXTENSIONS, --extensions=EXTENSIONS
