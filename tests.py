@@ -57,7 +57,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertFalse(options.copy_theme)
         self.assertFalse(options.debug)
         self.assertFalse(options.embed)
-        self.assertFalse(options.no_presenter_notes)
         self.assertFalse(options.quiet)
         self.assertFalse(options.math_output)
 
@@ -75,7 +74,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertTrue(options.copy_theme)
         self.assertTrue(options.debug)
         self.assertTrue(options.embed)
-        self.assertTrue(options.no_presenter_notes)
         self.assertTrue(options.quiet)
         self.assertTrue(options.math_output)
 
@@ -92,7 +90,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertFalse(options.copy_theme)
         self.assertFalse(options.debug)
         self.assertFalse(options.embed)
-        self.assertFalse(options.no_presenter_notes)
         self.assertFalse(options.quiet)
         self.assertFalse(options.math_output)
 
@@ -144,12 +141,6 @@ class OptionsTestCase(LandslideTestCase):
     def test_embed_cli_option(self):
         self.assertTrue(self.get_option('-i', 'embed'))
         self.assertTrue(self.get_option('--embed', 'embed'))
-
-    def test_no_presenter_notes_cli_options(self):
-        name = 'no_presenter_notes'
-
-        self.assertTrue(self.get_option('-P', name))
-        self.assertTrue(self.get_option('--no-presenter-notes', name))
 
     def test_quiet_cli_option(self):
         self.assertTrue(self.get_option('-q', 'quiet'))
