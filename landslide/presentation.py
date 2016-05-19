@@ -92,8 +92,8 @@ class Presentation(object):
         }
 
     def get_template_path(self):
-        theme_path = os.path.join(self.theme_dir, 'base.html')
-        default_path = os.path.join(THEMES_DIR, 'default', 'base.html')
+        theme_path = os.path.join(self.theme_dir, 'slides.html')
+        default_path = os.path.join(THEMES_DIR, 'default', 'slides.html')
 
         return theme_path if os.path.exists(theme_path) else default_path
 
