@@ -59,7 +59,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertFalse(options.embed)
         self.assertFalse(options.no_presenter_notes)
         self.assertFalse(options.quiet)
-        self.assertFalse(options.watch)
         self.assertFalse(options.math_output)
 
     def test_all_options_config_file(self):
@@ -78,7 +77,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertTrue(options.embed)
         self.assertTrue(options.no_presenter_notes)
         self.assertTrue(options.quiet)
-        self.assertTrue(options.watch)
         self.assertTrue(options.math_output)
 
     def test_source_only_config_file(self):
@@ -96,7 +94,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertFalse(options.embed)
         self.assertFalse(options.no_presenter_notes)
         self.assertFalse(options.quiet)
-        self.assertFalse(options.watch)
         self.assertFalse(options.math_output)
 
     def test_no_source_config_file(self):
@@ -157,10 +154,6 @@ class OptionsTestCase(LandslideTestCase):
     def test_quiet_cli_option(self):
         self.assertTrue(self.get_option('-q', 'quiet'))
         self.assertTrue(self.get_option('--quiet', 'quiet'))
-
-    def test_watch_cli_option(self):
-        self.assertTrue(self.get_option('-w', 'watch'))
-        self.assertTrue(self.get_option('--watch', 'watch'))
 
     def test_match_output_cli_option(self):
         self.assertTrue(self.get_option('-m', 'math_output'))

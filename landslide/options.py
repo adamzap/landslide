@@ -58,7 +58,6 @@ class Options(object):
         self.embed = config.get('embed')
         self.no_presenter_notes = config.get('no_presenter_notes')
         self.quiet = config.get('quiet')
-        self.watch = config.get('watch')
         self.math_output = config.get('math_output')
 
     def parse_arguments(self, args):
