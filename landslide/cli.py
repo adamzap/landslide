@@ -6,7 +6,6 @@ Usage: landslide [options] <source-or-config-file> [<source-files>...]
 
 --version           Show version number and exit
 -h, --help          Show this help message and exit
--b, --debug         Display exception tracebacks
 -d FILE, --destination=FILE
                     Destination file for slideshow, default is presentation.html
 -e ENCODING, --encoding=ENCODING

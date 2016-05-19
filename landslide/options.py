@@ -53,7 +53,6 @@ class Options(object):
         self.extensions = config.get('extensions', self.extensions)
         self.css = config.get('css', self.css)
         self.js = config.get('js', self.js)
-        self.debug = config.get('debug')
         self.embed = config.get('embed')
         self.quiet = config.get('quiet')
         self.math_output = config.get('math_output')

@@ -54,7 +54,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertEqual(options.extensions, [])
         self.assertEqual(options.css, [])
         self.assertEqual(options.js, [])
-        self.assertFalse(options.debug)
         self.assertFalse(options.embed)
         self.assertFalse(options.quiet)
         self.assertFalse(options.math_output)
@@ -70,7 +69,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertEqual(options.extensions, ['a', 'b'])
         self.assertEqual(options.css, ['style-1.css', 'style-2.css'])
         self.assertEqual(options.js, ['js-1.js', 'js-2.js'])
-        self.assertTrue(options.debug)
         self.assertTrue(options.embed)
         self.assertTrue(options.quiet)
         self.assertTrue(options.math_output)
@@ -85,7 +83,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertEqual(options.extensions, [])
         self.assertEqual(options.css, [])
         self.assertEqual(options.js, [])
-        self.assertFalse(options.debug)
         self.assertFalse(options.embed)
         self.assertFalse(options.quiet)
         self.assertFalse(options.math_output)
@@ -126,10 +123,6 @@ class OptionsTestCase(LandslideTestCase):
 
         self.assertTrue(self.get_option('-x a,b', name), ['a', 'b'])
         self.assertTrue(self.get_option('--extensions a,b', name), ['a', 'b'])
-
-    def test_debug_cli_option(self):
-        self.assertTrue(self.get_option('-b', 'debug'))
-        self.assertTrue(self.get_option('--debug', 'debug'))
 
     def test_embed_cli_option(self):
         self.assertTrue(self.get_option('-i', 'embed'))
