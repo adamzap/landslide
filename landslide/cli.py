@@ -14,10 +14,8 @@ Usage: landslide [options] <source-or-config-file> [<source-files>...]
                     The encoding of your files (defaults to utf8)
 -i, --embed         Embed all CSS, JS, and images into output file
 -l LINENOS, --linenos=LINENOS
-                    How to output linenos in source code. Three options
-                    availables: no (no line numbers); inline (inside <pre>
-                    tag); table (lines numbers in another cell, copy-paste
-                    friendly)
+                    Conrtols output of line numbers for code. Three options
+                    are available: no, inline, and table (copy-paste friendly)
 -P, --no-presenter-notes
                     Don't include presenter notes in the output
 -q, --quiet         Don't write anything to stdout
