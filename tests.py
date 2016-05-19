@@ -54,7 +54,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertEqual(options.extensions, [])
         self.assertEqual(options.css, [])
         self.assertEqual(options.js, [])
-        self.assertFalse(options.copy_theme)
         self.assertFalse(options.debug)
         self.assertFalse(options.embed)
         self.assertFalse(options.quiet)
@@ -71,7 +70,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertEqual(options.extensions, ['a', 'b'])
         self.assertEqual(options.css, ['style-1.css', 'style-2.css'])
         self.assertEqual(options.js, ['js-1.js', 'js-2.js'])
-        self.assertTrue(options.copy_theme)
         self.assertTrue(options.debug)
         self.assertTrue(options.embed)
         self.assertTrue(options.quiet)
@@ -87,7 +85,6 @@ class OptionsTestCase(LandslideTestCase):
         self.assertEqual(options.extensions, [])
         self.assertEqual(options.css, [])
         self.assertEqual(options.js, [])
-        self.assertFalse(options.copy_theme)
         self.assertFalse(options.debug)
         self.assertFalse(options.embed)
         self.assertFalse(options.quiet)
@@ -129,10 +126,6 @@ class OptionsTestCase(LandslideTestCase):
 
         self.assertTrue(self.get_option('-x a,b', name), ['a', 'b'])
         self.assertTrue(self.get_option('--extensions a,b', name), ['a', 'b'])
-
-    def test_copy_theme_cli_option(self):
-        self.assertTrue(self.get_option('-c', 'copy_theme'))
-        self.assertTrue(self.get_option('--copy-theme', 'copy_theme'))
 
     def test_debug_cli_option(self):
         self.assertTrue(self.get_option('-b', 'debug'))
