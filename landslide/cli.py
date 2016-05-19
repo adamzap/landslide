@@ -18,9 +18,6 @@ Usage: landslide [options] <source-or-config-file> [<source-files>...]
                     availables: no (no line numbers); inline (inside <pre>
                     tag); table (lines numbers in another cell, copy-paste
                     friendly)
--o, --direct-output
-                    Print the generated HTML code to stdout; won't work with
-                    PDF export
 -P, --no-presenter-notes
                     Don't include presenter notes in the output
 -q, --quiet         Don't write anything to stdout

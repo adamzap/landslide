@@ -56,7 +56,6 @@ class Options(object):
         self.copy_theme = config.get('copy_theme')
         self.debug = config.get('debug')
         self.embed = config.get('embed')
-        self.direct_output = config.get('direct_output')
         self.no_presenter_notes = config.get('no_presenter_notes')
         self.quiet = config.get('quiet')
         self.relative = config.get('relative')
