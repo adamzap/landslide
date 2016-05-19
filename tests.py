@@ -211,9 +211,9 @@ class PresentationTestCase(LandslideTestCase):
 
         self.assertTrue(p.theme_dir.endswith('themes/default'))
 
-        p = self.get_presentation('test-data/a.md -t light')
+        # p = self.get_presentation('test-data/a.md -t old')
 
-        self.assertTrue(p.theme_dir.endswith('themes/light'))
+        # self.assertTrue(p.theme_dir.endswith('themes/old'))
 
     def test_set_theme_dir_missing(self):
         with self.assertRaises(Exception):
