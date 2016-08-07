@@ -16,7 +16,7 @@ section h1, section h2, section h3, section h4, section h5, section h6 {
     color: #3465a4 !important;
 }
 
-img { display: block; margin: auto; }
+img { display: block; margin: auto; max-width: 100%;}
 
 body {
   font: 14px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
@@ -353,7 +353,7 @@ body.expose div.slide {
   margin: 10px !important;
   -webkit-transition: none;
   -moz-transition: none;
-  -o-transition: none;  
+  -o-transition: none;
   -moz-transform: scale(.33, .33);
   -moz-transform-origin: 0 0;
   -webkit-transform: scale(.33, .33);
