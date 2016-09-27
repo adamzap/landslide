@@ -2,7 +2,6 @@ import os
 import re
 import codecs
 import jinja2
-import functools
 
 import renderer
 
@@ -34,6 +33,9 @@ class Presentation(object):
         self.get_js_files()
 
         self.write()
+
+    def open(self, path, mode='r'):
+        return codecs.open(path, mode, encoding=self.options.encoding)
 
     def set_theme_dir(self):
         theme = self.options.theme
@@ -98,14 +100,12 @@ class Presentation(object):
         return theme_path if os.path.exists(theme_path) else default_path
 
     def write(self):
-        open = functools.partial(codecs.open, encoding=self.options.encoding)
-
         template_path = self.get_template_path()
 
-        with open(template_path) as template_file:
+        with self.open(template_path) as template_file:
             template = jinja2.Template(template_file.read())
 
         html = template.render(self.get_context())
 
-        with open(self.options.destination, 'w') as out_file:
+        with self.open(self.options.destination, 'w') as out_file:
             out_file.write(html)
