@@ -11,6 +11,7 @@ EXTENSIONS = {
 
 
 MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.extra',
     'markdown.extensions.codehilite'
 ]
 
