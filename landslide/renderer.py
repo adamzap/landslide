@@ -20,13 +20,8 @@ class RenderingError(Exception):
     pass
 
 
-def render(source):
-    ext = os.path.splitext(source)[1]
-
-    # TODO: Support custom encodings
-    # TODO: Make codecs open helper?
-    text = codecs.open(source, encoding='utf8').read()
-
+def render(source_file, text):
+    ext = os.path.splitext(source_file)[1]
     text = text.lstrip(unicode(codecs.BOM_UTF8, 'utf8'))
 
     if ext in EXTENSIONS['markdown']:
@@ -36,7 +31,7 @@ def render(source):
     elif ext in EXTENSIONS['textile']:
         return render_textile(text)
     else:
-        raise RenderingError('Unsupported file extension: %s' % source)
+        raise RenderingError('Unsupported file extension: %s' % source_file)
 
 
 def render_markdown(text):
