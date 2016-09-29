@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 
-import os
-import re
 import codecs
 import inspect
-import jinja2
+import os
+import re
 import shutil
 import tempfile
-
 from subprocess import Popen
+
+import jinja2
 from six import string_types
+
 from six.moves import configparser
 
-from . import utils
 from . import macro as macro_module
+from . import utils
 from .parser import Parser
-
 
 BASE_DIR = os.path.dirname(__file__)
 THEMES_DIR = os.path.join(BASE_DIR, 'themes')
@@ -74,7 +74,9 @@ class Generator(object):
         self.linenos = self.linenos_check(kwargs.get('linenos'))
         self.watch = kwargs.get('watch', False)
         self.math_output = kwargs.get('math_output', False)
+        self.macro_path = kwargs.get('macro', None)
         self.num_slides = 0
+        self.user_macros = []
         self.__toc = []
 
         # macros registering
@@ -105,9 +107,32 @@ class Generator(object):
             self.add_user_css(config.get('css', []))
             self.add_user_js(config.get('js', []))
             self.linenos = self.linenos_check(config.get('linenos'))
+            self.macro_path = config.get('macro', self.macro_path)
         else:
             self.source = source
             source_abspath = os.path.abspath(source)
+
+        # Parse user macros if they exist
+        user_macros = []
+        macro_globs = {}  # Space to hold our macros
+        if self.macro_path:
+            try:
+                # execfile is a suboptimal way to do this,
+                # but it seems better then having users
+                # instantiate landslide outside the cli.
+                execfile(self.macro_path, macro_globs)
+                for obj in macro_globs.values():
+                    if (id(obj) != id(macro_module.Macro) and
+                            hasattr(obj, 'process')):
+                        user_macros.append(obj)
+                        self.logger('Adding   User macro %s' %
+                                    obj.__name__,
+                                    'notify')
+                self.register_macro(*user_macros)
+            except Exception as e:
+                self.logger('Parse error for user macro'
+                            '%s: %s' % (self.macro_path, e.message),
+                            'error')
 
         if not os.path.isdir(source_abspath):
             source_abspath = os.path.dirname(source_abspath)
@@ -115,7 +140,7 @@ class Generator(object):
         self.watch_dir = source_abspath
 
         if (os.path.exists(self.destination_file)
-            and not os.path.isfile(self.destination_file)):
+                and not os.path.isfile(self.destination_file)):
             raise IOError(u"Destination %s exists and is not a file"
                           % self.destination_file)
 
@@ -464,6 +489,8 @@ class Generator(object):
         if raw_config.has_option('landslide', 'js'):
             config['js'] = raw_config.get('landslide', 'js')\
                 .replace('\r', '').split('\n')
+        if raw_config.has_option('landslide', 'macro'):
+            config['macro'] = raw_config.get('landslide', 'macro')
         return config
 
     def process_macros(self, content, source=None):

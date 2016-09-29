@@ -2,18 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import sys
-
 from optparse import OptionParser
 
-from . import generator
-from . import __version__
+from . import __version__, generator
 
 
 def _parse_options():
     """Parses landslide's command line options"""
 
     parser = OptionParser(
-        usage="%prog [options] input.md ...",
+        usage="%prog [options] (input.md|config.cfg)",
         description="Generates an HTML5 or PDF "
                     "slideshow from Markdown or other formats",
         epilog="Note: PDF export requires the `prince` program: "
@@ -136,6 +134,14 @@ def _parse_options():
         dest="math_output",
         help="Enable mathematical output using MathJax",
         default=False
+    )
+
+    parser.add_option(
+        "-M", "--macro",
+        dest="macro",
+        help="Path to python macro file."
+             "Any macros in this file will be parsed",
+        default=None
     )
 
     (options, args) = parser.parse_args()
