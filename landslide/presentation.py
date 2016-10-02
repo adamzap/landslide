@@ -90,8 +90,13 @@ class Presentation(object):
         self.js_files.extend(self.options.js)
 
     def get_context(self):
+        if self.options.embed:
+            self.css_files = [self.open(f).read() for f in self.css_files]
+            self.js_files = [self.open(f).read() for f in self.js_files]
+
         return {
             'slides': self.slides,
+            'options': self.options,
             'css_files': self.css_files,
             'js_files': self.js_files
         }

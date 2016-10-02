@@ -28,7 +28,7 @@
 
     <title>{{ head_title }}</title>
 
-    {% if embed %}
+    {% if options.embed %}
       <style type="text/css" media="screen, projection">
         {% for css_file in css_files %}
           {{ css_file }}
@@ -40,7 +40,7 @@
       {% endfor %}
     {% endif %}
 
-    {% if embed %}
+    {% if options.embed %}
       <script>
         {% for js_file in js_files %}
           {{ js_file }}
