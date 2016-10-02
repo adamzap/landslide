@@ -246,26 +246,32 @@ class PresentationTestCase(LandslideTestCase):
     def test_get_js_files_default(self):
         p = self.get_presentation('test-data/a.md')
 
-        path_end = 'landslide/themes/default/slides.js'
+        first_path_end = 'landslide/themes/default/jquery.js'
+        second_path_end = 'landslide/themes/default/slides.js'
 
-        self.assertEqual(len(p.js_files), 1)
-        self.assertTrue(p.js_files[0].endswith(path_end))
+        self.assertEqual(len(p.js_files), 2)
+        self.assertTrue(p.js_files[0].endswith(first_path_end))
+        self.assertTrue(p.js_files[1].endswith(second_path_end))
 
     def test_get_js_files_custom(self):
         p = self.get_presentation('test-data/a.md -t test-data/theme-all')
 
-        path = 'test-data/theme-all/slides.js'
+        first_path_end = 'landslide/themes/default/jquery.js'
+        second_path = 'test-data/theme-all/slides.js'
 
-        self.assertEqual(len(p.js_files), 1)
-        self.assertEqual(p.js_files[0], path)
+        self.assertEqual(len(p.js_files), 2)
+        self.assertTrue(p.js_files[0].endswith(first_path_end))
+        self.assertEqual(p.js_files[1], second_path)
 
     def test_get_js_files_custom_missing(self):
         p = self.get_presentation('test-data/a.md -t test-data/theme-no-js')
 
-        path_end = 'landslide/themes/default/slides.js'
+        first_path_end = 'landslide/themes/default/jquery.js'
+        second_path_end = 'landslide/themes/default/slides.js'
 
-        self.assertEqual(len(p.js_files), 1)
-        self.assertTrue(p.js_files[0].endswith(path_end))
+        self.assertEqual(len(p.js_files), 2)
+        self.assertTrue(p.js_files[0].endswith(first_path_end))
+        self.assertTrue(p.js_files[1].endswith(second_path_end))
 
     def test_get_css_files_extra_in_cfg(self):
         p = self.get_presentation('test-data/css-js.cfg')
@@ -280,12 +286,14 @@ class PresentationTestCase(LandslideTestCase):
     def test_get_js_files_extra_in_cfg(self):
         p = self.get_presentation('test-data/css-js.cfg')
 
-        first_path_end = 'landslide/themes/default/slides.js'
+        first_path_end = 'landslide/themes/default/jquery.js'
+        second_path_end = 'landslide/themes/default/slides.js'
 
-        self.assertEqual(len(p.js_files), 3)
+        self.assertEqual(len(p.js_files), 4)
         self.assertTrue(p.js_files[0].endswith(first_path_end))
-        self.assertEqual(p.js_files[1], 'js-1.js')
-        self.assertEqual(p.js_files[2], 'js-2.js')
+        self.assertTrue(p.js_files[1].endswith(second_path_end))
+        self.assertEqual(p.js_files[2], 'js-1.js')
+        self.assertEqual(p.js_files[3], 'js-2.js')
 
 
 class SlideTestCase(LandslideTestCase):

@@ -73,14 +73,16 @@ class Presentation(object):
         self.css_files.extend(self.options.css)
 
     def get_js_files(self):
-        self.js_files = []
+        self.js_files = [
+            os.path.join(THEMES_DIR, 'default', 'jquery.js')
+        ]
 
         theme_js_path = os.path.join(self.theme_dir, 'slides.js')
 
         if os.path.exists(theme_js_path):
             self.js_files.append(theme_js_path)
 
-        if not self.js_files:
+        if len(self.js_files) == 1:
             default_js_path = os.path.join(THEMES_DIR, 'default', 'slides.js')
 
             self.js_files.append(default_js_path)
