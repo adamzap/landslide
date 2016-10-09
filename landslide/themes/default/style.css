@@ -460,6 +460,11 @@ aside.source {
   text-indent: 10px;
 }
 
+aside.source a {
+  border: 0;
+  text-indent: 0;
+}
+
 aside.page_number {
   position: absolute;
   bottom: 6px;
