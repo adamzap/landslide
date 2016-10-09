@@ -132,7 +132,6 @@ var Landslide = function () {
 
     if (this.presenter_view_window) {
       this.presenter_view_window.close();
-      console.log(this.presenter_view_window);
       this.presenter_view_window = null;
     } else {
       var url = window.location.pathname + '#presenter' + $current.data('n');
