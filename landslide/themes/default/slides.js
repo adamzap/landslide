@@ -147,10 +147,10 @@ var Landslide = function () {
   };
 
   this.toggle_overview = function () {
-    var active = $('body').hasClass('expose');
+    var active = $('body').hasClass('overview');
     var expanded = $('body').hasClass('expanded');
 
-    $('body').toggleClass('expose');
+    $('body').toggleClass('overview');
 
     this.update_overview();
     this.set_scale(active && expanded ? this.get_expanded_scale() : 1);
@@ -158,7 +158,7 @@ var Landslide = function () {
 
   this.update_overview = function () {
     var toc_open = $('#toc').hasClass('open');
-    var overview_active = $('body').hasClass('expose');
+    var overview_active = $('body').hasClass('overview');
 
     if ($('body').hasClass('presenter_view')) {
       $('body').toggleClass('presenter_view', !overview_active);
@@ -198,11 +198,11 @@ var Landslide = function () {
   };
 
   this.overview_only = function (f) {
-    return $('body').hasClass('expose') ? f : $.noop;
+    return $('body').hasClass('overview') ? f : $.noop;
   };
 
   this.reject_overview = function (f) {
-    return $('body').hasClass('expose') ? $.noop : f;
+    return $('body').hasClass('overview') ? $.noop : f;
   };
 
   this.on_key_down = function (e) {
@@ -248,7 +248,7 @@ var Landslide = function () {
 
     this.seek_to_slide(n, true);
 
-    if ($('body').hasClass('expose')) {
+    if ($('body').hasClass('overview')) {
       this.toggle_overview();
     }
   }

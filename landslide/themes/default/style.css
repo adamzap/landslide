@@ -30,7 +30,7 @@ div.presentation > h1 {
   display: none;
 }
 
-div.slides, body.expose div.slides.nocontext {
+div.slides, body.overview div.slides.nocontext {
   width: 100%;
   height: 100%;
   left: 0;
@@ -68,16 +68,16 @@ div.slide {
   border-bottom-left-radius: 20px;
 }
 
-/* Expose */
+/* Overview */
 
-body.expose div.slides {
+body.overview div.slides {
   float: left;
   position: relative;
   overflow: auto;
   margin-bottom: 10px;
 }
 
-body.expose div.slide {
+body.overview div.slide {
   display: block;
   float: left;
   position: relative;
@@ -90,13 +90,13 @@ body.expose div.slide {
   cursor: pointer;
 }
 
-body.expose div.slide:hover {
+body.overview div.slide:hover {
   background: -webkit-gradient(linear, left bottom, left top, from(#bdd), to(#fff));
   background-color: #eee;
   background: -moz-linear-gradient(bottom, #bdd, #fff);
 }
 
-body.expose .slide-wrapper {
+body.overview .slide-wrapper {
   float: left;
   position: relative;
   margin: .5%;
@@ -104,14 +104,14 @@ body.expose .slide-wrapper {
   height: 233px;
 }
 
-body.expose .slide.far-past,
-body.expose .slide.past,
-body.expose .slide.future,
-body.expose .slide.far-future {
+body.overview .slide.far-past,
+body.overview .slide.past,
+body.overview .slide.future,
+body.overview .slide.far-future {
   margin-left: 0;
 }
 
-body.expose .slide.current {
+body.overview .slide.current {
   background: -webkit-gradient(linear, left bottom, left top, from(#ddb), to(#fff));
   background-color: #eee;
   background: -moz-linear-gradient(bottom, #ddb, #fff);
