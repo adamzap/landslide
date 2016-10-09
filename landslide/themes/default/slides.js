@@ -236,9 +236,15 @@ var Landslide = function () {
   };
 
   this.on_slide_click = function (e) {
+    var $target = $(e.target);
+
+    if ($target.closest('aside.source').length) {
+      return;
+    }
+
     e.preventDefault();
 
-    var n = $(e.target).closest('.slide').data('n');
+    var n = $target.closest('.slide').data('n');
 
     this.seek_to_slide(n, true);
 
