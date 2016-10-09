@@ -308,7 +308,7 @@ class SlideTestCase(LandslideTestCase):
         self.assertEqual(slide.header_source, header)
         self.assertEqual(slide.header_level, 1)
         self.assertEqual(slide.title, 'title')
-        self.assertEqual(slide.content, body)
+        self.assertEqual(slide.html, body)
 
     def test_process_header_no_header(self):
         html = '<p>test</p>'
@@ -318,28 +318,28 @@ class SlideTestCase(LandslideTestCase):
         self.assertIsNone(slide.header_source)
         self.assertIsNone(slide.header_level)
         self.assertIsNone(slide.title)
-        self.assertEqual(slide.content, html)
+        self.assertEqual(slide.html, html)
 
     def test_process_notes(self):
         html = '<p>.notes: test</p>'
 
         slide = Slide(html, 'test.md')
 
-        self.assertEqual(slide.content, '<p class="notes">test</p>')
+        self.assertEqual(slide.html, '<p class="notes">test</p>')
 
     def test_process_notes_no_notes(self):
         html = '<p>test</p>'
 
         slide = Slide(html, 'test.md')
 
-        self.assertEqual(slide.content, html)
+        self.assertEqual(slide.html, html)
 
     def test_process_notes_multiline(self):
         html = '<p>.notes: test\n1234</p>'
 
         slide = Slide(html, 'test.md')
 
-        self.assertEqual(slide.content, '<p class="notes">test\n1234</p>')
+        self.assertEqual(slide.html, '<p class="notes">test\n1234</p>')
 
 
 if __name__ == '__main__':
