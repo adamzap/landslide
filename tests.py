@@ -341,6 +341,41 @@ class SlideTestCase(LandslideTestCase):
 
         self.assertEqual(slide.html, '<p class="notes">test\n1234</p>')
 
+    def test_process_presenter_notes_with_header(self):
+        html = '\n'.join([
+            '<h1>Title</h1>',
+            '<p>Content</p>',
+            '<h1>Presenter Notes</h1>',
+            '<p>Pres Note Content</p>'
+        ])
+
+        slide = Slide(html, 'test.md')
+
+        self.assertEqual(slide.html, '<p>Content</p>')
+        self.assertEqual(slide.presenter_notes, '<p>Pres Note Content</p>')
+
+    def test_process_presenter_notes_without_header(self):
+        html = '\n'.join([
+            '<p>Content</p>',
+            '<h1>Presenter Notes</h1>',
+            '<p>Pres Note Content</p>'
+        ])
+
+        slide = Slide(html, 'test.md')
+
+        self.assertEqual(slide.html, '<p>Content</p>')
+        self.assertEqual(slide.presenter_notes, '<p>Pres Note Content</p>')
+
+    def test_process_presenter_notes_no_presenter_notes(self):
+        html = '\n'.join([
+            '<h1>Title</h1>',
+            '<p>Content</p>',
+        ])
+
+        slide = Slide(html, 'test.md')
+
+        self.assertEqual(slide.html, '<p>Content</p>')
+
 
 if __name__ == '__main__':
     unittest.main()
