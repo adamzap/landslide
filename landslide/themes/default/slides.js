@@ -29,7 +29,7 @@ var Landslide = function () {
   this.seek_to_slide = function (n, update_other) {
     this.$current = $('.slide[data-n="' + n + '"]');
 
-    var n = parseInt($current.data('n'));
+    var n = parseInt(this.$current.data('n'));
     var hash_prefix = window.opener ? 'presenter' : 'slide';
 
     window.location.hash = hash_prefix + n;
@@ -44,7 +44,7 @@ var Landslide = function () {
 
     this.highlight_current_toc_link();
 
-    $('title').text($current.find('header').first().text());
+    $('title').text(this.$current.find('header').first().text());
 
     if (window.opener) {
       this.update_presenter_notes();
@@ -59,12 +59,12 @@ var Landslide = function () {
   this.update_presenter_notes = function () {
     var $notes_box = $('#current_presenter_notes');
 
-    $notes_box.html($current.find('.presenter_notes').clone());
+    $notes_box.html(this.$current.find('.presenter_notes').clone());
   };
 
   this.highlight_current_toc_link = function () {
     $('#toc tr').removeClass('active');
-    $('#toc-row-' + $current.data('n')).addClass('active');
+    $('#toc-row-' + this.$current.data('n')).addClass('active');
   };
 
   this.update_other_page = function () {
@@ -74,23 +74,23 @@ var Landslide = function () {
 
     var win = window.opener ? window.opener : this.presenter_view_window
 
-    win.postMessage($current.data('n'), '*');
+    win.postMessage(this.$current.data('n'), '*');
   };
 
   this.next_slide = function () {
-    if (parseInt($current.data('n')) >= this.$slides.length) {
+    if (parseInt(this.$current.data('n')) >= this.$slides.length) {
       return;
     }
 
-    this.seek_to_slide($current.data('n') + 1, true);
+    this.seek_to_slide(this.$current.data('n') + 1, true);
   };
 
   this.prev_slide = function () {
-    if (parseInt($current.data('n')) < 2) {
+    if (parseInt(this.$current.data('n')) < 2) {
       return;
     }
 
-    this.seek_to_slide($current.data('n') - 1, true);
+    this.seek_to_slide(this.$current.data('n') - 1, true);
   };
 
   this.toggle_notes = function () {
@@ -132,7 +132,8 @@ var Landslide = function () {
       this.presenter_view_window.close();
       this.presenter_view_window = null;
     } else {
-      var url = window.location.pathname + '#presenter' + $current.data('n');
+      var path = window.location.pathname;
+      var url = path + '#presenter' + this.$current.data('n');
       var options = 'location=no,toolbar=no,menubar=no';
 
       this.presenter_view_window = open(url, 'presenter_notes', options);
