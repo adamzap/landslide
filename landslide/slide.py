@@ -2,6 +2,7 @@ import re
 
 
 HEADER_RE = r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?'
+NOTES_RE = r'<p>\.notes:\s?(.*?)</p>'
 
 
 class Slide(object):
@@ -12,6 +13,7 @@ class Slide(object):
         self.classes = []
 
         self.process_header()
+        self.process_notes()
 
     def process_header(self):
         m = re.search(HEADER_RE, self.html, re.DOTALL | re.UNICODE)
@@ -28,3 +30,8 @@ class Slide(object):
             self.content = self.html
 
         self.content = self.content.strip()
+
+    def process_notes(self):
+        rendered = r'<p class="notes">\1</p>'
+
+        self.content = re.sub(NOTES_RE, rendered, self.content)
