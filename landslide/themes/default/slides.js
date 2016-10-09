@@ -155,13 +155,13 @@ var Landslide = function () {
 
   this.update_overview = function () {
     var toc_open = $('#toc').hasClass('open');
-    var overview_active = $('body').hasClass('overview');
+    var is_overview = $('body').hasClass('overview');
 
     if (window.opener) {
       $('body').toggleClass('presenter_view', !overview_active);
     }
 
-    $('.presentation').toggleClass('sidebar-open', toc_open);
+    $('.presentation').toggleClass('sidebar-open', toc_open && is_overview);
   };
 
   this.get_expanded_scale = function () {
