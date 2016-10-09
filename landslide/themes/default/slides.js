@@ -30,8 +30,7 @@ var Landslide = function () {
     this.$current = $('.slide[data-n="' + n + '"]');
 
     var n = parseInt($current.data('n'));
-    var is_presenter_view = $('body').hasClass('presenter_view');
-    var hash_prefix = is_presenter_view ? 'presenter' : 'slide';
+    var hash_prefix = window.opener ? 'presenter' : 'slide';
 
     window.location.hash = hash_prefix + n;
 
@@ -47,7 +46,7 @@ var Landslide = function () {
 
     $('title').text($current.find('header').first().text());
 
-    if (is_presenter_view) {
+    if (window.opener) {
       this.update_presenter_notes();
       this.$slides.slice(n + 2).addClass('p-far')
     }
@@ -73,10 +72,9 @@ var Landslide = function () {
       return;
     }
 
-    var is_presenter_view = $('body').hasClass('presenter_view');
-    var w = is_presenter_view ? window.opener : this.presenter_view_window;
+    var win = window.opener ? window.opener : this.presenter_view_window
 
-    w.postMessage($current.data('n'), '*');
+    win.postMessage($current.data('n'), '*');
   };
 
   this.next_slide = function () {
@@ -126,7 +124,7 @@ var Landslide = function () {
   };
 
   this.toggle_presenter_view = function () {
-    if ($('body').hasClass('presenter_view')) {
+    if (window.opener) {
       return;
     }
 
@@ -159,7 +157,7 @@ var Landslide = function () {
     var toc_open = $('#toc').hasClass('open');
     var overview_active = $('body').hasClass('overview');
 
-    if ($('body').hasClass('presenter_view')) {
+    if (window.opener) {
       $('body').toggleClass('presenter_view', !overview_active);
     }
 
