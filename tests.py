@@ -320,6 +320,20 @@ class SlideTestCase(LandslideTestCase):
         self.assertIsNone(slide.title)
         self.assertEqual(slide.content, html)
 
+    def test_process_notes(self):
+        html = '<p>.notes: test</p>'
+
+        slide = Slide(html, 'test.md')
+
+        self.assertEqual(slide.content, '<p class="notes">test</p>')
+
+    def test_process_notes_no_notes(self):
+        html = '<p>test</p>'
+
+        slide = Slide(html, 'test.md')
+
+        self.assertEqual(slide.content, html)
+
 
 if __name__ == '__main__':
     unittest.main()
