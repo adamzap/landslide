@@ -203,6 +203,10 @@ var Landslide = function () {
   };
 
   this.on_key_down = function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) {
+      return;
+    }
+
     var handlers = {
       'ArrowLeft': this.prev_slide,
       'ArrowRight': this.next_slide,
