@@ -44,7 +44,9 @@ var Landslide = function () {
 
     this.highlight_current_toc_link();
 
-    $('title').text(this.$current.find('header').first().text());
+    var title = this.$current.find('.inner header').first().text();
+
+    $('title').text(title || 'Slide ' + n);
 
     if (window.opener) {
       this.update_presenter_notes();
