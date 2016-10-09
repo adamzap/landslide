@@ -2,7 +2,7 @@ import re
 
 
 HEADER_RE = re.compile(r'(<h(\d+?).*?>(.+?)</h\d>)\s?(.+)?', re.S | re.U)
-NOTES_RE = re.compile(r'<p>\.notes:\s?(.*?)</p>')
+NOTES_RE = re.compile(r'<p>\.notes:\s?(.*?)</p>', re.S)
 
 
 class Slide(object):

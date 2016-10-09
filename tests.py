@@ -334,6 +334,13 @@ class SlideTestCase(LandslideTestCase):
 
         self.assertEqual(slide.content, html)
 
+    def test_process_notes_multiline(self):
+        html = '<p>.notes: test\n1234</p>'
+
+        slide = Slide(html, 'test.md')
+
+        self.assertEqual(slide.content, '<p class="notes">test\n1234</p>')
+
 
 if __name__ == '__main__':
     unittest.main()
