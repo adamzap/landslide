@@ -72,9 +72,8 @@
 
       <div class="slides">
         {% for slide in slides %}
-          <!-- slide source: {% if slide.source %}{{ slide.source.rel_path }}{% endif %} -->
           <div class="slide-wrapper">
-            <div class="slide {{ slide.classes|join(' ') }} slide-{{ loop.index }}">
+            <div class="slide {{ slide.classes|join(' ') }} slide-{{ loop.index }}" data-n="{{ loop.index }}">
               <div class="inner">
                 {% if slide.header_source %}
                   <header>{{ slide.header_source }}</header>
@@ -109,7 +108,7 @@
       </div>
     </div>
 
-    <div id="toc" class="sidebar hidden">
+    <div id="toc" class="sidebar">
       <h2>Table of Contents</h2>
 
       <table>
@@ -123,7 +122,7 @@
       </table>
     </div>
 
-    <div id="help" class="sidebar hidden">
+    <div id="help" class="sidebar">
       <h2>Help</h2>
 
       <table>
@@ -171,6 +170,8 @@
       </table>
     </div>
 
-    <script>main()</script>
+    <script>
+      Landslide();
+    </script>
   </body>
 </html>

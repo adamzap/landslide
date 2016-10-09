@@ -13,6 +13,17 @@ div.presentation {
   vertical-align: middle;
   height: 100%;
   background: inherit;
+  perspective: 0;
+  margin-left: 0;
+}
+
+div.presentation.sidebar-open {
+  margin-left: 300px;
+  width: calc(100% - 300px);
+}
+
+body.three-d div.presentation {
+  perspective: 1000px;
 }
 
 div.presentation > h1 {
@@ -93,12 +104,6 @@ body.expose .slide-wrapper {
   height: 233px;
 }
 
-body.expose .slide footer {
-}
-
-body.expose .slide .inner {
-}
-
 body.expose .slide.far-past,
 body.expose .slide.past,
 body.expose .slide.future,
@@ -115,7 +120,7 @@ body.expose .slide.current {
   transform-origin: 0 0;
 }
 
-/* Presenter Mode */
+/* Presenter View */
 
 body.presenter_view div.slide {
   display: inline;
@@ -152,6 +157,11 @@ body.presenter_view .slide.future {
 body.presenter_view .slide.far-future {
   display: block;
   margin-left: 525px;
+}
+
+body.presenter_view .slide.p-far {
+  display: block;
+  margin-left: 1025px;
 }
 
 body.presenter_view div#current_presenter_notes {
@@ -386,6 +396,10 @@ li pre {
   transition: margin 0.2s ease-in-out;
 }
 
+.sidebar.open {
+  margin-left: 0;
+}
+
 .sidebar h2 {
   text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
   margin: 0 0 16px;
@@ -422,13 +436,13 @@ li pre {
 .sidebar td {
   text-align: right;
   min-width: 20px;
+  padding: 4px 0;
 }
 
 .sidebar a {
   display: block;
   text-decoration: none;
   border-bottom: none;
-  padding: 4px 0;
 }
 
 .sidebar tr.active {
