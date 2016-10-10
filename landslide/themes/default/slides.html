@@ -28,6 +28,46 @@
 
     <title>{{ head_title }}</title>
 
+    <style media="print">
+      body {
+        font-size: 13px;
+        font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, sans-serif;
+      }
+
+      header h1 {
+        margin-top: 0;
+        font-size: 30px;
+      }
+
+      .sidebar, aside.source, aside.page_number, .presenter_notes {
+        display: none;
+      }
+
+      .slide-wrapper {
+        width: 600px;
+        height: 450px;
+        margin: 18px auto;
+        border: 2px solid black;
+        border-radius: 16px;
+      }
+
+      .slide {
+        padding: 24px;
+      }
+
+      .slide header:only-child h1 {
+        width: 600px;
+        height: 404px;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+      }
+
+      .slide-wrapper:nth-child(even) {
+        page-break-after: always;
+      }
+    </style>
+
     {% if options.embed %}
       <style type="text/css" media="screen, projection">
         {% for css_file in css_files %}
