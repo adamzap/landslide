@@ -24,7 +24,14 @@ setup(
         'restructuredtext',
         'textile'
     ],
-    install_requires=['Jinja2', 'Markdown', 'Pygments', 'docutils', 'six'],
+    install_requires=[
+        'docopt',
+        'Jinja2',
+        'Markdown',
+        'Pygments',
+        'docutils',
+        'six'
+    ],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
