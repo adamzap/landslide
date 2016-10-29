@@ -49,7 +49,7 @@ for formatting instructions and more information.
 ''',
     entry_points={
         'console_scripts': [
-            'landslide = landslide.main:main',
+            'landslide = landslide.__main__:main',
         ]
     },
 )

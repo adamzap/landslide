@@ -24,13 +24,8 @@ Usage: landslide [options] <source-or-config-file> [<source-files>...]
 
 from docopt import docopt
 
-# TODO: There must be a better way
-from os import sys, path
-
-sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-
-from options import Options
-from presentation import Presentation
+from .options import Options
+from .presentation import Presentation
 
 
 def main(argv=None):

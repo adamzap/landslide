@@ -3,9 +3,8 @@ import re
 import codecs
 import jinja2
 
-import renderer
-
-from slide import Slide
+from . import renderer
+from .slide import Slide
 
 
 THEMES_DIR = os.path.join(os.path.dirname(__file__), 'themes')

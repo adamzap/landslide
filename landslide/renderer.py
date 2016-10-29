@@ -50,7 +50,7 @@ def render_restructured_text(text):
     except ImportError:
         raise RenderingError('Could not import `docutils` module')
 
-    import rst_pygments
+    from . import rst_pygments
 
     opts = {
         'embed_stylesheet': False,
