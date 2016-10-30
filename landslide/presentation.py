@@ -24,7 +24,7 @@ class Presentation(object):
 
         for source in self.sources:
             content = self.open(source).read()
-            rendered_source = renderer.render(source, content)
+            rendered_source = renderer.render(source, content, self.options)
 
             for html in re.split('<hr.+>', rendered_source):
                 self.slides.append(Slide(html, source))

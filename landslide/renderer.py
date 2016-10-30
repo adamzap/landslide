@@ -22,12 +22,12 @@ class RenderingError(Exception):
     pass
 
 
-def render(source_file, text):
+def render(source_file, text, options):
     ext = os.path.splitext(source_file)[1]
     text = text.lstrip(unicode(codecs.BOM_UTF8, 'utf8'))
 
     if ext in EXTENSIONS['markdown']:
-        return render_markdown(text)
+        return render_markdown(text, options.extensions)
     elif ext in EXTENSIONS['restructured_text']:
         return render_restructured_text(text)
     elif ext in EXTENSIONS['textile']:
@@ -36,14 +36,16 @@ def render(source_file, text):
         raise RenderingError('Unsupported file extension: %s' % source_file)
 
 
-def render_markdown(text):
-    # TODO: Support markdown extensions
+def render_markdown(text, extra_extensions):
     try:
         import markdown
     except ImportError:
         raise RenderingError('Could not import `markdown` module')
 
-    return markdown.markdown(text, extensions=MARKDOWN_EXTENSIONS)
+    extensions = MARKDOWN_EXTENSIONS + extra_extensions
+    print(extensions)
+
+    return markdown.markdown(text, extensions=extensions)
 
 
 def render_restructured_text(text):
