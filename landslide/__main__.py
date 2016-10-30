@@ -18,7 +18,7 @@ Usage: landslide [options] <source-or-config-file> [<source-files>...]
 -t THEME, --theme=THEME
                     A theme name or path to a landlside theme directory
 -x EXTENSIONS, --extensions=EXTENSIONS
-                    Comma-separated list of extensions for Markdown
+                    Comma-separated list of Markdown extensions
 -m, --math-output   Enable mathematical output using MathJax
 '''
 
