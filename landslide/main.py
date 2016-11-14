@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import chardet
 
 from optparse import OptionParser
 
@@ -163,7 +164,12 @@ def run(input_file, options):
 def main():
     """Main program entry point"""
 
+    if sys.getdefaultencoding() != 'utf-8':
+        reload(sys)
+        sys.setdefaultencoding('utf-8')
+        
     options, input_file = _parse_options()
+    input_file = input_file.decode(chardet.detect(input_file).get('encoding'))
 
     if (options.debug):
         run(input_file, options)
