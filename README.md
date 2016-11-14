@@ -43,6 +43,7 @@ The following markdown produces [this slideshow][sample].
 `python` and the following modules:
 
 - `jinja2`
+- `chardet`
 - `pygments` for code blocks syntax coloration
 
 #### Markup Conversion
