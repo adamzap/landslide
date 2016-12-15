@@ -3,7 +3,7 @@ import time
 
 try:
     from watchdog.observers import Observer
-    from watchdog.events import FileSystemEventHandler, DirModifiedEvent
+    from watchdog.events import FileSystemEventHandler, DirModifiedEvent, FileModifiedEvent
 except ImportError:
     print('Error: The watchdog module must be installed to use the -w option')
     print('Exiting...')
@@ -33,5 +33,5 @@ class LandslideEventHandler(FileSystemEventHandler):
         self.generate_func = generate_func
 
     def on_modified(self, event):
-        if isinstance(event, DirModifiedEvent):
+        if isinstance(event, DirModifiedEvent) or isinstance(event, FileModifiedEvent):
             self.generate_func()
