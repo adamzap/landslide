@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Landslide presentation <br/> with Lea Verou's CSSS model</title>
+    <!-- Styles -->
+    
+    <link href="./css/slideshow.css" rel="stylesheet" />
+	<link href="./css/theme.css" rel="stylesheet" />
+	<link href="./css/talk.css" rel="stylesheet" />
+	<link href="./css/sidebar.css" rel="stylesheet" />
+    
+    
+    <!-- /Styles -->
+    <!-- Javascripts -->
+    
+	<script type="text/javascript" src="./js/prefixfree.min.js"></script>
+    
+    
+    <!-- /Javascripts -->
+</head>
+<body>
+ <section>
+	 
+	  
+	   
+        <header class="slide" id="intro"><h1 id="theheader">Landslide presentation <br/> with Lea Verou's CSSS model</h1>
+        
+        <p class="attribution" id="thefooter">Jean-Philippe ZIMMER - IUT Dijon-Auxerre</p>
+<p class="situation">Interesting conference - Auxerre - 22/11/2012</p>
+        
+        </header>
+		
+	  
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>Landslide</h1></header>
+         
+         <p>Landslide can generate a slideshow using slides simple to write.
+The basic version uses the google slide model.</p>
+<p>This version use the model of <a href="http://leaverou.github.com/CSSS/">Lea Verou's CSSS presentation</a>.</p>
+<p>Landslide needs the <strong>python</strong> language with the following modules <em>jinja2</em>, <em>markdown</em> and <em>pygments</em> to work.</p>
+<p>With <strong>debian</strong> and <strong>ubuntu</strong>, the installation is performed with <code>apt-get install landslide</code>. Nevertheless, the
+version of the application contained in the landslide repositories does not contain the latest enhancements.
+To have access to these improvements, you must follow the installation procedure as shown on the main page
+the deposit GitHub.</p>
+<h2>How to make your slideshow ?</h2>
+<ul>
+<li>Develop your slides with simple tags in the file <em>slides_en.md</em>,</li>
+<li>Run the command <code>landslide leaverou_en.cfg</code>,</li>
+<li>See the result in the file <em>presentation_en.html</em>.</li>
+</ul>
+		</section>
+	  
+      
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>Why using the Lea Verou's CSSS presentation ?</h1></header>
+         
+         <ul>
+<li>It is based on the HTML5/CSS3 and takes into account the latest developments of these standards.</li>
+<li>It has a clean design, efficient and enjoyable to watch.</li>
+<li>It is Open Source and can be downloaded <a href="https://github.com/LeaVerou/csss">GitHub</a>.</li>
+<li>The navigation is easy :<ul>
+<li>arrows to move forward or backward finely,</li>
+<li>SHIFT+arrows for forward or backward slide in slide,</li>
+<li>Home to go to the first slide, End to go to the last,</li>
+<li>SHIFT+G to jump to the slide specified slide.</li>
+</ul>
+</li>
+<li>Size of the page contents is dynamic.</li>
+<li>The page title is the title of the slide.</li>
+<li>...</li>
+</ul>
+		</section>
+	  
+      
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>Why the CSSS presentation with Landslide</h1></header>
+         
+         <p>In order to make a presentation application that could replace conventional applications 
+such as MS PowerPoint or Impress OO I looked for presentations that can be viewable by a browser.</p>
+<p>I found this presentation (and also others availables) based on HTML5/CSS3.
+This presentation is quite simple to use for someone who knows a little coding to HTML.
+However, for a novice or a person reluctant to programming, I looked for a better 
+solution to compose the presentation slides.</p>
+<p>After various tests and research, I happily test the landslide application.
+This is actually the application that I needed to complete my project.</p>
+<p>The rest is a bit of coding and adaptation to present a simple, easy to use 
+application and to think about some improvements.</p>
+		</section>
+	  
+      
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>Some adaptations and improvements</h1></header>
+         
+         <ul>
+<li>I made some modifications to the CSSS basic model so that it matches a
+ result more visually according to my expectations.</li>
+<li>The table of contents within the Google model has been reported in the CSSS model.
+To make it appear and disappear, use SHIFT+t.</li>
+<li>A class situation that marks where the presentation takes place.</li>
+<li>A header and footer, which include the texts of the title page.</li>
+<li>Coming soon: a timer to allow automatic scrolling slides.</li>
+</ul>
+		</section>
+	  
+      
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>Instructions to use Markdown formatting</h1></header>
+         
+         <ul>
+<li>The following instructions are brief. You can find <a href="http://daringfireball.net/projects/markdown/syntax">on this site</a>
+more detailed instructions.</li>
+<li>Separate your slides with a horizontal line (--- with markdown).<ul>
+<li>The first slide will be used as the title of the presentation.</li>
+<li>Other slides can have a title (it is better to set one).</li>
+</ul>
+</li>
+<li>The main titles are marked with one #, with the secondaries with ##, ... </li>
+</ul>
+		</section>
+	  
+      
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>Instructions to use Markdown formatting - 2</h1></header>
+         
+         <ul>
+<li>A paragraph consists of one or more consecutive sentences, <ul>
+<li>To separate paragraphs, you must insert a blank line between them,</li>
+<li>To force a newline you must insert at least two spaces at the end of the line.</li>
+</ul>
+</li>
+<li>A word surrounded by :<ul>
+<li>* is displayed <em>bold</em>,</li>
+<li>** is displayed <strong>italic</strong>.</li>
+<li>` is displayed <code>surlined</code>. </li>
+</ul>
+</li>
+<li>To display marking characters ( * , ` , - ,... ), you must precede them by \ (AltGr-8).</li>
+</ul>
+		</section>
+	  
+      
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>Instructions to use Markdown formatting - 3</h1></header>
+         
+         <p>To highlight the code you need to insert 4 spaces or 1 tab at the beginning of the line.</p>
+<p>You can also insert !Thelanguage before the first line of code.</p>
+<p>First coding block (!python):</p>
+<div class="highlight"><pre><span class="lineno">1</span> <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="lineno">2</span>     <span class="k">print</span> <span class="s">&quot;Everything&#39;s gonna be allright&quot;</span>
+</pre></div>
+
+<p>Second coding block (!php):</p>
+<div class="highlight"><pre><span class="lineno">1</span> <span class="o">&lt;?</span><span class="nx">php</span> <span class="nb">exec</span><span class="p">(</span><span class="s1">&#39;python render.py --help&#39;</span><span class="p">);</span> <span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+
+		</section>
+	  
+      
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>The links with Markdown</h1></header>
+         
+         <p>A hyperlink is easily done by placing the link text in brackets ([ et ]) followed 
+by the URL address between brackets () . </p>
+<p>For example:</p>
+<p>[MySafeKey helps you to secure your PC](http://www.mysafekey.org) gives : </p>
+<p><a href="http://www.mysafekey.org">MySafeKey helps you to secure your PC</a>.</p>
+<p>By following this principle and preceding by a !, we can also easily insert an image :</p>
+<p>For example :
+![MySafeKey ](././img/logomysafekey3.png) gives : <img alt="MySafeKey" src="././img/logomysafekey3.png" /></p>
+		</section>
+	  
+      
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>The lists with Markdown</h1></header>
+         
+         <h2>Simples lists</h2>
+<p>Making lists is very simple: they use marks - ,+ ou * .
+For example :</p>
+<pre><code>- Item 1
+- Item 2
+    - Sub item 2.1 (4 space characters to the left of the mark)
+        - Sub sub item 2.1.1 (8 space characters to the left of the mark)
+- Item 3 (back to the start of the line)
+</code></pre>
+<p>gives :</p>
+<ul>
+<li>Item 1</li>
+<li>Item 2<ul>
+<li>Sub item 2.1 (4 space characters to the left of the mark)<ul>
+<li>Sub sub item 2.1.1 (8 space characters to the left of the mark)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Item 3 (back to the start of the line)</li>
+</ul>
+		</section>
+	  
+      
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>The lists with Markdown - 2</h1></header>
+         
+         <h2>Addings a CSSS style</h2>
+<p>Items appear one after the other:</p>
+<ul>
+<li class="delayed">Item<ul>
+<li class="delayed">Sub item<ul>
+<li class="delayed">Sub sub item</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="delayed">This is accomplished by Markdown extensions.
+{: .delayed}
+    -by inserting {: .delayed} just under the line item.</li>
+</ul>
+		</section>
+	  
+      
+     
+	  
+      
+        <section class="slide">
+		 
+		  <header><h1>Markdown is magic !</h1></header>
+         
+         <p>Markdown extensions are very powerful and interesting. You can see the extensions 
+list of <a href="http://packages.python.org/Markdown/extensions/index.html">Markdown with Python</a>.</p>
+<p>Extensions can be used with Landslide with the option -x.</p>
+<h2>Extension attr_list</h2>
+<p>It allows, with its syntax, to add different attributes to HTML elements. For example :</p>
+<pre><code>This is a paragraph.
+{: #one_id .one_class }
+</code></pre>
+<p>gives</p>
+<pre><code>&lt;p id="one_id" class="one_class"&gt;This is a paragraph.&lt;/p&gt;
+</code></pre>
+<p>It is through this option that the CSSS class called "delayed" presents in the previous slide or the
+class "allocation" of the title page of presentation are used.</p>
+<p>Many other extensions are possible, you can refer to the page mentioned above.</p>
+		</section>
+	  
+      
+     
+ </section>
+  
+  
+  <div id="toc" class="sidebar hidden">
+    <h2>Table des matières</h2>
+    <table>
+      <caption>Table des matières</caption>
+      
+      <tr id="toc-row-1">
+        <th><a href="#slide1">Landslide presentation <br/> with Lea Verou's CSSS model</a></th>
+        <td><a href="#slide1">1</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-2">
+        <th><a href="#slide2">Landslide</a></th>
+        <td><a href="#slide2">2</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-3">
+        <th><a href="#slide3">Why using the Lea Verou's CSSS presentation ?</a></th>
+        <td><a href="#slide3">3</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-4">
+        <th><a href="#slide4">Why the CSSS presentation with Landslide</a></th>
+        <td><a href="#slide4">4</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-5">
+        <th><a href="#slide5">Some adaptations and improvements</a></th>
+        <td><a href="#slide5">5</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-6">
+        <th><a href="#slide6">Instructions to use Markdown formatting</a></th>
+        <td><a href="#slide6">6</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-7">
+        <th><a href="#slide7">Instructions to use Markdown formatting - 2</a></th>
+        <td><a href="#slide7">7</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-8">
+        <th><a href="#slide8">Instructions to use Markdown formatting - 3</a></th>
+        <td><a href="#slide8">8</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-9">
+        <th><a href="#slide9">The links with Markdown</a></th>
+        <td><a href="#slide9">9</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-10">
+        <th><a href="#slide10">The lists with Markdown</a></th>
+        <td><a href="#slide10">10</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-11">
+        <th><a href="#slide11">The lists with Markdown - 2</a></th>
+        <td><a href="#slide11">11</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-12">
+        <th><a href="#slide12">Markdown is magic !</a></th>
+        <td><a href="#slide12">12</a></td>
+      </tr>
+      
+      
+    </table>
+  </div>
+  
+  
+	<script src="./js/slideshow.js"></script>
+	<script src="./js/plugins/css-edit.js"></script>
+	<script src="./js/plugins/css-snippets.js"></script>
+	<script src="./js/plugins/css-controls.js"></script>
+	<script src="./js/plugins/code-highlight.js"></script>
+	<script>
+	var slideshow = new SlideShow();
+
+	var snippets = document.querySelectorAll('.snippet');
+	for(var i=0; i<snippets.length; i++) {
+		new CSSSnippet(snippets[i]);
+	}
+
+	var cssControls = document.querySelectorAll('.css-control');
+	for(var i=0; i<cssControls.length; i++) {
+		new CSSControl(cssControls[i]);
+	}
+</script>
+</body>
+</html>
