@@ -61,15 +61,20 @@ The following markdown produces [this slideshow][sample].
 Install the latest stable version of Landslide with a python package manager
 like `pip`:
 
-    $ pip install landslide
+    $ pip install --user landslide
 
 If you want to stay on the edge:
 
     $ git clone https://github.com/adamzap/landslide.git
     $ cd landslide
-    $ python setup.py build
-    $ sudo python setup.py install
+    $ pip install --user -e .
+    
+If you want to keep things nicely separated create a virtualenv:
 
+   $ virtualenv env
+   $ . .env/bin/activate
+   $ pip install ...  # use either the package or the git repo
+   
 ## Formatting
 
 #### Markdown
