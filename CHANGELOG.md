@@ -37,7 +37,7 @@
 
 ### Minor Enhancements
 
-- Supress ReST rendering errors
+- Suppress ReST rendering errors
 - CSS pre enhancements (#91) (roktas)
 - Add an example using presenter notes (#106) (netantho)
 - Run macros on headers also, to embed images (#74) (godfat)
