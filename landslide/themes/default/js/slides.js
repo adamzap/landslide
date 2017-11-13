@@ -171,6 +171,7 @@ function main() {
             currentSlideNo++;
         }
         updateSlideClasses(true);
+        handleAutoplays();
     };
 
     var prevSlide = function() {
@@ -178,7 +179,15 @@ function main() {
             currentSlideNo--;
         }
         updateSlideClasses(true);
+        handleAutoplays();
     };
+    
+    var gotoSlide = function(slideNumber) {
+        currentSlideNo = slideNumber;
+        updateSlideClasses(true);
+        handleAutoplays();
+    }
+    main.gotoSlide = gotoSlide;
 
     var showNotes = function() {
         var notes = getSlideEl(currentSlideNo).getElementsByClassName('notes');
@@ -506,6 +515,7 @@ function main() {
             if (e.data.indexOf("slide#") != -1) {
                     currentSlideNo = Number(e.data.replace('slide#', ''));
                     updateSlideClasses(false);
+                    handleAutoplays();
             }
         }, false);
     };
@@ -538,6 +548,75 @@ function main() {
                 }, true);
             }
         }
+    };
+    
+    var handleAutoplays = function() {
+        // Stop autoplaying video and audio on all slides except current
+        var videos = document.getElementsByTagName('video');
+        var audios = document.getElementsByTagName('audio');
+        var cSlide = document.getElementsByClassName('current')[0];
+        
+        for (var i = 0; i < videos.length; i++) {
+            if (videos[i].hasAttribute('autoplay')) {
+                if (isPresenterView) {
+                    videos[i].pause();
+                    videos[i].currentTime = 0;
+                }
+                else {
+                    if (cSlide.contains(videos[i])) {
+                        videos[i].play();
+                    }
+                    else {
+                        videos[i].pause();
+                        videos[i].currentTime = 0;
+                    }
+                }
+            }
+        }
+        for (var i = 0; i < audios.length; i++) {
+            if (audios[i].hasAttribute('autoplay')) {
+                if (isPresenterView) {
+                    audios[i].pause();
+                    audios[i].currentTime = 0;
+                }
+                else {
+                    if (cSlide.contains(audios[i])) {
+                        audios[i].play();
+                    }
+                    else {
+                        audios[i].pause();
+                        audios[i].currentTime = 0;
+                    }
+                }
+            }
+        }
+    };
+    
+    var setInternalTargets = function(refs) {
+        for (var i = 0; i < refs.length; i++) {
+            var parts = refs[i].href.split('#');
+            var target_id = parts[parts.length - 1];
+            var target = document.getElementById(target_id);
+            for (var x = 0; x < slides.length; x++) {
+                if (slides[x].contains(target)) {
+                    var slideNumber = (x + 1).toString();
+                    refs[i].href = 'javascript:main.gotoSlide(' + slideNumber + ');';
+                    break;
+                }
+            }
+        }
+    }
+    
+    var adaptInternalHyperlinks = function() {
+        // Set internal hyperlink (like footnotes) to goto target slide
+        var forwardRefs = document.getElementsByClassName('footnote-reference');
+        setInternalTargets(forwardRefs);
+        
+        var forwardCites = document.getElementsByClassName('citation-reference');
+        setInternalTargets(forwardCites);
+        
+        var backRefs = document.getElementsByClassName('fn-backref');
+        setInternalTargets(backRefs);
     };
 
     // initialize
@@ -576,5 +655,9 @@ function main() {
         addSlideClickListeners();
 
         addRemoteWindowControls();
+        
+        handleAutoplays();
+        adaptInternalHyperlinks();
+
     })();
 }
