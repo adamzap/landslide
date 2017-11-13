@@ -344,10 +344,12 @@ function main() {
     };
 
     var hideContext = function() {
-        try {
-            var presentation = document.getElementsByClassName('slides')[0];
-            addClass(presentation, 'nocontext');
-        } catch (e) {}
+        if (!isPresenterView) {
+            try {
+                var presentation = document.getElementsByClassName('slides')[0];
+                addClass(presentation, 'nocontext');
+            } catch (e) {}
+        }
     };
 
     var processContext = function() {
