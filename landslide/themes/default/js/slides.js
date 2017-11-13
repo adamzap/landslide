@@ -550,46 +550,35 @@ function main() {
         }
     };
     
+    var setPlayStatuses = function(medias) {
+        var cSlide = document.getElementsByClassName('current')[0];
+        
+        for (var i = 0; i < medias.length; i++) {
+            if (medias[i].hasAttribute('autoplay')) {
+                if (isPresenterView) {
+                    medias[i].pause();
+                    medias[i].currentTime = 0;
+                }
+                else {
+                    if (cSlide.contains(medias[i])) {
+                        medias[i].play();
+                    }
+                    else {
+                        medias[i].pause();
+                        medias[i].currentTime = 0;
+                    }
+                }
+            }
+        }
+    };
+    
     var handleAutoplays = function() {
         // Stop autoplaying video and audio on all slides except current
         var videos = document.getElementsByTagName('video');
-        var audios = document.getElementsByTagName('audio');
-        var cSlide = document.getElementsByClassName('current')[0];
+        setPlayStatuses(videos);
         
-        for (var i = 0; i < videos.length; i++) {
-            if (videos[i].hasAttribute('autoplay')) {
-                if (isPresenterView) {
-                    videos[i].pause();
-                    videos[i].currentTime = 0;
-                }
-                else {
-                    if (cSlide.contains(videos[i])) {
-                        videos[i].play();
-                    }
-                    else {
-                        videos[i].pause();
-                        videos[i].currentTime = 0;
-                    }
-                }
-            }
-        }
-        for (var i = 0; i < audios.length; i++) {
-            if (audios[i].hasAttribute('autoplay')) {
-                if (isPresenterView) {
-                    audios[i].pause();
-                    audios[i].currentTime = 0;
-                }
-                else {
-                    if (cSlide.contains(audios[i])) {
-                        audios[i].play();
-                    }
-                    else {
-                        audios[i].pause();
-                        audios[i].currentTime = 0;
-                    }
-                }
-            }
-        }
+        var audios = document.getElementsByTagName('audio');
+        setPlayStatuses(audios);
     };
     
     var setInternalTargets = function(refs) {
