@@ -133,7 +133,6 @@ function main() {
         document.getElementsByTagName('title')[0].innerText = getSlideTitle(currentSlideNo);
 
         updatePresenterNotes();
-        
         handleAutoplays();
 
         if (updateOther) { updateOtherPage(); }
@@ -279,9 +278,6 @@ function main() {
         }
         processContext();
         updateOverview();
-        
-
-        
     };
 
     var updateOverview = function() {
@@ -625,8 +621,7 @@ function main() {
             }
         }
         gifs = Gifffer({playButtonStyles: {}, playButtonIconStyles: {}});
-    }
-        
+    };
     
     var setInternalTargets = function(refs) {
         for (var i = 0; i < refs.length; i++) {
@@ -641,7 +636,7 @@ function main() {
                 }
             }
         }
-    }
+    };
     
     var adaptInternalHyperlinks = function() {
         // Set internal hyperlink (like footnotes) to goto target slide
