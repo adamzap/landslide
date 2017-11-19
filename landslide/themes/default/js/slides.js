@@ -336,7 +336,6 @@ function main() {
             setScale(scale);
             expanded = true;
         }
-        
     };
 
     var showContext = function() {
@@ -594,8 +593,10 @@ function main() {
             }
             else {
                 if (cSlide.contains(gifs[i])) {
-                    gifs[i].click();
-                    gifs[i].setAttribute('playing', '');
+                    if (!gifs[i].hasAttribute('playing')) {
+                        gifs[i].click();
+                        gifs[i].setAttribute('playing', '');
+                    }
                 }
                 else {
                     if (gifs[i].hasAttribute('playing')) {
@@ -690,6 +691,5 @@ function main() {
         setupGIFs();
         handleAutoplays();
         adaptInternalHyperlinks();
-
     })();
 }
