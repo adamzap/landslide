@@ -58,7 +58,10 @@ class Parser(object):
             if text.startswith(u'\ufeff'):  # check for unicode BOM
                 text = text[1:]
 
-            return markdown.markdown(text)
+            try:
+                return markdown.markdown(text, self.md_extensions)
+            except:
+                return markdown.markdown(text)
         elif self.format == 'restructuredtext':
             try:
                 from landslide.rst import html_body
