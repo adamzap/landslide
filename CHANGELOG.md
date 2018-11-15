@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.5
+
+- Fix packaging
+
 ## v1.1.4
 
 - Setup Travis CI
