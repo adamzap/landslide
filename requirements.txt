@@ -1,0 +1,5 @@
+Jinja2==2.10
+Markdown==2.6.11
+Pygments==2.2.0
+docutils==0.14
+six==1.11.0
