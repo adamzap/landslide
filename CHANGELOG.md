@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.4
+
+- Setup Travis CI
+- Update Python versions in `setup.py`
+- Pin dependency versions to fix `markdown` issue
+
 ## v1.1.3
 
 - Identify each slide by a numbered class (#171) (dkg)
