@@ -22,7 +22,13 @@ setup(
         'restructuredtext',
         'textile'
     ],
-    install_requires=open('requirements.txt').read().strip().split('\n'),
+    install_requires=[
+        'Jinja2==2.10',
+        'Markdown==2.6.11',
+        'Pygments==2.2.0',
+        'docutils==0.14',
+        'six==1.11.0'
+    ],
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
