@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.6
+
+- Fix packaging again
+
 ## v1.1.5
 
 - Fix packaging
