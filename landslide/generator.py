@@ -565,7 +565,7 @@ class Generator(object):
         dummy_fh = open(os.path.devnull, 'w')
 
         try:
-            command = ["prince", f.name, self.destination_file]
+            command = ["prince", f.name, "-o", self.destination_file]
 
             Popen(command, stderr=dummy_fh).communicate()
         except Exception:
