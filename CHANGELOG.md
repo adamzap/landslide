@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Fix Prince integration for PDF output (#212) (HadrienG2)
+
 ## v1.1.6
 
 - Fix packaging again
