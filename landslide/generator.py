@@ -552,8 +552,8 @@ class Generator(object):
                 outfile.write(html)
 
     def write_pdf(self, html):
-        """ Tries to write a PDF export from the command line using PrinceXML
-            if available.
+        """ Tries to write a PDF export from the command line using Prince if
+            available.
         """
         try:
             f = tempfile.NamedTemporaryFile(delete=False, suffix='.html')

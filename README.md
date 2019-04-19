@@ -54,7 +54,7 @@ The following markdown produces [this slideshow][sample].
 #### Optional
 
 - `watchdog` for watching/auto-regeneration with the `-w` flag
-- [PrinceXML](http://www.princexml.com/) for PDF export
+- [Prince](http://www.princexml.com/) for PDF export
 
 ## Installation
 
@@ -100,7 +100,7 @@ If you want to stay on the edge:
 - Run `landslide slides.md` or `landslide slides.rst`
 - Enjoy your newly generated `presentation.html`
 
-Or get it as a PDF document if PrinceXML is installed and available on your
+Or get it as a PDF document if Prince is installed and available on your
 system:
 
     $ landslide README.md -d readme.pdf
