@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Support `markdown` v3.0+ (#211) (HadrienG2)
 - Fix Prince integration for PDF output (#212) (HadrienG2)
 
 ## v1.1.6
