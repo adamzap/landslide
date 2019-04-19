@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Upgrade `Jinja2` from v2.10 to v2.10.1
 - Support `markdown` v3.0+ (#211) (HadrienG2)
 - Fix Prince integration for PDF output (#212) (HadrienG2)
 

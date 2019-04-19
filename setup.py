@@ -23,7 +23,7 @@ setup(
         'textile'
     ],
     install_requires=[
-        'Jinja2==2.10',
+        'Jinja2==2.10.1',
         'Markdown==2.6.11',
         'Pygments==2.2.0',
         'docutils==0.14',
