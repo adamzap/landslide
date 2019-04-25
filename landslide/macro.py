@@ -164,7 +164,7 @@ class QRMacro(Macro):
         classes = []
 
         new_content = re.sub(r'<p>\.qr:\s?(\d*?)\|(.*?)</p>',
-                             r'<p class="qr"><img src="http://chart.apis.google.com/chart?chs=\1x\1&cht=qr&chl=\2&chf=bg,s,00000000&choe=UTF-8" alt="QR Code" /></p>',
+                             r'<p class="qr"><img src="https://chart.apis.google.com/chart?chs=\1x\1&cht=qr&chl=\2&chf=bg,s,00000000&choe=UTF-8" alt="QR Code" /></p>',
                              content)
 
         if content != new_content:
