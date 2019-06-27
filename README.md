@@ -291,7 +291,7 @@ This will render any slide as below:
 #### Enabling Markdown Extensions
 
 See documentation on available Markdown extensions
-[here](https://pythonhosted.org/Markdown/extensions/index.html):
+[here](https://python-markdown.github.io/extensions/):
 
     $ landslide slides.md -x abbr
 
