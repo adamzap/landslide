@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Explicitly support Python v3.8
 - Test Python v3.7 and v3.8 with CI
 - Fix sample slideshow link in `setup.py`
 
