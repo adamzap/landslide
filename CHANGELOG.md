@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.1.8
 
 - Explicitly support Python v3.8
 - Test Python v3.7 and v3.8 with CI
