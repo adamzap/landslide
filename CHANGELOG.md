@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.1.7
 
 - Change "PrinceXML" references to "Prince"
 - Upgrade `Jinja2` from v2.10 to v2.10.1
