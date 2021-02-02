@@ -347,7 +347,7 @@ relative to the root of your presentation;
 
 That way, you'll just have to host the whole presentation directory to
 a webserver. Of course, no Python nor PHP nor anything else than a HTTP
-webserver (like Apache) is required to host a landslide presentation.
+webserver (like Nginx) is required to host a landslide presentation.
 
 [Here's an example][akei-pres].
 
