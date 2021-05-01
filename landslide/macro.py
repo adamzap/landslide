@@ -171,3 +171,16 @@ class QRMacro(Macro):
             classes.append(u'has_qr')
 
         return new_content, classes
+
+class AlertMacro(Macro):
+    """Adds 3 types of alerts: .info:, .success:, .danger"""
+
+    def process(self, content, source=None):
+        classes = []
+
+        new_content = re.sub(r'<p>\.(info|success|danger):\s?(.*?)</p>', r'<p class="alert alert-\1">\2</p>', content)
+
+        if content != new_content:
+            classes.append(u'has_alert')
+
+        return new_content, classes
