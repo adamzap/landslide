@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.9
+
+- Pin `MarkupSafe` dependency to `v1.1.1`
+
 ## v1.1.8
 
 - Explicitly support Python v3.8
