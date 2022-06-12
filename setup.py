@@ -23,6 +23,7 @@ setup(
         'textile'
     ],
     install_requires=[
+        'MarkupSafe==1.1.1',
         'Jinja2==2.10.1',
         'Markdown==2.6.11',
         'Pygments==2.2.0',
