@@ -7,10 +7,9 @@ import inspect
 import jinja2
 import shutil
 import tempfile
+import configparser
 
 from subprocess import Popen
-from six import string_types
-from six.moves import configparser
 
 from . import utils
 from . import macro as macro_module
@@ -136,7 +135,7 @@ class Generator(object):
         """ Adds supplementary user css files to the presentation. The
             ``css_list`` arg can be either a ``list`` or a string.
         """
-        if isinstance(css_list, string_types):
+        if isinstance(css_list, str):
             css_list = [css_list]
 
         for css_path in css_list:
@@ -154,7 +153,7 @@ class Generator(object):
         """ Adds supplementary user javascript files to the presentation. The
             ``js_list`` arg can be either a ``list`` or a string.
         """
-        if isinstance(js_list, string_types):
+        if isinstance(js_list, str):
             js_list = [js_list]
         for js_path in js_list:
             if js_path and js_path not in self.user_js:

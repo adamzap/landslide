@@ -80,7 +80,7 @@ class Parser(object):
 
             text = text.replace('\n---\n', '\n<hr />\n')
 
-            return textile.textile(text, encoding=self.encoding)
+            return textile.textile(text, html_type='html5')
         else:
             raise NotImplementedError(u"Unsupported format %s, cannot parse"
                                       % self.format)
