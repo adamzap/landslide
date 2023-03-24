@@ -452,7 +452,7 @@ body.expose .slide.current {
 .vg { color: #19177C } /* Name.Variable.Global */
 .vi { color: #19177C } /* Name.Variable.Instance */
 .il { color: #666666 } /* Literal.Number.Integer.Long */
-.lineno { padding-right: 10px } /* A few space after linenos */
+.linenos { padding-right: 21px } /* A few space after linenos */
 
 /* Presenter Mode */
 
