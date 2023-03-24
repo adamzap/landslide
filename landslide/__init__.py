@@ -1,5 +1,5 @@
 __title__ = 'landslide'
-__version__ = '1.1.9'
+__version__ = '2.0.0'
 __author__ = 'Adam Zapletal'
 __author_email__ = 'adamzap@gmail.com'
 __license__ = 'Apache 2.0'

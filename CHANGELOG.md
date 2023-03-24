@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.0.0
+
+- Drop Python 2 support
+- Upgrade requirements
+- Stop using Travis for CI
+- Start using GitHub Actions for CI
+- Fix path assert in test on Windows
+
 ## v1.1.9
 
 - Pin `MarkupSafe` dependency to `v1.1.1`
