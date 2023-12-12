@@ -15,7 +15,7 @@ The following markdown produces [this slideshow][sample].
 
     ![python](http://i.imgur.com/bc2xk.png)
 
-    Landslide is primarily written in Python, but it's themes use:
+    Landslide is primarily written in Python, but its themes use:
 
     - HTML5
     - Javascript
