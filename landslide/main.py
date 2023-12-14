@@ -37,7 +37,7 @@ def _parse_options():
     parser.add_option(
         "-d", "--destination",
         dest="destination_file",
-        help="The path to the to the destination file: .html or "
+        help="The path to the destination file: .html or "
              ".pdf extensions allowed (default: presentation.html)",
         metavar="FILE",
         default="presentation.html")
