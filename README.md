@@ -349,10 +349,6 @@ That way, you'll just have to host the whole presentation directory to
 a webserver. Of course, no Python nor PHP nor anything else than a HTTP
 webserver (like Nginx) is required to host a landslide presentation.
 
-[Here's an example][akei-pres].
-
-[akei-pres]: http://www.akei.com/presentations/2011-Djangocong/index.html
-
 ## Theme Variables
 
 The `base.html` must be a [Jinja2 template file][jinja-docs] where you can
