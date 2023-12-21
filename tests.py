@@ -109,6 +109,19 @@ class GeneratorTest(BaseTestCase):
         self.assertEqual(r[1][0], 'blah')
         self.assertEqual(r[1][1], 'blob')
 
+    def test_macro_alert(self):
+        g = Generator(os.path.join(DATA_DIR, 'test.md'))
+        # .info
+        r = g.process_macros('<p>foo</p>\n<p>.info: bar</p>\n<p>baz</p>')
+        self.assertEqual(r[0].find('<p class="alert alert-info">bar</p>'), 11)
+        self.assertEqual(r[1], [u'has_alert'])
+
+        # .danger
+        r = g.process_macros('<p>foo</p>\n<p>.danger: bar</p>\n<p>baz</p>')
+        self.assertEqual(r[0].find('<p class="alert alert-danger">bar</p>'), 11)
+        self.assertEqual(r[1], [u'has_alert'])
+
+
     def test_register_macro(self):
         g = Generator(os.path.join(DATA_DIR, 'test.md'))
 
