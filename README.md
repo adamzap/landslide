@@ -132,7 +132,7 @@ Several options are available using the command line:
                           directory
     -b, --debug           Will display any exception trace to stdin
     -d FILE, --destination=FILE
-                          The path to the to the destination file: .html or .pdf
+                          The path to the destination file: .html or .pdf
                           extensions allowed (default: presentation.html)
     -e ENCODING, --encoding=ENCODING
                           The encoding of your files (defaults to utf8)
